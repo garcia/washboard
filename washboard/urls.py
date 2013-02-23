@@ -1,8 +1,8 @@
 from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
-    url(r'^$', 'register.views.main'),
-    url(r'^dashboard$', 'dash.views.main'),
+    url(r'^register/', include('register.urls')),
+    #url(r'^dashboard$', 'dash.views.main'),
     # Examples:
     # url(r'^$', 'washboard.views.home', name='home'),
     # url(r'^washboard/', include('washboard.foo.urls')),

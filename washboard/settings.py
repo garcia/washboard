@@ -1,4 +1,5 @@
 # Django settings for washboard project.
+import os.path
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -95,7 +96,11 @@ ROOT_URLCONF = 'washboard.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'washboard.wsgi.application'
 
+# from http://www.djangofoo.com/35/template_dirs-project-folder
+PROJECT_DIR = os.path.dirname(__file__)
+
 TEMPLATE_DIRS = (
+    os.path.abspath(os.path.join(PROJECT_DIR, '..', 'templates'))
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -143,6 +148,8 @@ LOGGING = {
         },
     }
 }
+
+AUTH_PROFILE_MODULE = 'register.UserProfile'
 
 # From http://djangosnippets.org/snippets/1873/
 try:
