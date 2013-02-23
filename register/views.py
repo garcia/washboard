@@ -44,7 +44,7 @@ def app(request):
 def callback(request):
     if request.method != 'GET':
         # TODO: error message
-        return redirect('/register/app')
+        return redirect('/register/')
     # Get consumer and request keypair from database
     tk = TemporaryKeypair.objects.filter(nonce__exact=request.session['nonce'])[0]
     consumer = oauth2.Consumer(tk.api_key, tk.api_secret)
@@ -81,7 +81,7 @@ def callback(request):
 def finish(request):
     if request.method != 'POST':
         # TODO: error message
-        return redirect('/register/app?84')
+        return redirect('/register/')
     user = User(username=request.POST['name'])
     user.set_password(request.POST['password'])
     user.save()
