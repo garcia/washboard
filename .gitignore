@@ -1,3 +1,4 @@
 local_settings.py
 pip-log.txt
 *.py[cod]
+*.swp
