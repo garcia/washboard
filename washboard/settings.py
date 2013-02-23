@@ -112,6 +112,7 @@ INSTALLED_APPS = (
     'gunicorn',
     
     'register',
+    'dash',
 )
 
 # A sample logging configuration. The only tangible logging
