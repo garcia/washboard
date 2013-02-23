@@ -25,4 +25,6 @@ class Blacklist(models.Model):
 class TemporaryKeypair(models.Model):
     api_key = models.TextField(max_length=64)
     api_secret = models.TextField(max_length=64)
+    token_key = models.TextField(max_length=64)
+    token_secret = models.TextField(max_length=64)
     nonce = models.TextField(max_length=64)
