@@ -36,6 +36,8 @@ class APIForm(forms.Form):
 
 
 def main(request):
+    if request.user.is_authenticated():
+        return redirect('/')
     request.session['nonce'] = str(random.randrange(sys.maxsize))
     return render(request, 'register.main.tpl', {
         'BASE_URL': settings.BASE_URL,
@@ -44,6 +46,8 @@ def main(request):
 
 
 def app(request):
+    if request.user.is_authenticated():
+        return redirect('/')
     if not (request.method == 'POST' and APIForm(request.POST).is_valid()):
         messages.error(request, 'Invalid request.') # TODO: more details
         return redirect('/register/')
@@ -68,6 +72,7 @@ def app(request):
     # Save consumer and token keys for the next step
     # Normally this would be stored client-side, but some versions of Safari
     # have a bug where cookies are not stored during redirects to other domains
+    # TODO: expire after 24 hours?
     tk = TemporaryKeypair(
         api_key=request.POST['api_key'],
         api_secret=request.POST['api_secret'],
@@ -91,14 +96,30 @@ class CallbackForm(forms.Form):
 
 
 def callback(request):
-    if not (request.method == 'GET' and
-            'nonce' in request.session and
-            'oauth_verifier' in request.GET):
-        messages.error(request, 'Invalid request.') # TODO: more details
+    if request.user.is_authenticated():
+        return redirect('/')
+    if request.method != 'GET' or 'nonce' not in request.session:
+        messages.error(request, 'Invalid request.')
+        return redirect('/register/')
+
+    if 'oauth_verifier' not in request.GET:
+        messages.error(request, """
+            You need to grant your application access to your blog.
+        """)
         return redirect('/register/')
 
     # Get consumer and request keypair from database
-    tk = TemporaryKeypair.objects.filter(nonce__exact=request.session['nonce'])[0]
+    try:
+        tk = TemporaryKeypair.objects.filter(
+            nonce__exact=request.session['nonce']
+        )[0]
+    except IndexError:
+        messages.error(request, """
+            Sorry, your session seems to have expired.
+            
+            You can try again, but please contact us if the problem persists.
+        """)
+        return redirect('/register/')
     consumer = oauth2.Consumer(tk.api_key, tk.api_secret)
 
     # Get the access token for the user
@@ -157,6 +178,8 @@ def callback(request):
 
 
 def finish(request):
+    if request.user.is_authenticated():
+        return redirect('/')
     if not (request.method == 'POST' and CallbackForm(request.POST).is_valid()):
         messages.error('Invalid request.') # TODO: more details
         return redirect('/register/')
