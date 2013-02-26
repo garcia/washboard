@@ -21,4 +21,4 @@ def main(request):
         'token_key': profile.token_key,
         'token_secret': profile.token_secret,
     }
-    return render(request, 'dash.main.tpl', data)
+    return render(request, 'dash.tpl', data)

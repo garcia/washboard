@@ -46,7 +46,7 @@ def main(request):
     if request.user.is_authenticated():
         return redirect('/')
     request.session['nonce'] = str(random.randrange(sys.maxsize))
-    return render(request, 'register.main.tpl', {
+    return render(request, 'register.tpl', {
         'BASE_URL': settings.BASE_URL,
         'form': RegistrationForm(),
     })
@@ -57,10 +57,10 @@ def app(request):
         return redirect('/')
     if request.method != 'POST':
         messages.error(request, 'Invalid request.') # TODO: more details
-        return redirect('/register/')
+        return redirect('/register')
     if not RegistrationForm(request.POST).is_valid():
         messages.error(request, 'Please fill in all of the fields.')
-        return redirect('/register/')
+        return redirect('/register')
     
     # Get request token for the user
     client = oauth2.Client(oauth2.Consumer(
@@ -77,7 +77,7 @@ def app(request):
 
             You can try again, but please contact us if the problem persists.
         """)
-        return redirect('/register/')
+        return redirect('/register')
     
     # Save input for after the authorization has been completed
     request.session['api_key'] = request.POST['api_key']
@@ -94,17 +94,17 @@ def callback(request):
         return redirect('/')
     if request.method != 'GET':
         messages.error(request, 'Invalid request.')
-        return redirect('/register/')
+        return redirect('/register')
     if 'oauth_verifier' not in request.GET:
         messages.error(request, """
             You need to grant your application access to your blog.
         """)
-        return redirect('/register/')
+        return redirect('/register')
     for sessionvar in ('api_key', 'api_secret', 'token_key',
                        'token_secret', 'password', 'nonce'):
         if sessionvar not in request.session:
             messages.error(request, 'Invalid request.')
-            return redirect('/register/')
+            return redirect('/register')
 
 
     # Get the access token for the user
@@ -127,7 +127,7 @@ def callback(request):
 
             You can try again, but please contact us if the problem persists.
         """)
-        return redirect('/register/')
+        return redirect('/register')
     token = oauth2.Token(
         access_token['oauth_token'],
         access_token['oauth_token_secret'],
@@ -145,14 +145,14 @@ def callback(request):
 
             You can try again, but please contact us if the problem persists.
         """)
-        return redirect('/register/')
+        return redirect('/register')
     if not str(userinfo['meta']['status']).startswith('2'):
         messages.warning(request, """
             Tumblr refused to give us your name for some reason.
 
             You can try again, but please contact us if the problem persists.
         """)
-        return redirect('/register/')
+        return redirect('/register')
     name = userinfo['response']['user']['name']
 
     # Check for duplicate user
@@ -163,7 +163,7 @@ def callback(request):
 
             Contact us if you're absolutely sure you didn't.
         """)
-        return redirect('/register/')
+        return redirect('/register')
     except User.DoesNotExist:
         pass
 
