@@ -114,8 +114,7 @@ INSTALLED_APPS = (
 
     'south',
     
-    'register',
-    'dash',
+    'wb',
 )
 
 # A sample logging configuration. The only tangible logging

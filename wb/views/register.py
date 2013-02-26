@@ -9,7 +9,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 import oauth2
 
-from models import *
+from wb.models import *
 
 def main(request):
     request.session['nonce'] = str(random.randrange(sys.maxsize))

@@ -8,18 +8,64 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Deleting model 'Blacklist'
-        db.delete_table('register_blacklist')
+        # Adding model 'UserProfile'
+        db.create_table('wb_userprofile', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True)),
+            ('api_key', self.gf('django.db.models.fields.TextField')(max_length=64)),
+            ('api_secret', self.gf('django.db.models.fields.TextField')(max_length=64)),
+            ('token_key', self.gf('django.db.models.fields.TextField')(max_length=64)),
+            ('token_secret', self.gf('django.db.models.fields.TextField')(max_length=64)),
+        ))
+        db.send_create_signal('wb', ['UserProfile'])
+
+        # Adding model 'TemporaryKeypair'
+        db.create_table('wb_temporarykeypair', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('api_key', self.gf('django.db.models.fields.TextField')(max_length=64)),
+            ('api_secret', self.gf('django.db.models.fields.TextField')(max_length=64)),
+            ('token_key', self.gf('django.db.models.fields.TextField')(max_length=64)),
+            ('token_secret', self.gf('django.db.models.fields.TextField')(max_length=64)),
+            ('nonce', self.gf('django.db.models.fields.TextField')(max_length=64)),
+        ))
+        db.send_create_signal('wb', ['TemporaryKeypair'])
+
+        # Adding model 'Rule'
+        db.create_table('wb_rule', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('keyword', self.gf('django.db.models.fields.TextField')(max_length=256)),
+            ('blacklist', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('show_notification', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('show_user', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('show_keyword', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('scan_tags', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('scan_post', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('regex', self.gf('django.db.models.fields.BooleanField')(default=False)),
+        ))
+        db.send_create_signal('wb', ['Rule'])
+
+        # Adding model 'WhitelistUser'
+        db.create_table('wb_whitelistuser', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('other_user', self.gf('django.db.models.fields.TextField')(max_length=64)),
+        ))
+        db.send_create_signal('wb', ['WhitelistUser'])
 
 
     def backwards(self, orm):
-        # Adding model 'Blacklist'
-        db.create_table('register_blacklist', (
-            ('text', self.gf('django.db.models.fields.TextField')(max_length=128)),
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-        ))
-        db.send_create_signal('register', ['Blacklist'])
+        # Deleting model 'UserProfile'
+        db.delete_table('wb_userprofile')
+
+        # Deleting model 'TemporaryKeypair'
+        db.delete_table('wb_temporarykeypair')
+
+        # Deleting model 'Rule'
+        db.delete_table('wb_rule')
+
+        # Deleting model 'WhitelistUser'
+        db.delete_table('wb_whitelistuser')
 
 
     models = {
@@ -59,7 +105,20 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'register.temporarykeypair': {
+        'wb.rule': {
+            'Meta': {'object_name': 'Rule'},
+            'blacklist': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'keyword': ('django.db.models.fields.TextField', [], {'max_length': '256'}),
+            'regex': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'scan_post': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'scan_tags': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'show_keyword': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'show_notification': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'show_user': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+        },
+        'wb.temporarykeypair': {
             'Meta': {'object_name': 'TemporaryKeypair'},
             'api_key': ('django.db.models.fields.TextField', [], {'max_length': '64'}),
             'api_secret': ('django.db.models.fields.TextField', [], {'max_length': '64'}),
@@ -68,7 +127,7 @@ class Migration(SchemaMigration):
             'token_key': ('django.db.models.fields.TextField', [], {'max_length': '64'}),
             'token_secret': ('django.db.models.fields.TextField', [], {'max_length': '64'})
         },
-        'register.userprofile': {
+        'wb.userprofile': {
             'Meta': {'object_name': 'UserProfile'},
             'api_key': ('django.db.models.fields.TextField', [], {'max_length': '64'}),
             'api_secret': ('django.db.models.fields.TextField', [], {'max_length': '64'}),
@@ -76,7 +135,13 @@ class Migration(SchemaMigration):
             'token_key': ('django.db.models.fields.TextField', [], {'max_length': '64'}),
             'token_secret': ('django.db.models.fields.TextField', [], {'max_length': '64'}),
             'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True'})
+        },
+        'wb.whitelistuser': {
+            'Meta': {'object_name': 'WhitelistUser'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'other_user': ('django.db.models.fields.TextField', [], {'max_length': '64'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         }
     }
 
-    complete_apps = ['register']
+    complete_apps = ['wb']
