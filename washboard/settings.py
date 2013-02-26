@@ -146,7 +146,7 @@ LOGGING = {
     }
 }
 
-AUTH_PROFILE_MODULE = 'register.UserProfile'
+AUTH_PROFILE_MODULE = 'wb.UserProfile'
 
 # From http://djangosnippets.org/snippets/1873/
 try:

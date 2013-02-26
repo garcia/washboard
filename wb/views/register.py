@@ -6,6 +6,7 @@ import urlparse
 from django import forms
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
@@ -18,7 +19,7 @@ REQUEST_TOKEN_URL = OAUTH_BASE_URL + 'request_token'
 AUTHORIZE_URL = OAUTH_BASE_URL + 'authorize?oauth_token=%s'
 ACCESS_TOKEN_URL = OAUTH_BASE_URL + 'access_token'
 
-class APIForm(forms.Form):
+class RegistrationForm(forms.Form):
     api_key = forms.CharField(
         max_length=64,
         widget=forms.TextInput(attrs={'placeholder': 'OAuth Consumer Key'}),
@@ -33,6 +34,12 @@ class APIForm(forms.Form):
             'required': 'Please enter your Secret Key.',
         },
     )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'placeholder': 'Password'}),
+        error_messages={
+            'required': 'Please choose a password.',
+        },
+    )
 
 
 def main(request):
@@ -41,15 +48,18 @@ def main(request):
     request.session['nonce'] = str(random.randrange(sys.maxsize))
     return render(request, 'register.main.tpl', {
         'BASE_URL': settings.BASE_URL,
-        'form': APIForm(),
+        'form': RegistrationForm(),
     })
 
 
 def app(request):
     if request.user.is_authenticated():
         return redirect('/')
-    if not (request.method == 'POST' and APIForm(request.POST).is_valid()):
+    if request.method != 'POST':
         messages.error(request, 'Invalid request.') # TODO: more details
+        return redirect('/register/')
+    if not RegistrationForm(request.POST).is_valid():
+        messages.error(request, 'Please fill in all of the fields.')
         return redirect('/register/')
     
     # Get request token for the user
@@ -69,61 +79,43 @@ def app(request):
         """)
         return redirect('/register/')
     
-    # Save consumer and token keys for the next step
-    # Normally this would be stored client-side, but some versions of Safari
-    # have a bug where cookies are not stored during redirects to other domains
-    # TODO: expire after 24 hours?
-    tk = TemporaryKeypair(
-        api_key=request.POST['api_key'],
-        api_secret=request.POST['api_secret'],
-        token_key=request_token['oauth_token'],
-        token_secret=request_token['oauth_token_secret'],
-        nonce=request.session['nonce'],
-    )
-    tk.save()
+    # Save input for after the authorization has been completed
+    request.session['api_key'] = request.POST['api_key']
+    request.session['api_secret'] = request.POST['api_secret']
+    request.session['token_key'] = request_token['oauth_token']
+    request.session['token_secret'] = request_token['oauth_token_secret']
+    request.session['password'] = request.POST['password']
     
     return redirect(AUTHORIZE_URL % request_token['oauth_token'])
-
-
-class CallbackForm(forms.Form):
-    name = forms.CharField(max_length=64)
-    password = forms.CharField(
-        widget=forms.PasswordInput(attrs={'placeholder': 'Password'}),
-        error_messages={
-            'required': 'Please choose a password.',
-        },
-    )
 
 
 def callback(request):
     if request.user.is_authenticated():
         return redirect('/')
-    if request.method != 'GET' or 'nonce' not in request.session:
+    if request.method != 'GET':
         messages.error(request, 'Invalid request.')
         return redirect('/register/')
-
     if 'oauth_verifier' not in request.GET:
         messages.error(request, """
             You need to grant your application access to your blog.
         """)
         return redirect('/register/')
+    for sessionvar in ('api_key', 'api_secret', 'token_key',
+                       'token_secret', 'password', 'nonce'):
+        if sessionvar not in request.session:
+            messages.error(request, 'Invalid request.')
+            return redirect('/register/')
 
-    # Get consumer and request keypair from database
-    try:
-        tk = TemporaryKeypair.objects.filter(
-            nonce__exact=request.session['nonce']
-        )[0]
-    except IndexError:
-        messages.error(request, """
-            Sorry, your session seems to have expired.
-            
-            You can try again, but please contact us if the problem persists.
-        """)
-        return redirect('/register/')
-    consumer = oauth2.Consumer(tk.api_key, tk.api_secret)
 
     # Get the access token for the user
-    req_token = oauth2.Token(tk.token_key, tk.token_secret)
+    consumer = oauth2.Consumer(
+        request.session['api_key'],
+        request.session['api_secret'],
+    )
+    req_token = oauth2.Token(
+        request.session['token_key'],
+        request.session['token_secret'],
+    )
     req_token.set_verifier(request.GET['oauth_verifier'])
     req_client = oauth2.Client(consumer, req_token)
     resp, content = req_client.request(ACCESS_TOKEN_URL, 'POST')
@@ -163,44 +155,36 @@ def callback(request):
         return redirect('/register/')
     name = userinfo['response']['user']['name']
 
-    # Assemble everything for the last step
-    data = {
-        'api_key': tk.api_key,
-        'api_secret': tk.api_secret,
-        'token_key': access_token['oauth_token'],
-        'token_secret': access_token['oauth_token_secret'],
-        'name': name,
-        'form': CallbackForm(),
-    }
-    # Cleanup
-    tk.delete()
-    return render(request, 'register.callback.tpl', data)
-
-
-def finish(request):
-    if request.user.is_authenticated():
-        return redirect('/')
-    if not (request.method == 'POST' and CallbackForm(request.POST).is_valid()):
-        messages.error('Invalid request.') # TODO: more details
-        return redirect('/register/')
-
     # Check for duplicate user
     try:
-        User.objects.get(username__exact=request.POST['name'])
-        messages.error('User already exists.')
-        return redirect('/register/') # TODO: return to Step 2, not Step 1!
+        User.objects.get(username__exact=name)
+        messages.error("""
+            It looks like you've already signed up for Washboard!
+
+            Contact us if you're absolutely sure you didn't.
+        """)
+        return redirect('/register/')
     except User.DoesNotExist:
         pass
 
-    # TODO: re-request username from Tumblr (or just only do it here...?)
-    # Also, consider that a user might change their username on Tumblr. What then?
-    user = User(username=request.POST['name'])
-    user.set_password(request.POST['password'])
+    # Save the user's information
+    # TODO: What happens when a user changes their username on Tumblr?
+    user = User(username=name)
+    password = request.session['password']
+    user.set_password(password)
     user.save()
     profile = user.get_profile()
-    profile.api_key = request.POST['api_key']
-    profile.api_secret = request.POST['api_secret']
-    profile.token_key = request.POST['token_key']
-    profile.token_secret = request.POST['token_secret']
+    profile.api_key = request.session['api_key']
+    profile.api_secret = request.session['api_secret']
+    profile.token_key = access_token['oauth_token']
+    profile.token_secret = access_token['oauth_token_secret']
     profile.save()
+    
+    # Cleanup
+    for key in request.session.keys():
+        del request.session[key]
+    
+    # Authenticate the user
+    authenticated_user = authenticate(username=name, password=password)
+    login(request, authenticated_user)
     return redirect('/')
