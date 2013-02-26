@@ -17,11 +17,6 @@ def create_user_profile(sender, instance, created, **kwargs):
 models.signals.post_save.connect(create_user_profile, sender=User)
 
 
-class Blacklist(models.Model):
-    text = models.TextField(max_length=128)
-    user = models.ForeignKey(User)
-
-
 class TemporaryKeypair(models.Model):
     api_key = models.TextField(max_length=64)
     api_secret = models.TextField(max_length=64)
