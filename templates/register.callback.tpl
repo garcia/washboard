@@ -4,6 +4,14 @@
 <title>Washboard</title>
 <script type="text/javascript" src="{% static "jquery.min.js" %}"></script>
 
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 <h1>Step 2: choose a password</h1>
 <p>You're almost done! Just choose a password (ideally not the same password you use for Tumblr) and you're all set.</p>
 
