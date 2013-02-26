@@ -1,5 +1,6 @@
 # Django settings for washboard project.
 import os.path
+PROJECT_DIR = os.path.dirname(__file__)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -50,7 +51,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = os.path.abspath(os.path.join(PROJECT_DIR, '..', 'static'))
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -95,9 +96,6 @@ ROOT_URLCONF = 'washboard.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'washboard.wsgi.application'
-
-# from http://www.djangofoo.com/35/template_dirs-project-folder
-PROJECT_DIR = os.path.dirname(__file__)
 
 TEMPLATE_DIRS = (
     os.path.abspath(os.path.join(PROJECT_DIR, '..', 'templates'))
