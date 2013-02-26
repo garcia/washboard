@@ -113,6 +113,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'gunicorn',
+    'south',
     
     'register',
     'dash',
