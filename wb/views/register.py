@@ -13,6 +13,11 @@ import oauth2
 
 from wb.models import *
 
+OAUTH_BASE_URL = 'http://www.tumblr.com/oauth/'
+REQUEST_TOKEN_URL = OAUTH_BASE_URL + 'request_token'
+AUTHORIZE_URL = OAUTH_BASE_URL + 'authorize?oauth_token=%s'
+ACCESS_TOKEN_URL = OAUTH_BASE_URL + 'access_token'
+
 class APIForm(forms.Form):
     api_key = forms.CharField(
         max_length=64,
@@ -31,7 +36,6 @@ class APIForm(forms.Form):
 
 
 def main(request):
-    
     request.session['nonce'] = str(random.randrange(sys.maxsize))
     return render(request, 'register.main.tpl', {
         'BASE_URL': settings.BASE_URL,
@@ -44,11 +48,12 @@ def app(request):
         messages.error(request, 'Invalid request.') # TODO: more details
         return redirect('/register/')
     
+    # Get request token for the user
     client = oauth2.Client(oauth2.Consumer(
         request.POST['api_key'],
         request.POST['api_secret'],
     ))
-    resp, content = client.request('http://www.tumblr.com/oauth/request_token', 'POST')
+    resp, content = client.request(REQUEST_TOKEN_URL, 'POST')
     request_token = dict(urlparse.parse_qsl(content))
     
     if not ('oauth_token' in request_token and
@@ -60,6 +65,9 @@ def app(request):
         """)
         return redirect('/register/')
     
+    # Save consumer and token keys for the next step
+    # Normally this would be stored client-side, but some versions of Safari
+    # have a bug where cookies are not stored during redirects to other domains
     tk = TemporaryKeypair(
         api_key=request.POST['api_key'],
         api_secret=request.POST['api_secret'],
@@ -69,7 +77,7 @@ def app(request):
     )
     tk.save()
     
-    return redirect('http://www.tumblr.com/oauth/authorize?oauth_token=' + request_token['oauth_token'])
+    return redirect(AUTHORIZE_URL % request_token['oauth_token'])
 
 
 class CallbackForm(forms.Form):
@@ -92,16 +100,13 @@ def callback(request):
     # Get consumer and request keypair from database
     tk = TemporaryKeypair.objects.filter(nonce__exact=request.session['nonce'])[0]
     consumer = oauth2.Consumer(tk.api_key, tk.api_secret)
+
     # Get the access token for the user
     req_token = oauth2.Token(tk.token_key, tk.token_secret)
     req_token.set_verifier(request.GET['oauth_verifier'])
     req_client = oauth2.Client(consumer, req_token)
-    resp, content = req_client.request(
-        'http://www.tumblr.com/oauth/access_token',
-        'POST'
-    )
+    resp, content = req_client.request(ACCESS_TOKEN_URL, 'POST')
     access_token = dict(urlparse.parse_qsl(content))
-
     if not ('oauth_token' in access_token and
             'oauth_token_secret' in access_token):
         messages.error(request, """
@@ -110,7 +115,6 @@ def callback(request):
             You can try again, but please contact us if the problem persists.
         """)
         return redirect('/register/')
-
     token = oauth2.Token(
         access_token['oauth_token'],
         access_token['oauth_token_secret'],
@@ -118,6 +122,7 @@ def callback(request):
 
     # Get the user's name
     client = oauth2.Client(consumer, token)
+    # TODO: externalize this URL (but where...?)
     resp, content = client.request('http://api.tumblr.com/v2/user/info', 'GET')
     try:
         userinfo = json.loads(content)
@@ -135,7 +140,6 @@ def callback(request):
             You can try again, but please contact us if the problem persists.
         """)
         return redirect('/register/')
-
     name = userinfo['response']['user']['name']
 
     # Assemble everything for the last step
