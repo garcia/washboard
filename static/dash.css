@@ -1,4 +1,4 @@
-body {
+html, body {
     width: 100%;
     margin: 0;
     padding: 0;
@@ -31,6 +31,7 @@ h2 {
     padding: 0;
     margin: 0 auto;
     list-style-type: none;
+    overflow-x: hidden;
 }
 
 .post {
