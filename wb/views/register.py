@@ -45,19 +45,14 @@ class RegistrationForm(forms.Form):
 def main(request):
     if request.user.is_authenticated():
         return redirect('/')
-    request.session['nonce'] = str(random.randrange(sys.maxsize))
-    return render(request, 'register.tpl', {
-        'BASE_URL': settings.BASE_URL,
-        'form': RegistrationForm(),
-    })
-
-
-def app(request):
-    if request.user.is_authenticated():
-        return redirect('/')
+    
     if request.method != 'POST':
-        messages.error(request, 'Invalid request.') # TODO: more details
-        return redirect('/register')
+        request.session['nonce'] = str(random.randrange(sys.maxsize))
+        return render(request, 'register.tpl', {
+            'BASE_URL': settings.BASE_URL,
+            'form': RegistrationForm(),
+        })
+    
     if not RegistrationForm(request.POST).is_valid():
         messages.error(request, 'Please fill in all of the fields.')
         return redirect('/register')
@@ -87,6 +82,14 @@ def app(request):
     request.session['password'] = request.POST['password']
     
     return redirect(AUTHORIZE_URL % request_token['oauth_token'])
+
+
+def app(request):
+    if request.user.is_authenticated():
+        return redirect('/')
+    if request.method != 'POST':
+        messages.error(request, 'Invalid request.') # TODO: more details
+        return redirect('/register')
 
 
 def callback(request):
