@@ -2,11 +2,12 @@
 <!DOCTYPE html>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 <title>Washboard</title>
+<link rel="stylesheet" type="text/css" href="{% static "dash.css" %}" />
 <script type="text/javascript" src="{% static "jquery.min.js" %}"></script>
 <script type="text/javascript" src="{% static "sha1.js" %}"></script>
 <script type="text/javascript" src="{% static "oauth.js" %}"></script>
 <script type="text/javascript" src="{% static "jquery.oauth.js" %}"></script>
-<!--<script type="text/javascript" src="{% static "json2.js" %}"></script>-->
+<script type="text/javascript" src="{% static "json2.js" %}"></script>
 <script type="text/javascript">
 API_KEY         = "{{ api_key }}"
 API_SECRET      = "{{ api_secret }}"
