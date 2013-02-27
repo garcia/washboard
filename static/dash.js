@@ -25,10 +25,37 @@ function cb(data) {
     d = data;
     posts = $(elem('ul')).attr('id', 'posts');
     $.each(data.response.posts, function(p, post) {
-        postelem = $(elem('li')).addClass('post');
+        var postelem = $(elem('li')).addClass('post');
         postelem.addClass(post.type);
 
-        // Text posts
+        // Common metadata
+        var meta = $(elem('div')).addClass('meta');
+        meta.append($(elem('a'))
+            .addClass('blog_name')
+            .text(post.blog_name)
+            .attr('href', post.post_url)
+        );
+        if (post.reblogged_from_name) {
+            meta.append($(elem('span'))
+                .addClass('reblogged_text')
+                .html('&nbsp;reblogged&nbsp;')
+            );
+            meta.append($(elem('a'))
+                .addClass('reblogged_from_name')
+                .text(post.reblogged_from_name)
+                .attr('href', post.reblogged_from_url)
+            );
+        }
+        if (post.note_count) {
+            meta.append($(elem('a'))
+                .addClass('note_count')
+                .text(post.note_count)
+            );
+        }
+        // TODO: reblog, like buttons
+        postelem.append(meta);
+
+        // Text
         if (post.type == 'text') {
             if (post.title) {
                 postelem.append($(elem('h2')).text(post.title));
@@ -36,8 +63,11 @@ function cb(data) {
             postelem.append($(elem('div')).addClass('body').html(post.body));
         }
 
-        // Photo posts
+        // Photo
         else if (post.type == 'photo') {
+            var photos = $(elem('div')).addClass('photos');
+            var row = $(elem('div')).addClass('row');
+            var last_row = 0;
             $.each(post.photos, function(ph, photo) {
                 // Photoset logic
                 if (post.photoset_layout) {
@@ -53,6 +83,11 @@ function cb(data) {
                     running_row++;
                 }
                 running_row--;
+                if (running_row > last_row) {
+                    photos.append(row);
+                    row = $(elem('div')).addClass('row');
+                }
+                last_row = running_row;
                 var target_size = {'1': 500, '2': 245, '3': 160}[
                     layout[running_row]
                 ];
@@ -60,8 +95,10 @@ function cb(data) {
                 var photoelem = $(elem('img'))
                     .attr('src', best_photo.url)
                     .attr('width', target_size);
-                postelem.append(photoelem);
+                row.append(photoelem);
             });
+            photos.append(row);
+            postelem.append(photos);
             if (post.caption) {
                 postelem.append($(elem('div')).addClass('caption').html(post.caption));
             }
@@ -151,14 +188,25 @@ function cb(data) {
             var answerbox = $(elem('div')).addClass('answerbox');
             answerbox.append($(elem('p')).addClass('question').text(post.question));
             var asking = $(elem('p')).addClass('asking');
+            asking.append($(elem('img'))
+                .addClass('asking_avatar')
+                .attr('src', (post.asking_name == 'Anonymous') ?
+                    ('http://assets.tumblr.com/images/anonymous_avatar_24.gif') :
+                    ('http://api.tumblr.com/v2/blog/'
+                        + post.asking_name
+                        + '.tumblr.com/avatar/24')
+                )
+            );
+            asking_name = $(elem('a'))
+                .addClass('asking_name')
+                .text(post.asking_name);
             if (post.asking_url) {
-                asking.html(
-                    $(elem('a')).text(post.asking_name).attr('href', post.asking_url)
-                );
+                asking_name.attr('href', post.asking_url);
             }
             else {
-                asking.text(post.asking_name);
+                asking_name.addClass('anonymous');
             }
+            asking.append(asking_name);
             answerbox.append(asking);
             postelem.append(answerbox);
             postelem.append($(elem('div')).addClass('answer').html(post.answer));
@@ -177,9 +225,14 @@ function cb(data) {
 }
 
 $.oauth({
-    url: 'http://api.tumblr.com/v2/user/dashboard',
-    //url: '/static/testdata2.js',
-    data: {callback: 'cb', oauth_body_hash: '2jmj7l5rSw0yVb/vlWAYkK/YBwk='},
+    //url: 'http://api.tumblr.com/v2/user/dashboard',
+    url: '/static/testdata.js',
+    data: {
+        callback: 'cb',
+        reblog_info: 'true',
+        notes_info: 'true',
+        oauth_body_hash: '2jmj7l5rSw0yVb/vlWAYkK/YBwk='
+    },
     dataType: 'jsonp',
     jsonp: false,
     cache: true,
