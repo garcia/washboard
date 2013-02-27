@@ -1,3 +1,9 @@
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
+TIME_ZONE = 'America/Chicago'
+USE_TZ = True
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -8,3 +14,5 @@ DATABASES = {
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
+
+BASE_URL = 'http://localhost/'
