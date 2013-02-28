@@ -13,8 +13,12 @@ $(document).ready(function() {
 </script>-->
 {% endblock %}
 
+{% block title %}
+Blacklist rules
+{% endblock %}
+
 {% block content %}
-<form medivod="post">
+<form method="post">
     <fieldset>
         {% csrf_token %}
         <div id="rules">

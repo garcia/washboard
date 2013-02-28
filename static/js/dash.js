@@ -84,19 +84,20 @@ function cb(data) {
                 }
                 running_row--;
                 if (running_row > last_row) {
+                    row.addClass('row-' + layout[last_row]);
                     photos.append(row);
                     row = $(elem('div')).addClass('row');
                 }
                 last_row = running_row;
-                var target_size = {'1': 500, '2': 245, '3': 160}[
+                var target_size = {'1': 500 * scale, '2': 245 * scale, '3': 160 * scale}[
                     layout[running_row]
                 ];
                 var best_photo = best_fit(photo.alt_sizes, target_size);
                 var photoelem = $(elem('img'))
-                    .attr('src', best_photo.url)
-                    .attr('width', target_size);
+                    .attr('src', best_photo.url);
                 row.append(photoelem);
             });
+            row.addClass('row-' + layout[last_row]);
             photos.append(row);
             postelem.append(photos);
             if (post.caption) {
@@ -174,7 +175,7 @@ function cb(data) {
         // Video
         else if (post.type == 'video') {
             // TODO: choose video size intelligently
-            var best_player = best_fit(post.player, 500);
+            var best_player = best_fit(post.player, 500 * scale);
             postelem.append($(best_player.embed_code).addClass('player'));
             if (post.caption) {
                 postelem.append(
@@ -223,6 +224,10 @@ function cb(data) {
     });
     $('body').append(posts);
 }
+
+$(function() {
+    scale = Math.min(500, screen.width) / 500;
+});
 
 $.oauth({
     //url: 'http://api.tumblr.com/v2/user/dashboard',
