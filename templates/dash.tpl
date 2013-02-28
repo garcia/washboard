@@ -3,19 +3,19 @@
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 <meta name="viewport" content="width=512, initial-scale=1, minimum-scale=1" />
 <title>Washboard</title>
-<link rel="stylesheet" type="text/css" href="{% static "dash.css" %}" />
-<script type="text/javascript" src="{% static "jquery.min.js" %}"></script>
-<script type="text/javascript" src="{% static "sha1.js" %}"></script>
-<script type="text/javascript" src="{% static "oauth.js" %}"></script>
-<script type="text/javascript" src="{% static "jquery.oauth.js" %}"></script>
-<script type="text/javascript" src="{% static "json2.js" %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static "css/dash.css" %}" />
+<script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/sha1.js" %}"></script>
+<script type="text/javascript" src="{% static "js/oauth.js" %}"></script>
+<script type="text/javascript" src="{% static "js/jquery.oauth.js" %}"></script>
+<script type="text/javascript" src="{% static "js/json2.js" %}"></script>
 <script type="text/javascript">
 API_KEY         = "{{ api_key }}"
 API_SECRET      = "{{ api_secret }}"
 TOKEN_KEY       = "{{ token_key }}"
 TOKEN_SECRET    = "{{ token_secret }}"
 </script>
-<script type="text/javascript" src="{% static "dash.js" %}"></script>
+<script type="text/javascript" src="{% static "js/dash.js" %}"></script>
 
 {% if messages %}
 <ul class="messages">

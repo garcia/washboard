@@ -226,7 +226,7 @@ function cb(data) {
 
 $.oauth({
     //url: 'http://api.tumblr.com/v2/user/dashboard',
-    url: '/static/testdata.js',
+    url: '/static/js/testdata.js',
     data: {
         callback: 'cb',
         reblog_info: 'true',

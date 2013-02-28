@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 <title>Washboard</title>
-<script type="text/javascript" src="{% static "jquery.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
 
 {% if messages %}
 <ul class="messages">

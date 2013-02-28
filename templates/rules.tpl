@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 <meta name="viewport" content="width=512, initial-scale=1, minimum-scale=1" />
 <title>Washboard</title>
-<link rel="stylesheet" type="text/css" href="{% static "rules.css" %}" />
-<script type="text/javascript" src="{% static "jquery.min.js" %}"></script>
-<script type="text/javascript" src="{% static "jquery.fix.clone.js" %}"></script>
-<script type="text/javascript" src="{% static "rules.js" %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static "css/rules.css" %}" />
+<script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/jquery.fix.clone.js" %}"></script>
+<script type="text/javascript" src="{% static "js/rules.js" %}"></script>
 
 {% if messages %}
 <ul class="messages">
