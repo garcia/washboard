@@ -8,4 +8,6 @@ urlpatterns = patterns('',
     url(r'^callback$', 'wb.views.register.callback'),
     
     url(r'^dash', 'wb.views.dash.main'),
+
+    url(r'^rules', 'wb.views.rules.main'),
 )
