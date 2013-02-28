@@ -14,37 +14,41 @@ $(document).ready(function() {
 {% endblock %}
 
 {% block content %}
-<form method="post">
+<form medivod="post">
     <fieldset>
         {% csrf_token %}
-        <table id="rules">
-            <tr>
-                <th>Keyword</th>
-                <th>Show notification</th>
-                <th>Show user</th>
-                <th>Show keyword</th>
-                <th>Scan tags</th>
-                <th>Scan post</th>
-                <th>Regex</th>
-            </tr>
+        <div id="rules">
+            <div class="rule header">
+                <div class="keyword">Keyword</div>
+                <div class="show_notification">Notification</div>
+                <div class="show_user">Show user</div>
+                <div class="show_keyword">Show keyword</div>
+                <div class="scan_tags">Scan tags</div>
+                <div class="scan_post">Scan post</div>
+                <div class="regex">Regex</div>
+            </div>
             {% for rule in rules %}
-            <tr class="rule">
+            <div class="rule{% if not rule.instance.keyword %} defaults{% endif %}">
                 {% if not rule.instance.keyword %}
-                <td class="defaults">Default values</td>
-                <td class="keyword" style="display: none">{{ rule.keyword }}</td>
+                <div class="label">Default values</div>
+                <div class="keyword" style="display: none">{{ rule.keyword }}</div>
                 {% else %}
-                <td class="keyword">{{ rule.keyword }}</td>
+                <div class="keyword">{{ rule.keyword }}</div>
                 {% endif %}
-                <td class="show_notification">{{ rule.show_notification }}</td>
-                <td class="show_user">{{ rule.show_user }}</td>
-                <td class="show_keyword">{{ rule.show_keyword }}</td>
-                <td class="scan_tags">{{ rule.scan_tags }}</td>
-                <td class="scan_post">{{ rule.scan_post }}</td>
-                <td class="regex">{{ rule.regex }}</td>
-            </tr>
+                <div class="show_notification">{{ rule.show_notification }}</div>
+                <div class="show_user">{{ rule.show_user }}</div>
+                <div class="show_keyword">{{ rule.show_keyword }}</div>
+                <div class="scan_tags">{{ rule.scan_tags }}</div>
+                <div class="scan_post">{{ rule.scan_post }}</div>
+                <div class="regex">{{ rule.regex }}</div>
+            </div>
             {% endfor %}
-        </table>
-        <a href="javascript:add_rule()">Add rule</a>
+            <div class="rule add">
+                <div class="label" onclick="javascript:add_rule()">
+                    Add rule
+                </div>
+            </div>
+        </div>
     </fieldset>
 </form>
 {% endblock %}
