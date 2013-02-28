@@ -1,19 +1,6 @@
-{% load static %}
-<!DOCTYPE html>
-<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-<title>Washboard</title>
-<script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
+{% extends "base.tpl" %}
 
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
-<h1>Washboard</h1>
-
+{% block content %}
 <form action="/login" method="POST">
     <fieldset>
         {% csrf_token %}
@@ -24,3 +11,4 @@
 </form>
 
 <p>TODO: site description</p>
+{% endblock %}

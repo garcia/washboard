@@ -1,22 +1,19 @@
+{% extends "base.tpl" %}
 {% load static %}
-<!DOCTYPE html>
-<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-<meta name="viewport" content="width=512, initial-scale=1, minimum-scale=1" />
-<title>Washboard</title>
+
+{% block head %}
 <link rel="stylesheet" type="text/css" href="{% static "css/rules.css" %}" />
-<script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
-<script type="text/javascript" src="{% static "js/jquery.fix.clone.js" %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static "css/ios-checkboxes.css" %}" />
 <script type="text/javascript" src="{% static "js/rules.js" %}"></script>
+<script type="text/javascript" src="{% static "js/ios-checkboxes.js" %}"></script>
+<!--<script type="text/javascript">
+$(document).ready(function() {
+    $(':checkbox').iphoneStyle();
+});
+</script>-->
+{% endblock %}
 
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
-{% if rules %}
+{% block content %}
 <form method="post">
     <fieldset>
         {% csrf_token %}
@@ -50,4 +47,4 @@
         <a href="javascript:add_rule()">Add rule</a>
     </fieldset>
 </form>
-{% endif %}
+{% endblock %}

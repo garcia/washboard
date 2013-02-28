@@ -1,17 +1,6 @@
-{% load static %}
-<!DOCTYPE html>
-<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-<title>Washboard</title>
-<script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
+{% extends "base.tpl" %}
 
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
+{% block content %}
 <h1>Step 1: register an application</h1>
 
 <form method="post">
@@ -29,3 +18,4 @@
         <input type="submit" />
     </fieldset>
 </fieldset></form>
+{% endblock %}
