@@ -24,6 +24,7 @@ def main(request):
     rules.extend(RuleForm(instance=r, prefix=r.keyword)
         for r in Rule.objects.filter(user__exact=request.user))
     data = {
+        'title': 'Rules',
         'rules': rules,
     }
     return render(request, 'rules.tpl', data)

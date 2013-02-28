@@ -222,7 +222,7 @@ function cb(data) {
         }
         posts.append(postelem);
     });
-    $('body').append(posts);
+    $('#middle div').html(posts);
 }
 
 $(function() {

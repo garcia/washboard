@@ -15,10 +15,12 @@
 
 <div id="middle" class="wrapper">
     <div>
+        {% if not dash %}
         <h1 id="title">{% if title %}{{ title }}{% else %}Washboard{% endif %}</h1>
         <div id="content">
             {% block content %}{% endblock %}
         </div>
+        {% endif %}
     </div>
 </div>
 

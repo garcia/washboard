@@ -159,7 +159,8 @@ h2 {
 
     #posts,
     .post.video > iframe,
-    .audiobox > iframe {
+    .audiobox > iframe,
+    .meta {
         width: 100% !important;
     }
     
@@ -169,6 +170,14 @@ h2 {
         box-sizing: border-box;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
+    }
+
+    .post:first-child {
+        margin-top: 4px;
+    }
+    
+    .post:last-child {
+        margin-bottom: 4px;
     }
     
     .post.photo .row {
@@ -184,7 +193,7 @@ h2 {
         vertical-align: top;
     }
     
-    .post.photo .row img:nth-child(0) {
+    .post.photo .row img:first-child {
         margin-left: 0;
     }
     

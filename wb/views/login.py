@@ -23,7 +23,10 @@ class LoginForm(forms.Form):
 def main(request):
     if request.user.is_authenticated():
         return redirect('/dash')
-    return render(request, 'main.tpl', {'form': LoginForm()})
+    return render(request, 'main.tpl', {
+        'title': 'Login',
+        'form': LoginForm(),
+    })
 
 def login(request):
     if request.method == 'GET':
