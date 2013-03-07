@@ -24,8 +24,8 @@ Blacklist rules
         <div id="rules">
             <div class="rule header">
                 <div class="keyword">Keyword</div>
-                <div class="show_notification">Notification</div>
-                <div class="whole_word">Whole word only</div>
+                <div class="show_notification">Show notification</div>
+                <div class="whole_word">Whole word</div>
                 <div class="regex">Regex</div>
             </div>
             {% for rule in rules %}

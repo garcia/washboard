@@ -1,8 +1,25 @@
 from django.db import models
 from django.contrib.auth.models import User
+from south.modelsinspector import add_introspection_rules
 
-# Much of this is copied from
-# http://stackoverflow.com/questions/44109/extending-the-user-model-with-custom-fields-in-django/965883
+# From http://stackoverflow.com/questions/2350681
+
+class LowerCaseCharField(models.fields.CharField):
+
+    def pre_save(self, model_instance, add):
+        current_value = getattr(model_instance, self.attname)
+        setattr(model_instance, self.attname, current_value.lower())
+        return getattr(model_instance, self.attname)
+
+    def to_python(self, value):
+        value = super(LowerCaseCharField, self).to_python(value)
+        if isinstance(value, basestring):
+            return value.lower()
+        return value
+
+add_introspection_rules([], ['^wb\.models\.LowerCaseCharField'])
+
+# From http://stackoverflow.com/questions/44109/965883
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
@@ -28,11 +45,14 @@ class TemporaryKeypair(models.Model):
 
 class Rule(models.Model):
     user = models.ForeignKey(User)
-    keyword = models.TextField(max_length=256)
+    keyword = LowerCaseCharField(max_length=256)
     blacklist = models.BooleanField(default=True)
     show_notification = models.BooleanField(default=True)
     whole_word = models.BooleanField(default=False)
     regex = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('user', 'keyword')
 
 
 class WhitelistUser(models.Model):
