@@ -45,12 +45,16 @@ Blacklist rules
                 <div class="scan_tags">{{ rule.scan_tags }}</div>
                 <div class="scan_post">{{ rule.scan_post }}</div>
                 <div class="regex">{{ rule.regex }}</div>
+                <div class="blacklist" style="display: none">{{ rule.blacklist }}</div>
             </div>
             {% endfor %}
             <div class="rule add">
                 <div class="label" onclick="javascript:add_rule()">
                     Add rule
                 </div>
+            </div>
+            <div class="rule submit">
+                <input type="submit" />
             </div>
         </div>
     </fieldset>
