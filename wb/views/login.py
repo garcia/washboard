@@ -1,6 +1,5 @@
 from django import forms
-from django.contrib import messages
-from django.contrib.auth import authenticate, login as auth_login
+from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 
@@ -37,12 +36,20 @@ def login(request):
         return redirect('/')
     
     data = form.cleaned_data
-    user = authenticate(username=data['username'], password=data['password'])
+    user = auth.authenticate(username=data['username'], password=data['password'])
     if not user:
         messages.error(request, 'Incorrect username or password.')
         return redirect('/')
     elif not user.is_active:
         messages.error(request, 'Sorry, your account is disabled.')
         return redirect('/')
-    auth_login(request, user)
+    auth.login(request, user)
+    return redirect('/')
+
+from django.contrib.auth import logout as auth_logout
+from django.shortcuts import redirect
+
+def logout(request):
+    auth.logout(request)
+    messages.success(request, 'You have logged out.')
     return redirect('/')
