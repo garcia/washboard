@@ -12,10 +12,8 @@ API_KEY         = "{{ api_key }}"
 API_SECRET      = "{{ api_secret }}"
 TOKEN_KEY       = "{{ token_key }}"
 TOKEN_SECRET    = "{{ token_secret }}"
+
+rules = {{ rules|safe }}
 </script>
 <script type="text/javascript" src="{% static "js/dash.js" %}"></script>
-{% endblock %}
-
-{% block content %}
-<h1>Loading posts...</h1>
 {% endblock %}
