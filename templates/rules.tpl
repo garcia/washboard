@@ -25,10 +25,7 @@ Blacklist rules
             <div class="rule header">
                 <div class="keyword">Keyword</div>
                 <div class="show_notification">Notification</div>
-                <div class="show_user">Show user</div>
-                <div class="show_keyword">Show keyword</div>
-                <div class="scan_tags">Scan tags</div>
-                <div class="scan_post">Scan post</div>
+                <div class="whole_word">Whole word only</div>
                 <div class="regex">Regex</div>
             </div>
             {% for rule in rules %}
@@ -40,10 +37,7 @@ Blacklist rules
                 <div class="keyword">{{ rule.keyword }}</div>
                 {% endif %}
                 <div class="show_notification">{{ rule.show_notification }}</div>
-                <div class="show_user">{{ rule.show_user }}</div>
-                <div class="show_keyword">{{ rule.show_keyword }}</div>
-                <div class="scan_tags">{{ rule.scan_tags }}</div>
-                <div class="scan_post">{{ rule.scan_post }}</div>
+                <div class="whole_word">{{ rule.whole_word }}</div>
                 <div class="regex">{{ rule.regex }}</div>
                 <div class="blacklist" style="display: none">{{ rule.blacklist }}</div>
             </div>

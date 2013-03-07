@@ -31,10 +31,7 @@ class Rule(models.Model):
     keyword = models.TextField(max_length=256)
     blacklist = models.BooleanField(default=True)
     show_notification = models.BooleanField(default=True)
-    show_user = models.BooleanField(default=True)
-    show_keyword = models.BooleanField(default=True)
-    scan_tags = models.BooleanField(default=True)
-    scan_post = models.BooleanField(default=True)
+    whole_word = models.BooleanField(default=False)
     regex = models.BooleanField(default=False)
 
 
