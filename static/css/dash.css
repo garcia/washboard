@@ -38,6 +38,7 @@ h2 {
 }
 
 .post {
+    position: relative;
     width: 500px;
     padding: 20px;
     margin: 10px 0;
@@ -57,7 +58,6 @@ h2 {
     width: 500px;
     margin: -10px 0 0 -10px;
     padding: 20px 10px;
-    background
 }
 
 .meta .blog_name,
@@ -168,6 +168,19 @@ h2 {
 .blacklisted > .notification {
     display: block;
     text-align: center;
+}
+
+.progress {
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background-color: #88ffff;
+    opacity: 0;
+    border-right: 1px solid #00ffff;
+    border-radius: 6px 0 0 6px;
 }
 
 @media screen and (max-width: 540px) {

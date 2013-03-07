@@ -267,7 +267,7 @@ function cb(data) {
         }
         
         // Check for blacklisted keywords
-        keywords = []
+        keywords = [];
         blacklist = true;
         $.each(scan, function(s, scan_element) {
             console.log(scan_element);
@@ -299,8 +299,10 @@ function cb(data) {
                     touchscreen ? 'Press and hold to unhide'
                                 : 'Click to unhide')
             );
+            notification.append(elem('div').addClass('progress'));
             if (touchscreen) {
-                // magic
+                postelem.on('touchstart', touchstart);
+                postelem.on('touchend', touchend);
             }
             else {
                 notification.attr('onclick', 'unhide(this)');
@@ -313,8 +315,51 @@ function cb(data) {
     $('#middle div').html(posts);
 }
 
+function touchstart(e) {
+    $('body').css('-webkit-user-select', 'none');
+    unhiding = setTimeout(function() {
+        var prog = $(e.currentTarget).find('.progress');
+        prog.stop()
+            .css('opacity', .25)
+            .animate(
+                {width: '100%'},
+                1000,
+                function() {
+                    unhide(e.currentTarget);
+                    $('body').css('-webkit-user-select', 'text');
+                    $(e.currentTarget).off('touchstart').off('touchend');
+                }
+            );
+    }, 50);
+    //checktouch = setInterval(function() {
+        
+}
+
+function touchend(e) {
+    $('body').css('-webkit-user-select', 'text');
+    console.log(e);
+    clearTimeout(unhiding);
+    var prog = $(e.currentTarget).find('.progress');
+    prog.stop()
+        .animate(
+            {opacity: 0},
+            200,
+            function() {
+                $(this).css('opacity', .25).css('width', 0);
+            }
+        );
+}
+
 function unhide(a) {
-    $(a).closest('.post').removeClass('blacklisted');
+    var post = $(a).closest('.post');
+    post.children().animate(
+        {opacity: 0},
+        500,
+        function() {
+            post.removeClass('blacklisted');
+            post.children().css('opacity', 0).animate({opacity: 1}, 600);
+        }
+    );
 }
 
 $(function() {
