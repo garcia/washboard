@@ -21,5 +21,8 @@ def main(request):
         'api_secret': profile.api_secret,
         'token_key': profile.token_key,
         'token_secret': profile.token_secret,
+        'rules': json.dumps(list(
+                Rule.objects.filter(user__exact=request.user).values()
+            )),
     }
     return render(request, 'dash.tpl', data)

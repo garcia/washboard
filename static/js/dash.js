@@ -1,3 +1,23 @@
+function plural(array) {
+    return array.length == 1 ? '' : 's';
+}
+
+function niceList(array) {
+    if (!array || !array.length) {
+        return "";
+    }
+    var clone = array.slice(0);
+    return function build() {
+        if (clone.length == 1) {
+            return clone[0];
+        }
+        if (clone.length == 2) {
+            return clone[0] + ' and ' + clone[1];
+        }
+        return clone.shift() + ", " + build();
+    }();
+}
+
 function best_fit(elements, target_width) {
     var best = 0;
     var best_width = 0;
@@ -25,8 +45,11 @@ function cb(data) {
     d = data;
     posts = $(elem('ul')).attr('id', 'posts');
     $.each(data.response.posts, function(p, post) {
+        console.log(post);
         var postelem = $(elem('li')).addClass('post');
         postelem.addClass(post.type);
+
+        var scan = [];
 
         // Common metadata
         var meta = $(elem('div')).addClass('meta');
@@ -45,6 +68,7 @@ function cb(data) {
                 .text(post.reblogged_from_name)
                 .attr('href', post.reblogged_from_url)
             );
+            scan.push(post.reblogged_from_name);
         }
         if (post.note_count) {
             meta.append($(elem('a'))
@@ -59,8 +83,10 @@ function cb(data) {
         if (post.type == 'text') {
             if (post.title) {
                 postelem.append($(elem('h2')).text(post.title));
+                scan.push(post.title);
             }
             postelem.append($(elem('div')).addClass('body').html(post.body));
+            scan.push(post.body);
         }
 
         // Photo
@@ -102,14 +128,17 @@ function cb(data) {
             postelem.append(photos);
             if (post.caption) {
                 postelem.append($(elem('div')).addClass('caption').html(post.caption));
+                scan.push(post.caption);
             }
         }
 
         // Quote
         else if (post.type == 'quote') {
             postelem.append($(elem('div')).addClass('quote').html(post.text));
+            scan.push(post.text);
             if (post.source) {
                 postelem.append($(elem('div')).addClass('source').html(post.source));
+                scan.push(post.source);
             }
         }
 
@@ -122,20 +151,28 @@ function cb(data) {
             else {
                 anchor.text(post.url);
             }
+            scan.push(post.title);
+            scan.push(post.url);
             postelem.append(anchor);
-            postelem.append($(elem('div')).addClass('description').html(post.description));
+            if (post.description) {
+                postelem.append($(elem('div')).addClass('description').html(post.description));
+                scan.push(post.description);
+            }
         }
 
         // Chat
         else if (post.type == 'chat') {
             if (post.title) {
                 postelem.append($(elem('h2')).addClass('title').text(post.title));
+                scan.push(post.title);
             }
             chat = $(elem('ul')).addClass('dialogue');
             $.each(post.dialogue, function(l, line) {
                 chat.append($(elem('li')).addClass('line').text(
                     line.label + " " + line.phrase
                 ));
+                scan.push(line.label);
+                scan.push(line.phrase);
             });
             postelem.append(chat);
         }
@@ -153,22 +190,26 @@ function cb(data) {
                 audiobox.append(
                     $(elem('p')).addClass('track_name').text(post.track_name)
                 );
+                scan.push(post.track_name);
             }
             if (post.artist) {
                 audiobox.append(
                     $(elem('p')).addClass('artist').text(post.artist)
                 );
+                scan.push(post.artist);
             }
             if (post.album) {
                 audiobox.append(
                     $(elem('p')).addClass('album').text(post.album)
                 );
+                scan.push(post.album);
             }
             postelem.append(audiobox);
             if (post.caption) {
                 postelem.append(
                     $(elem('div')).addClass('caption').html(post.caption)
                 );
+                scan.push(post.caption);
             }
         }
 
@@ -181,6 +222,7 @@ function cb(data) {
                 postelem.append(
                     $(elem('div')).addClass('caption').html(post.caption)
                 );
+                scan.push(post.caption);
             }
         }
 
@@ -207,10 +249,13 @@ function cb(data) {
             else {
                 asking_name.addClass('anonymous');
             }
+            scan.push(post.asking_name);
+            scan.push(post.question);
             asking.append(asking_name);
             answerbox.append(asking);
             postelem.append(answerbox);
             postelem.append($(elem('div')).addClass('answer').html(post.answer));
+            scan.push(post.answer);
 
         }
         
@@ -220,13 +265,61 @@ function cb(data) {
                 "Sorry, I don't know how to render " + post.type + " posts yet."
             ));
         }
+        
+        // Check for blacklisted keywords
+        keywords = []
+        blacklist = true;
+        $.each(scan, function(s, scan_element) {
+            console.log(scan_element);
+            $.each(rules, function(r, rule) {
+                console.log(rule);
+                if (scan_element.toLowerCase().indexOf(rule.keyword.toLowerCase()) >= 0) {
+                    // Post contains a whitelisted keyword
+                    if (!rule.blacklist) {
+                        blacklist = false;
+                    }
+                    keywords.push(rule.keyword);
+                    console.log('Blacklisted: ' + rule.keyword);
+                }
+            });
+        });
+        if (keywords.length && blacklist) {
+            postelem.addClass('blacklisted');
+            var notification = $(elem('div')).addClass('notification');
+            notification.append(
+                $(elem('h2')).text('Post blacklisted')
+            );
+            notification.append(
+                $(elem('p')).text('This post contains the keyword' +
+                    plural(keywords) + ' ' + niceList(keywords) + '.')
+            );
+            notification.append($(elem('a'))
+                .addClass('instructions')
+                .text(
+                    touchscreen ? 'Press and hold to unhide'
+                                : 'Click to unhide')
+            );
+            if (touchscreen) {
+                // magic
+            }
+            else {
+                notification.attr('onclick', 'unhide(this)');
+            }
+            postelem.append(notification);
+        }
+
         posts.append(postelem);
     });
     $('#middle div').html(posts);
 }
 
+function unhide(a) {
+    $(a).closest('.post').removeClass('blacklisted');
+}
+
 $(function() {
     scale = Math.min(500, screen.width) / 500;
+    touchscreen = !!('ontouchstart' in window);
 });
 
 $.oauth({
