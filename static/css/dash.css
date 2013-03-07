@@ -46,6 +46,7 @@ h2 {
     list-style-type: none; /* IE9 fix */
     border-radius: 6px;
     box-shadow: 0 1px 5px rgba(0, 0, 0, .5);
+    -webkit-transition: opacity .5s ease;
 }
 
 .post p:last-child {
@@ -156,6 +157,10 @@ h2 {
 }
 
 /* blacklisted posts */
+
+.blacklisted {
+    opacity: .875;
+}
 
 .notification {
     display: none;
