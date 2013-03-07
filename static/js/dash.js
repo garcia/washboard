@@ -278,8 +278,10 @@ function cb(data) {
                     if (!rule.blacklist) {
                         blacklist = false;
                     }
-                    keywords.push(rule.keyword);
-                    console.log('Blacklisted: ' + rule.keyword);
+                    if (keywords.indexOf(rule.keyword) == -1) {
+                        keywords.push(rule.keyword);
+                        console.log('Blacklisted: ' + rule.keyword);
+                    }
                 }
             });
         });
