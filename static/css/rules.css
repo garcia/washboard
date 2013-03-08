@@ -4,21 +4,21 @@
     text-align: center;
 }
 
-.rule {
+.row {
     display: table-row;
     height: 30px;
 }
 
-.rule > div {
+.row > div {
     display: table-cell;
     padding: 10px;
 }
 
-.rule:nth-of-type(2n+1) {
+.row:nth-of-type(2n+1) {
     background-color: rgba(205, 211, 233, .125);
 }
 
-.rule:nth-of-type(2n+1) > div {
+.row:nth-of-type(2n+1) > div {
     border-bottom: 1px solid rgba(205, 211, 233, .5);
 }
 
@@ -31,17 +31,90 @@
     text-align: left;
 }
 
-.rule.defaults .label {
+.row.defaults .label {
     color: #808080;
 }
 
-.rule.add {
+.row.add {
     background-color: inherit;
 }
 
-.rule.add .label {
+.row.add .label {
     border-bottom: none;
     cursor: pointer;
     color: #000080;
 }
 
+/* ------------------------------------------
+PURE CSS GUI ICONS
+by Nicolas Gallagher
+- http://nicolasgallagher.com/pure-css-gui-icons/
+
+http://nicolasgallagher.com
+http://twitter.com/necolas
+
+Created: 29 July 2010
+Version: 1.0.1
+
+Dual licensed under MIT and GNU GPLv2 © Nicolas Gallagher
+
+(edited by Grant Garcia)
+------------------------------------------ */
+
+.defaults .delete {
+    visibility: hidden;
+    cursor: inherit;
+}
+
+.delete {
+    width: 20px;
+    left: 28px;
+    margin: 0 auto;
+    position: relative;
+    text-indent: -65536em;
+}
+
+.delete a {
+    left: 50%;
+    cursor: pointer;
+}
+
+.delete:before,
+.delete:after,
+.delete a:before,
+.delete a:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+}
+
+.delete a:before,
+.delete a:after {
+    left: 6px;
+    width: 5px;
+    height: 15px;
+    margin-top: -7px;
+    background: #c55500;
+    /* css3 */
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.delete a:after {
+    left: 1px;
+    width: 15px;
+    height: 5px;
+    margin-top: -2px;
+}
+
+.delete a:hover:after,
+.delete a:focus:after,
+.delete a:active:after,
+.delete a:hover:before,
+.delete a:focus:before,
+.delete a:active:before {
+    background: #730800;
+}

@@ -1,6 +1,6 @@
 function add_rule() {
     // Insert the default rules
-    rule = $('.rule.defaults').clone().removeClass('defaults');
+    rule = $('.row.defaults').clone().removeClass('defaults').addClass('rule');
     // Replace {prefix} with a random number
     rule.html(
         rule.html()
@@ -10,22 +10,24 @@ function add_rule() {
     rule.find('.label').remove();
     // Make the keyword input visible again
     rule.find('.keyword').removeAttr('style');
+    rule.find('.delete').removeAttr('style');
     // Insert the new row into the rules table
-    rule.insertBefore($('.rule.add'));
+    rule.insertBefore($('.row.add'));
     rule.find('.keyword input').focus().keypress(keyword_keypress);
     rule.find('input[type=checkbox]').click(checkbox_click);
 }
 
 function keyword_keypress(e) {
-    if (e.which == 13) {
+    if ((e.which || e.keyCode || e.charCode) == 13) {
         add_rule();
+        return false;
     }
 }
 
 function checkbox_click(e) {
     console.log(e);
     if (e.shiftKey) {
-        if ($(this).closest('.rule').hasClass('defaults')) {
+        if ($(this).closest('.row').hasClass('defaults')) {
             $('.' + $(this).closest('div').attr('class'))
                 .find('input[type=checkbox]')
                 .prop('checked', this.checked);
@@ -37,6 +39,14 @@ function checkbox_click(e) {
                 .prop('checked', this.checked);
         }
         */
+    }
+}
+
+function delete_rule(e) {
+    $(e).closest('.rule').remove();
+    console.log($('#rules').children('.rule').length);
+    if (!$('#rules').children('.rule').length) {
+        add_rule();
     }
 }
 
