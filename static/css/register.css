@@ -1,0 +1,38 @@
+#register-example {
+    position: relative;
+    float: right;
+    margin-left: 20px;
+    padding: 20px;
+    color: #444;
+    background-color: #eee;
+    border-radius: 10px;
+    border-bottom: solid 1px #ccc;
+}
+
+#register-example h2,
+#register-example h2 a {
+    font-weight: normal;
+    color: inherit;
+    margin: 0;
+}
+
+#register-example p {
+    margin: 20px 0 5px 0;
+}
+
+#register-example p:first-child {
+    margin-top: 0;
+}
+
+#register-example input {
+    width: 300px;
+    margin: 0;
+    padding: 7px;
+    border: 1px solid rgba(0, 0, 0, .2);
+    outline: 0;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, .7);
+}
+
+#content {
+    overflow: hidden;
+}
