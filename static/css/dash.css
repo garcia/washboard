@@ -170,9 +170,18 @@ h2 {
     display: none;
 }
 
+/* videos have display: block; hardcoded */
+.blacklisted iframe {
+    display: none !important;
+}
+
 .blacklisted > .notification {
     display: block;
     text-align: center;
+}
+
+.keyword {
+    font-style: italic;
 }
 
 .progress {

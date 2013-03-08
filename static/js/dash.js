@@ -2,19 +2,19 @@ function plural(array) {
     return array.length == 1 ? '' : 's';
 }
 
-function niceList(array) {
+function kw_list(array) {
     if (!array || !array.length) {
         return "";
     }
     var clone = array.slice(0);
     return function build() {
         if (clone.length == 1) {
-            return clone[0];
+            return '<span class="keyword">' + clone[0] + '</span>';
         }
         if (clone.length == 2) {
-            return clone[0] + ' and ' + clone[1];
+            return '<span class="keyword">' + clone[0] + '</span> and <span class="keyword">' + clone[1] + '</span>';
         }
-        return clone.shift() + ", " + build();
+        return '<span class="keyword">' + clone.shift() + '</span>, <span class="keyword">' + build();
     }();
 }
 
@@ -269,14 +269,25 @@ function cb(data) {
         // Check for blacklisted keywords
         keywords = [];
         blacklist = true;
+        notification = true;
         $.each(scan, function(s, scan_element) {
             console.log(scan_element);
             $.each(rules, function(r, rule) {
                 console.log(rule);
-                if (scan_element.toLowerCase().indexOf(rule.keyword.toLowerCase()) >= 0) {
+                var kw = rule.keyword;
+                if (rule.whole_word) {
+                    kw = new RegExp('\\b' + kw + '\\b', 'i');
+                    rule.regex = true;
+                }
+                if ((rule.regex && scan_element.search(kw) >= 0) ||
+                    (!rule.regex && scan_element.toLowerCase().indexOf(kw.toLowerCase()) >= 0)) {
                     // Post contains a whitelisted keyword
                     if (!rule.blacklist) {
                         blacklist = false;
+                        return false;
+                    }
+                    if (!rule.show_notification) {
+                        notification = false;
                     }
                     if (keywords.indexOf(rule.keyword) == -1) {
                         keywords.push(rule.keyword);
@@ -285,15 +296,15 @@ function cb(data) {
                 }
             });
         });
-        if (keywords.length && blacklist) {
+        if (keywords.length && blacklist && notification) {
             postelem.addClass('blacklisted');
             var notification = elem('div').addClass('notification');
             notification.append(
                 elem('h2').text('Post blacklisted')
             );
             notification.append(
-                elem('p').text('This post contains the keyword' +
-                    plural(keywords) + ' ' + niceList(keywords) + '.')
+                elem('p').html('This post contains the keyword' +
+                    plural(keywords) + ' ' + kw_list(keywords) + '.')
             );
             notification.append(elem('a')
                 .addClass('instructions')
@@ -312,7 +323,10 @@ function cb(data) {
             postelem.append(notification);
         }
 
-        posts.append(postelem);
+        // Append element, unless it got blacklisted by a no-notification keyword
+        if (!keywords.length || notification) {
+            posts.append(postelem);
+        }
     });
     $('#middle div').html(posts);
 }
