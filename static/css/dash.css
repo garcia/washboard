@@ -210,10 +210,23 @@ h2 {
     }
 
     #posts,
+    #top #nav,
     .post.video > iframe,
     .audiobox > iframe,
     .meta {
         width: 100% !important;
+    }
+    
+    #menu {
+        right: 0 !important;
+    }
+
+    .dropdown.dropdown-tip:before {
+        left: 139px !important;
+    }
+
+    .dropdown.dropdown-tip:after {
+        left: 140px !important;
     }
     
     .post {
@@ -262,3 +275,18 @@ h2 {
     }
 }
 
+@media screen and (min-width: 540px) {
+
+    #menu {
+        right: -20px !important;
+    }
+
+    .dropdown.dropdown-tip:before {
+        left: 119px !important;
+    }
+
+    .dropdown.dropdown-tip:after {
+        left: 120px !important;
+    }
+
+}

@@ -92,19 +92,19 @@ fieldset {
 /* jquery.dropdown.js overrides */
 
 #menu {
-    right: -40px !important;
+    right: -20px !important;
     left: inherit !important;
 }
 
 .dropdown.dropdown-tip:before {
     top: -7px !important;
-    left: 99px !important;
+    left: 119px !important;
     border-bottom-color: rgba(0, 0, 0, 0.2) !important;
 }
 
 .dropdown.dropdown-tip:after {
     top: -6px !important;
-    left: 100px !important;
+    left: 120px !important;
     border-bottom-color: hsl(210, 38%, 50%) !important;
 }
 
@@ -177,6 +177,19 @@ input[type=password]:focus {
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         padding: 0 10px;
+    }
+
+    #menu {
+        right: 0 !important;
+    }
+
+    .dropdown.dropdown-tip:before {
+        left: 139px !important;
+    }
+
+    .dropdown.dropdown-tip:after {
+        left: 140px !important;
+    }
 
 }
 
@@ -184,6 +197,11 @@ input[type=password]:focus {
 
     body {
         font-size: 9px;
+    }
+
+    #menu-link:before,
+    #menu-link:after {
+        top: 4px;
     }
     
     #content {
