@@ -44,6 +44,9 @@ def post(request):
         # Defaults
         if prefix == '{prefix}':
             continue
+        # Empty?
+        if not request.POST.get('%s-%s' % (prefix, 'keyword'), ''):
+            continue
         form = {}
         for field in Rule._meta.fields:
             # Ignored fields
