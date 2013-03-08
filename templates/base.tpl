@@ -29,10 +29,21 @@
 
 <div id="middle" class="wrapper">
     <div>
+        {% if messages %}
+        <ul id="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
         {% if not dash %}
         <div id="content">
             {% block content %}{% endblock %}
         </div>
+        {% else %}
+        <noscript>
+            <p>Sorry, your browser does not have JavaScript enabled. (Maybe it's turned off?)</p>
+        </noscript>
         {% endif %}
     </div>
 </div>

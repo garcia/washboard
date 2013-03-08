@@ -27,6 +27,12 @@ h2 {
     margin-top: 0;
 }
 
+noscript p {
+    text-align: center;
+    font-size: 24px;
+    color: white;
+}
+
 /* nav */
 
 #top #nav {
