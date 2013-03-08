@@ -4,14 +4,25 @@
 <meta name="viewport" content="initial-scale=1, minimum-scale=1" />
 <title>{% if title %}{{title}} &mdash; {% endif %}Washboard</title>
 <link rel="stylesheet" type="text/css" href="{% static "css/washboard.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/jquery.dropdown.css" %}" />
 <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
 <script type="text/javascript" src="{% static "js/jquery.fix.clone.js" %}"></script>
+<script type="text/javascript" src="{% static "js/jquery.dropdown.js" %}"></script>
+<script type="text/javascript" src="{% static "js/washboard.js" %}"></script>
 {% block head %}{% endblock %}
 
 <div id="top" class="wrapper">
     <div>
         <div id="nav">
             <h1 id="title">{% if title %}{{ title }}{% else %}Washboard{% endif %}</h1>
+            <div id="menu">
+                <ul>
+                    <li><a href="/dash">Dashboard</a></li>
+                    <li><a href="/rules">Rules</a></li>
+                    <li><a href="/settings">Settings</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

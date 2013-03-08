@@ -41,14 +41,78 @@ fieldset {
 }
 
 #top #nav {
+    position: relative;
     width: 920px;
     margin: 0 auto;
 }
 
 #top h1,
 #bottom h1 {
-    display: inline-block;
+    display: inline;
+    position: relative;
     margin: 0;
+}
+
+#menu-link {
+    float: right;
+    text-indent: -65536em;
+}
+
+#menu-link:before,
+#menu-link:after {
+    content: "";
+    position: absolute;
+    top: 9px;
+    right: 0px;
+    width: 12px;
+    height: 2px;
+    background: transparent;
+    border-width: 6px 0;
+    border-style: double;
+    border-color: #a8c1d7;
+}
+
+#menu-link:after {
+    right: 14px;
+    width: 2px;
+}
+
+#menu-link:hover:before,
+#menu-link:focus:before,
+#menu-link:active:before,
+#menu-link:hover:after,
+#menu-link:focus:after,
+#menu-link:active:after {
+    background: transparent;
+    border-color: #dce6ef;
+}
+
+#menu {
+    right: -40px !important;
+    left: inherit !important;
+}
+
+.dropdown.dropdown-tip:before {
+    top: -7px !important;
+    left: 108px !important;
+    border-bottom-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+.dropdown.dropdown-tip:after {
+    top: -6px !important;
+    left: 109px !important;
+    border-bottom-color: hsl(209, 38%, 50%) !important;
+}
+
+.dropdown .dropdown-menu,
+.dropdown .dropdown-panel {
+    background-color: hsl(209, 38%, 14%) !important;
+    border: solid 2px hsl(209, 38%, 50%) !important;
+    box-shadow: -1px 1px 1px rgba(0, 0, 0, .2) !important;
+}
+
+.dropdown .dropdown-menu li > a {
+    color: hsl(208, 37%, 90%) !important;
 }
 
 #middle > div {
@@ -103,11 +167,6 @@ input[type=password]:focus {
         border-radius: 0;
     }
 
-    #top > div,
-    #bottom > div {
-        height: 16px;
-    }
-
 }
 
 @media screen and (max-width: 500px) {
@@ -118,11 +177,6 @@ input[type=password]:focus {
     
     #content {
         padding: 10px;
-    }
-
-    #top > div,
-    #bottom > div {
-        height: 8px;
     }
 
 }
