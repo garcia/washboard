@@ -23,7 +23,7 @@ def main(request):
     if request.user.is_authenticated():
         return redirect('/dash')
     return render(request, 'main.tpl', {
-        'title': 'Login',
+        'title': 'Washboard',
         'form': LoginForm(),
     })
 

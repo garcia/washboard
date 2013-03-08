@@ -16,6 +16,7 @@ def main(request):
     
     profile = request.user.get_profile()
     data = {
+        'title': 'Dashboard',
         'dash': True,
         'api_key': profile.api_key,
         'api_secret': profile.api_secret,

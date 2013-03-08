@@ -34,29 +34,28 @@ fieldset {
 
 #top > div,
 #bottom > div {
-    background-color: #cdd3e9;
-    height: 24px;
+    height: 100%;
+    padding: 10px 0;
+    color: #dce6ef;
+    background-color: #162431;
 }
 
-#top > div {
-    border-bottom: 2px solid #88c6c9;
-    background-image: url("data:image/gif;base64,R0lGODdhBgAEAKEDAIjGyZLIzsPR5M3T6SwAAAAABgAEAAACCtR+YSegIwJwERQAOw==");
-    background-position: bottom center;
-    background-repeat: repeat-x;
+#top #nav {
+    width: 920px;
+    margin: 0 auto;
 }
 
-#bottom > div {
-    border-top: 4px solid #88c6c9;
-    background-image: url("data:image/gif;base64,R0lGODdhBgAEAKEDAIjGyZLIzsPR5M3T6SwAAAAABgAEAAACCQQiYTjJ0wScBQA7");
-    background-position: top center;
-    background-repeat: repeat-x;
+#top h1,
+#bottom h1 {
+    display: inline-block;
+    margin: 0;
 }
 
 #middle > div {
     height: 100%;
     background-color: #2c4762;
-    border-top: 4px solid #798ee0;
-    border-bottom: 4px solid #798ee0;
+    border-top: 2px solid #4f7fb0;
+    border-bottom: 2px solid #4f7fb0;
 }
 
 #middle > div > h1 {
@@ -67,7 +66,7 @@ fieldset {
 
 #content {
     width: 880px;
-    margin: 0 auto 40px auto;
+    margin: 20px auto;
     padding: 40px;
     background-color: white;
     border-radius: 6px;

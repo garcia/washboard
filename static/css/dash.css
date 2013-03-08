@@ -27,7 +27,13 @@ h2 {
     margin-top: 0;
 }
 
-/* common elements */
+/* nav */
+
+#top #nav {
+    width: 500px !important;
+}
+
+/* posts */
 
 #posts {
     width: 540px;

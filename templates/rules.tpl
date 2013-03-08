@@ -3,7 +3,6 @@
 
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{% static "css/rules.css" %}" />
-<link rel="stylesheet" type="text/css" href="{% static "css/gui.css" %}" />
 <script type="text/javascript" src="{% static "js/rules.js" %}"></script>
 <script type="text/javascript" src="{% static "js/ios-checkboxes.js" %}"></script>
 <!--<script type="text/javascript">
