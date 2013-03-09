@@ -413,8 +413,8 @@ function dashboard(data, options) {
         reblog_info: 'true',
         notes_info: 'true'
     }, data);
-    apicall('http://api.tumblr.com/v2/user/dashboard', _data, options);
-    //apicall('/static/js/testdata.js', _data, options);
+    //apicall('http://api.tumblr.com/v2/user/dashboard', _data, options);
+    apicall('/static/js/testdata.js', _data, options);
 }
 
 function load_more() {
