@@ -9,10 +9,14 @@
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#395c7f', endColorstr='#2c4762',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
-#content, #links {
+#content, #links, #messages {
+    text-align: center;
+}
+
+#content {
+    margin: 10% auto;
     background-color: transparent;
     color: #dce6ef;
-    text-align: center;
 }
 
 a {
@@ -51,8 +55,11 @@ a:hover {
 
 #login {
     width: 40%;
-    float: left;
-    padding: 10px 0;
+}
+
+#login h3 {
+    font-weight: normal;
+    font-size: 20px;
 }
 
 #login input {
@@ -102,6 +109,10 @@ a:hover {
     #description, #login {
         width: 100%;
         float: none;
+    }
+
+    #login {
+        border-top: 1px dotted hsl(210, 38%, 75%);
     }
 
 }
