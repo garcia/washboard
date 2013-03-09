@@ -15,7 +15,11 @@
 <div id="top" class="wrapper">
     <div>
         <div id="nav">
-            <h1 id="title">{% if title %}{{ title }}{% else %}Washboard{% endif %}</h1>
+            <h1 id="title">
+                {% if user.is_authenticated %}<a href="/dash">{% endif %}
+                    {% if title %}{{ title }}{% else %}Washboard{% endif %}
+                {% if user.is_authenticated %}</a>{% endif %}
+            </h1>
             <div id="menu">
                 <ul>
                     {% if user.is_authenticated %}
@@ -24,7 +28,7 @@
                     <li><a href="/settings">Settings</a></li>
                     <li><a href="/logout">Logout</a></li>
                     {% else %}
-                    <li><a href="/login">Login</a></li>
+                    <li><a href="/">Login</a></li>
                     <li><a href="/register">Register</a></li>
                     {% endif %}
                 </ul>
