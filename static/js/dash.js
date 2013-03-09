@@ -43,9 +43,16 @@ function cb(data) {
         return $(document.createElement(elem));
     }
     d = data;
-    posts = elem('ul').attr('id', 'posts');
+    var posts_elem = elem('ul').attr('id', 'posts');
     $.each(data.response.posts, function(p, post) {
-        console.log(post);
+        // Check post's ID
+        if (post.id >= $(posts).last().prop('id')) {
+            behind_by++;
+            return true;
+        }
+        posts.push(post);
+
+        //console.log(post);
         var postelem = elem('li').addClass('post');
         postelem.addClass(post.type);
 
@@ -271,9 +278,7 @@ function cb(data) {
         blacklist = true;
         notification = true;
         $.each(scan, function(s, scan_element) {
-            console.log(scan_element);
             $.each(rules, function(r, rule) {
-                console.log(rule);
                 var kw = rule.keyword;
                 if (rule.whole_word) {
                     kw = new RegExp('\\b' + kw + '\\b', 'i');
@@ -291,7 +296,6 @@ function cb(data) {
                     }
                     if (keywords.indexOf(rule.keyword) == -1) {
                         keywords.push(rule.keyword);
-                        console.log('Blacklisted: ' + rule.keyword);
                     }
                 }
             });
@@ -314,6 +318,7 @@ function cb(data) {
             );
             notification.append(elem('div').addClass('progress'));
             if (touchscreen) {
+                console.log('hmm');
                 postelem.on('touchstart', touchstart);
                 postelem.on('touchend', touchend);
             }
@@ -325,10 +330,15 @@ function cb(data) {
 
         // Append element, unless it got blacklisted by a no-notification keyword
         if (!keywords.length || notification) {
-            posts.append(postelem);
+            posts_elem.append(postelem);
         }
     });
-    $('#middle div').html(posts);
+    $('#middle > div > #posts').append(posts_elem.children());
+
+    if ($('#load_more').hasClass('loading')) {
+        $('#load_more').text('Load more');
+        $('#load_more').removeClass('loading');
+    }
 }
 
 function touchstart(e) {
@@ -378,25 +388,48 @@ function unhide(a) {
     );
 }
 
-$(function() {
-    scale = Math.min(500, screen.width) / 500;
-    touchscreen = !!('ontouchstart' in window);
-});
+function apicall(url, data, options) {
+    var _data = $.extend({
+        oauth_body_hash: '2jmj7l5rSw0yVb/vlWAYkK/YBwk='
+    }, data);
+    var _options = $.extend({
+        url: url,
+        data: _data,
+        dataType: 'jsonp',
+        jsonp: false,
+        cache: true,
+        consumerKey: API_KEY,
+        consumerSecret: API_SECRET,
+        token: TOKEN_KEY,
+        tokenSecret: TOKEN_SECRET,
+    }, options);
+    console.log(url + ' : ' + JSON.stringify(_data));
+    $.oauth(_options);
+}
 
-$.oauth({
-    //url: 'http://api.tumblr.com/v2/user/dashboard',
-    url: '/static/js/testdata.js',
-    data: {
+function dashboard(data, options) {
+    var _data = $.extend({
         callback: 'cb',
         reblog_info: 'true',
-        notes_info: 'true',
-        oauth_body_hash: '2jmj7l5rSw0yVb/vlWAYkK/YBwk='
-    },
-    dataType: 'jsonp',
-    jsonp: false,
-    cache: true,
-    consumerKey: API_KEY,
-    consumerSecret: API_SECRET,
-    token: TOKEN_KEY,
-    tokenSecret: TOKEN_SECRET
+        notes_info: 'true'
+    }, data);
+    apicall('http://api.tumblr.com/v2/user/dashboard', _data, options);
+    //apicall('/static/js/testdata.js', _data, options);
+}
+
+function load_more() {
+    dashboard({
+        offset: $('#posts').children().length + behind_by * 2
+    });
+    $('#load_more').text('Loading...');
+    $('#load_more').addClass('loading');
+}
+
+$(function() {
+    scale = Math.min(500, screen.width) / 500;
+    touchscreen = 'ontouchstart' in window;
+    $('#middle > div').html('<div id="posts"></div>');
+    posts = [];
+    behind_by = 0;
+    dashboard();
 });

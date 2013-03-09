@@ -50,5 +50,6 @@
 
 <div id="bottom" class="wrapper">
     <div>
+        {% block bottom %}{% endblock %}
     </div>
 </div>

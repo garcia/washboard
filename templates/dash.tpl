@@ -17,3 +17,7 @@ rules = {{ rules|safe }}
 </script>
 <script type="text/javascript" src="{% static "js/dash.js" %}"></script>
 {% endblock %}
+
+{% block bottom %}
+<a id="load_more" class="js" onclick="load_more()">Load more</a>
+{% endblock %}
