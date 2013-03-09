@@ -1,0 +1,97 @@
+#middle > div {
+    background: #395c7f; /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover,  #395c7f 0%, #2c4762 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#395c7f), color-stop(100%,#2c4762)); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover,  #395c7f 0%,#2c4762 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover,  #395c7f 0%,#2c4762 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover,  #395c7f 0%,#2c4762 100%); /* IE10+ */
+    background: radial-gradient(ellipse at center,  #395c7f 0%,#2c4762 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#395c7f', endColorstr='#2c4762',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+#content, #links {
+    background-color: transparent;
+    color: #dce6ef;
+    text-align: center;
+}
+
+a {
+    color: inherit;
+}
+
+a:hover {
+    color: white;
+}
+
+#logo {
+    font-family: "Signika";
+    text-shadow: 0 2px 2px rgba(0, 0, 0, .25);
+}
+
+#logo * {
+    margin: 0;
+}
+
+#logo h1 {
+    font-size: 4em;
+}
+
+#logo h2 {
+    font-size: 2em;
+    font-weight: normal;
+    font-style: italic;
+    margin-top: -0.4em;
+}
+
+#description {
+    width: 60%;
+    float: right;
+    font-size: 20px;
+}
+
+#login {
+    width: 40%;
+    float: left;
+    padding: 10px 0;
+}
+
+#login input {
+    display: block;
+    margin: 5px auto;
+    padding: 5px;
+    font-size: 16px;
+    color: hsl(210, 38%, 88%);
+    background-color: hsl(210, 38%, 20%);
+    border: 1px solid hsl(210, 38%, 10%);
+    border-radius: 4px;
+    box-shadow:  1px 1px 0px hsl(210, 38%, 40%),
+                -1px 1px 0px hsl(210, 38%, 40%);
+}
+
+#login #id_username {
+    margin-bottom: 0;
+    border-bottom: 1px solid hsl(210, 38%, 10%);
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+#login #id_password {
+    margin-top: 0;
+    border-top: 1px solid hsl(210, 38%, 25%);
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+}
+
+#links {
+    margin: 0 auto;
+    list-style-type: none;
+}
+
+#links li {
+    margin: 2px 0;
+}
+
+#links li a {
+    text-decoration: none;
+    border-bottom: 1px dotted hsla(210, 38%, 90%, .4);
+}
