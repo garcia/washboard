@@ -36,6 +36,7 @@ fieldset {
 #bottom > div {
     height: 100%;
     padding: 10px 0;
+    font-family: "Signika";
     color: #dce6ef;
     background-color: #162431;
 }
@@ -51,6 +52,8 @@ fieldset {
     display: inline;
     position: relative;
     margin: 0;
+    top: 2px;
+    font-size: 28px;
 }
 
 /* pure CSS menu icon from http://nicolasgallagher.com/pure-css-gui-icons/ */

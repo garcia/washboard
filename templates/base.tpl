@@ -5,6 +5,7 @@
 <title>{% if title %}{{title}} &mdash; {% endif %}Washboard</title>
 <link rel="stylesheet" type="text/css" href="{% static "css/washboard.css" %}" />
 <link rel="stylesheet" type="text/css" href="{% static "css/jquery.dropdown.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "signika/stylesheet.css" %}" />
 <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
 <script type="text/javascript" src="{% static "js/jquery.fix.clone.js" %}"></script>
 <script type="text/javascript" src="{% static "js/jquery.dropdown.js" %}"></script>

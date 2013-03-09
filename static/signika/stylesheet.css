@@ -1,0 +1,29 @@
+@font-face {
+    font-family: 'Signika';
+    src: url('signika-bold.eot');
+    src: url('signika-bold.eot?#iefix') format('embedded-opentype'),
+         url('signika-bold.woff') format('woff'),
+         url('signika-bold.svg#signikabold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Signika';
+    src: url('signika-light.eot');
+    src: url('signika-light.eot?#iefix') format('embedded-opentype'),
+         url('signika-light.woff') format('woff'),
+         url('signika-light.svg#signikalight') format('svg');
+    font-weight: light;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Signika';
+    src: url('signika-regular.eot');
+    src: url('signika-regular.eot?#iefix') format('embedded-opentype'),
+         url('signika-regular.woff') format('woff'),
+         url('signika-regular.svg#signikaregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
