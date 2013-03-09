@@ -73,8 +73,7 @@ noscript p {
 
 .meta {
     width: 500px;
-    margin: -10px 0 0 -10px;
-    padding: 20px 10px;
+    padding-bottom: 20px;
 }
 
 .meta .blog_name,
@@ -84,10 +83,11 @@ noscript p {
     display: inline-block;
     font-weight: bold;
     font-size: 90%;
+    color: #a8b1ba;
 }
 
 .meta .reblogged_text {
-    color: #808080;
+    //color: #808080;
 }
 
 .meta .note_count {
