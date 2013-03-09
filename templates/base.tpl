@@ -17,10 +17,15 @@
             <h1 id="title">{% if title %}{{ title }}{% else %}Washboard{% endif %}</h1>
             <div id="menu">
                 <ul>
+                    {% if user.is_authenticated %}
                     <li><a href="/dash">Dashboard</a></li>
                     <li><a href="/rules">Rules</a></li>
                     <li><a href="/settings">Settings</a></li>
                     <li><a href="/logout">Logout</a></li>
+                    {% else %}
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/register">Register</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
