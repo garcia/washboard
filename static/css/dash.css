@@ -225,6 +225,7 @@ noscript p {
     
     #menu {
         right: 0 !important;
+        top: 32px !important;
     }
 
     .dropdown.dropdown-tip:before {
@@ -279,20 +280,4 @@ noscript p {
     .row-3 img {
         width: 32%;
     }
-}
-
-@media screen and (min-width: 540px) {
-
-    #menu {
-        right: -20px !important;
-    }
-
-    .dropdown.dropdown-tip:before {
-        left: 119px !important;
-    }
-
-    .dropdown.dropdown-tip:after {
-        left: 120px !important;
-    }
-
 }

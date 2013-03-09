@@ -57,36 +57,11 @@ fieldset {
 
 #menu-link {
     float: right;
+    width: 16px;
+    height: 14px;
+    margin-top: 10px;
     text-indent: -65536em;
-}
-
-#menu-link:before,
-#menu-link:after {
-    content: "";
-    position: absolute;
-    top: 9px;
-    right: 10px;
-    width: 12px;
-    height: 2px;
-    background: transparent;
-    border-width: 6px 0;
-    border-style: double;
-    border-color: #a8c1d7;
-}
-
-#menu-link:after {
-    right: 24px;
-    width: 2px;
-}
-
-#menu-link:hover:before,
-#menu-link:focus:before,
-#menu-link:active:before,
-#menu-link:hover:after,
-#menu-link:focus:after,
-#menu-link:active:after {
-    background: transparent;
-    border-color: #dce6ef;
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90DCQM0AZa37TMAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAJElEQVQokWNYcfD6fyhmgOL/pGAGahhAEaaKAaNhMBoGAx8GAEFRZ6/Zklp5AAAAAElFTkSuQmCC");
 }
 
 /* jquery.dropdown.js overrides */
@@ -94,17 +69,18 @@ fieldset {
 #menu {
     right: -20px !important;
     left: inherit !important;
+    top: 36px !important;
 }
 
 .dropdown.dropdown-tip:before {
     top: -7px !important;
-    left: 119px !important;
+    left: 129px !important;
     border-bottom-color: rgba(0, 0, 0, 0.2) !important;
 }
 
 .dropdown.dropdown-tip:after {
     top: -6px !important;
-    left: 120px !important;
+    left: 130px !important;
     border-bottom-color: hsl(210, 38%, 50%) !important;
 }
 
@@ -117,6 +93,10 @@ fieldset {
 
 .dropdown .dropdown-menu li > a {
     color: hsl(208, 37%, 90%) !important;
+}
+
+.dropdown .dropdown-menu li > a:hover {
+    background-color: hsl(210, 38%, 50%) !important;
 }
 
 /* middle / content */
