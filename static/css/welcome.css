@@ -28,6 +28,7 @@ a:hover {
 }
 
 #logo {
+    margin-bottom: 40px;
     font-family: "Signika";
     text-shadow: 0 2px 2px rgba(0, 0, 0, .25);
 }
@@ -50,16 +51,16 @@ a:hover {
 #description {
     width: 60%;
     float: right;
-    font-size: 20px;
+    font-size: 18px;
+}
+
+#description p:first-child {
+    margin-top: 0;
 }
 
 #login {
+    padding-top: 12px;
     width: 40%;
-}
-
-#login h3 {
-    font-weight: normal;
-    font-size: 20px;
 }
 
 #login input {
@@ -89,6 +90,12 @@ a:hover {
     border-top-left-radius: 0;
 }
 
+#login input[type=submit] {
+    cursor: pointer;
+    padding: 5px 20px;
+    -webkit-appearance: none;
+}
+
 #links {
     margin: 0 auto;
     padding-left: 0;
@@ -96,7 +103,11 @@ a:hover {
 }
 
 #links li {
-    margin: 2px 0;
+    display: inline;
+}
+
+#links li:after {
+    content: ".\00a0";
 }
 
 #links li a {
@@ -113,6 +124,8 @@ a:hover {
 
     #login {
         border-top: 1px dotted hsl(210, 38%, 75%);
+        margin-top: 30px;
+        padding-top: 30px;
     }
 
 }

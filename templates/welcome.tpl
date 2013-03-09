@@ -19,13 +19,12 @@
 </div>
 
 <div id="login">
-    <h3>Login</h3>
     <form action="/login" method="POST">
         <fieldset>
             {% csrf_token %}
             {{ form.username }}
             {{ form.password }}
-            <input type="submit" value="Go" />
+            <input type="submit" value="Login" />
         </fieldset>
     </form>
 </div>
@@ -34,7 +33,7 @@
 {% block bottom %}
 <ul id="links">
     <li>&copy; <a href="http://grantgarcia.org/">Grant Garcia</a> 2013</li>
-    <li><a href="https://github.com/grantgarcia/washboard">Source on GitHub</a></li>
+    <li>Source on <a href="https://github.com/grantgarcia/washboard">GitHub</a></li>
     <li>Built with the <a href="http://www.tumblr.com/docs/en/api/v2">Tumblr API</a></li>
 </ul>
 {% endblock %}

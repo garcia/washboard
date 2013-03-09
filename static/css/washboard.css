@@ -61,8 +61,6 @@ fieldset {
     text-decoration: none;
 }
 
-/* pure CSS menu icon from http://nicolasgallagher.com/pure-css-gui-icons/ */
-
 #menu-link {
     float: right;
     width: 16px;
@@ -168,7 +166,8 @@ input[type=password]:focus {
         border-radius: 0;
     }
     
-    #top #nav {
+    #top #nav,
+    #messages {
         width: 100%;
         box-sizing: border-box;
         -webkit-box-sizing: border-box;
