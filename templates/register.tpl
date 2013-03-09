@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block head %}
+<link rel="stylesheet" type="text/css" href="{% static "css/welcome.css" %}" />
 <link rel="stylesheet" type="text/css" href="{% static "css/register.css" %}" />
 {% endblock %}
 
@@ -16,7 +17,7 @@
     <p>Default callback URL:</p>
     <input type="text" value="{{ BASE_URL }}callback" readonly />
 </div>
-<form method="post">
+<form id="register" method="post">
     <p>Because Washboard runs in your browser, we need you to register your own app using the information in the box to the right.</p>
     <p>After you've registered your app, enter your OAuth Consumer Key and Secret Key in the fields below.</p>
     <fieldset id="key_field">
@@ -29,7 +30,7 @@
         {{ form.password }}
     </fieldset>
     <fieldset id="submit_field">
-        <input type="submit" />
+        <input type="submit" value="Register" />
     </fieldset>
 </fieldset></form>
 {% endblock %}
