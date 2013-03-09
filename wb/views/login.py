@@ -1,31 +1,10 @@
 from django import forms
 from django.contrib import messages, auth
+from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 
-class LoginForm(forms.Form):
-    username = forms.CharField(
-        max_length=30,
-        error_messages={
-            'required': 'Please enter your name.',
-        },
-        widget=forms.TextInput(attrs={'placeholder': 'Username'}),
-    )
-    password = forms.CharField(
-        label='Password',
-        error_messages={
-            'required': 'Please enter your password.',
-        },
-        widget=forms.PasswordInput(attrs={'placeholder': 'Password'}),
-    )
-
-def main(request):
-    if request.user.is_authenticated():
-        return redirect('/dash')
-    return render(request, 'main.tpl', {
-        'title': 'Washboard',
-        'form': LoginForm(),
-    })
+from wb.forms import LoginForm
 
 def login(request):
     if request.method == 'GET':
@@ -45,9 +24,6 @@ def login(request):
         return redirect('/')
     auth.login(request, user)
     return redirect('/')
-
-from django.contrib.auth import logout as auth_logout
-from django.shortcuts import redirect
 
 def logout(request):
     auth.logout(request)
