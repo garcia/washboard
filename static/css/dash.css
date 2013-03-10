@@ -44,6 +44,11 @@ noscript p {
 }
 
 #new {
+    float: right;
+    width: 16px;
+    height: 14px;
+    margin-top: 10px;
+    text-indent: -65536em;
     background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAQCAYAAAAiYZ4HAAAAAXNSR0IArs4c6QAAAAZiS0dEAAAAAAAA+UO7fwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90DCRQhBb8GessAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAM0lEQVQoz2NYcfA6AxL2AeL/+DBJipE1oCtmwILhGrCZjFfDf3I1MBDAoxoGqQaiMMkaAPnlD/AWM5t5AAAAAElFTkSuQmCC");
     background-repeat: no-repeat;
 }
@@ -136,6 +141,99 @@ noscript p {
 
 .row-3 img {
     width: 160px;
+}
+
+/* quote */
+
+.quote .quote {
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.quote .quote:before {
+    content: "\201c";
+    display: block;
+    position: absolute;
+    margin-top: -6px;
+    margin-left: -24px;
+    font-size: 36px;
+    color: #c0c0c0;
+}
+
+.quote .source {
+    margin-left: 30px;
+}
+
+.quote .source:before {
+    content: "\2014";
+    display: block;
+    position: absolute;
+    margin-left: -20px;
+}
+
+/* link */
+
+.link .link {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* chat */
+
+.chat .dialogue {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.chat .dialogue li {
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    margin-top: -1px;
+}
+
+.chat .dialogue li:nth-child(2n) {
+    background-color: #fdfdfd;
+}
+
+/* audio */
+
+.audio .audiobox .album_art {
+    display: block;
+    float: left;
+    max-width: 100px;
+    margin: 0 10px 10px 0;
+    border: 1px solid white;
+}
+
+.audio .audiobox .album_art,
+.audio .audiobox embed {
+    box-shadow: 0 1px 8px rgba(0, 0, 0, .2);
+}
+
+.audio .audiobox p {
+    font-weight: bold;
+    margin: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.audio .audiobox .track_name {
+    font-weight: bold;
+}
+
+.audio .audiobox .artist:before {
+    content: "by ";
+    font-weight: normal;
+}
+
+.audio .audiobox .album:before {
+    content: "from ";
+    font-weight: normal;
+}
+
+.audio .caption {
+    clear: left;
 }
 
 /* answer */
