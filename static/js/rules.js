@@ -1,10 +1,15 @@
 function add_rule() {
     // Insert the default rules
-    rule = $('.row.defaults').clone().removeClass('defaults').addClass('rule');
-    // Replace {prefix} with a random number
+    var prefix = $('.row.rule').last().data('prefix') + 1;
+    var rule = $('.row.defaults')
+        .clone()
+        .removeClass('defaults')
+        .addClass('rule')
+        .attr('data-prefix', prefix);
+    // Replace {prefix} with the subsequential number
     rule.html(
         rule.html()
-            .replace(/{prefix}/g, parseInt(Math.random() * 1000000000))
+            .replace(/{prefix}/g, prefix)
     );
     // Remove the "defaults" label
     rule.find('.label').remove();

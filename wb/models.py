@@ -50,6 +50,7 @@ class Rule(models.Model):
     show_notification = models.BooleanField(default=True)
     whole_word = models.BooleanField(default=False)
     regex = models.BooleanField(default=False)
+    index = models.IntegerField()
 
     class Meta:
         unique_together = ('user', 'keyword')

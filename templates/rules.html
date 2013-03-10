@@ -20,7 +20,7 @@
                 <div class="regex">Regex</div>
             </div>
             {% for rule in rules %}
-            <div class="row{% if not rule.instance.keyword %} defaults{% else %} rule{% endif %}">
+            <div class="row{% if not rule.instance.keyword %} defaults{% else %} rule{% endif %}" data-prefix="{{ rule.prefix }}">
                 <div class="delete"><a class="delete-alt" onclick="delete_rule(this)">Delete</a></div>
                 {% if not rule.instance.keyword %}
                 <div class="label">Default values</div>
