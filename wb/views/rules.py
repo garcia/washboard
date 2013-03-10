@@ -34,7 +34,7 @@ def get(request):
         'title': 'Rules',
         'rules': rules,
     }
-    return render(request, 'rules.tpl', data)
+    return render(request, 'rules.html', data)
 
 def post(request):
     Rule.objects.filter(user__exact=request.user).delete()

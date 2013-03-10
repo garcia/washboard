@@ -26,4 +26,4 @@ def main(request):
                 Rule.objects.filter(user__exact=request.user).values()
             )),
     }
-    return render(request, 'dash.tpl', data)
+    return render(request, 'dash.html', data)

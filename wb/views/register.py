@@ -48,7 +48,7 @@ def main(request):
     
     if request.method != 'POST':
         request.session['nonce'] = str(random.randrange(sys.maxsize))
-        return render(request, 'register.tpl', {
+        return render(request, 'register.html', {
             'title': 'Register',
             'BASE_URL': settings.BASE_URL,
             'form': RegistrationForm(),
