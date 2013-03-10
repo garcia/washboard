@@ -11,9 +11,9 @@
     <h2>for Tumblr</h2>
 </div>
 
-<div id="description">
+<div id="intro">
     <p>Washboard is an interface to the Tumblr Dashboard that features keyword blacklisting.
-        Think of it as a <a href="http://bjornstar.com/tumblr-savior">Tumblr Savior</a> alternative for mobile devices.</p>
+        Think of it as a <a href="http://bjornstar.com/tumblr-savior">Tumblr Savior</a> port for mobile devices.</p>
     <p>Signing up is free and only takes a minute, so <a href="/register">what are you waiting for?</a></p>
 </p>
 </div>
