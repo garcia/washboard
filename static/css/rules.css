@@ -1,3 +1,10 @@
+#content {
+    margin: 20px auto;
+    background-color: white;
+    border-radius: 6px;
+    color: black;
+}
+
 #rules {
     display: table;
     width: 100%;
@@ -35,15 +42,27 @@
     color: #808080;
 }
 
-.row.add {
+.row.add,
+.row.submit {
     background-color: inherit;
 }
 
 .row.add .label {
+    text-align: center;
+    color: #000080;
     border-bottom: none;
     cursor: pointer;
-    color: #000080;
 }
+
+.row.submit input {
+    padding: 5px 20px;
+    background-color: rgba(205, 211, 233, .25);
+    border: 1px solid rgba(205, 211, 233, .75);
+    border-radius: 2px;
+    box-shadow: 0 1px 1px rgba(205, 211, 233, .25);
+    cursor: pointer;
+}
+
 
 /* pure CSS delete icon from http://nicolasgallagher.com/pure-css-gui-icons/ */
 

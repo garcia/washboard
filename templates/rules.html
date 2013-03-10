@@ -5,15 +5,6 @@
 <link rel="stylesheet" type="text/css" href="{% static "css/rules.css" %}" />
 <script type="text/javascript" src="{% static "js/rules.js" %}"></script>
 <script type="text/javascript" src="{% static "js/ios-checkboxes.js" %}"></script>
-<!--<script type="text/javascript">
-$(document).ready(function() {
-    $(':checkbox').iphoneStyle();
-});
-</script>-->
-{% endblock %}
-
-{% block title %}
-Blacklist rules
 {% endblock %}
 
 {% block content %}
@@ -44,12 +35,10 @@ Blacklist rules
             </div>
             {% endfor %}
             <div class="row add">
-                <div class="label" onclick="javascript:add_rule()">
-                    Add rule
-                </div>
+                <div class="label" onclick="add_rule()">Add rule</div>
             </div>
             <div class="row submit">
-                <input type="submit" />
+                <input type="submit" value="Submit" />
             </div>
         </div>
     </fieldset>

@@ -112,6 +112,9 @@ fieldset {
     margin: 20px auto;
     list-style-type: none;
     padding-left: 0;
+    font-family: "Signika";
+    font-size: 16px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .5);
 }
 
 /* middle / content */
@@ -131,11 +134,10 @@ fieldset {
 
 #content {
     width: 880px;
-    margin: 20px auto;
+    margin: 10% auto;
     padding: 40px;
-    background-color: white;
+    color: #dce6ef;
     border-radius: 6px;
-    color: black;
 }
 
 /* form inputs */
