@@ -5,6 +5,11 @@ Copyright (c) 2013 [Grant Garcia](http://grantgarcia.org/). Licensed under the [
 
 Washboard utilizes code from the following projects:
 
+jQuery
+------
+
+(c) 2005, 2012 jQuery Foundation, Inc. | [jquery.org/license](http://jquery.org/license)
+
 jquery.dropdown.js
 ------------------
 
@@ -18,11 +23,6 @@ jquery.fix.clone.js
 Textarea and select clone() bug workaround | Spencer Tipping
 
 Licensed under the terms of the [MIT source code license][MIT]
-
-jQuery
-------
-
-(c) 2005, 2012 jQuery Foundation, Inc. | [jquery.org/license](http://jquery.org/license)
 
 jquery.oauth.js
 ---------------
