@@ -70,9 +70,10 @@ fieldset {
     background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90DCQM0AZa37TMAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAJElEQVQokWNYcfD6fyhmgOL/pGAGahhAEaaKAaNhMBoGAx8GAEFRZ6/Zklp5AAAAAElFTkSuQmCC");
 }
 
-/* jquery.dropdown.js overrides */
+/* jquery.dropdown.js overrides 
+   TODO: fix tip positioning on small devices */
 
-#menu {
+.dropdown {
     right: -20px !important;
     left: inherit !important;
     top: 36px !important;
@@ -80,14 +81,20 @@ fieldset {
 
 .dropdown.dropdown-tip:before {
     top: -7px !important;
-    left: 129px !important;
     border-bottom-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+#menu.dropdown.dropdown-tip:before {
+    left: 129px !important;
 }
 
 .dropdown.dropdown-tip:after {
     top: -6px !important;
-    left: 130px !important;
     border-bottom-color: hsl(210, 38%, 50%) !important;
+}
+
+#menu.dropdown.dropdown-tip:after {
+    left: 130px !important;
 }
 
 .dropdown .dropdown-menu,

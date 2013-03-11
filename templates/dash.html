@@ -18,6 +18,20 @@ rules = {{ rules|safe }}
 <script type="text/javascript" src="{% static "js/dash.js" %}"></script>
 {% endblock %}
 
+{% block after_menu %}
+<div id="new">
+    <ul>
+        <li><a href="http://www.tumblr.com/new/text">Text</a></li>
+        <li><a href="http://www.tumblr.com/new/photo">Photo</a></li>
+        <li><a href="http://www.tumblr.com/new/quote">Quote</a></li>
+        <li><a href="http://www.tumblr.com/new/link">Link</a></li>
+        <li><a href="http://www.tumblr.com/new/chat">Chat</a></li>
+        <li><a href="http://www.tumblr.com/new/audio">Audio</a></li>
+        <li><a href="http://www.tumblr.com/new/video">Video</a></li>
+    </ul>
+</div>
+{% endblock %}
+
 {% block bottom %}
 <a id="load_more" class="js" onclick="load_more()">Load more</a>
 {% endblock %}

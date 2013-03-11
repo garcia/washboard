@@ -450,4 +450,7 @@ $(function() {
     posts = [];
     behind_by = 0;
     dashboard();
+    $('#new').addClass('dropdown').addClass('dropdown-tip');
+    $('#new ul').addClass('dropdown-menu');
+    $('#new').before('<a class="js" id="new-link" data-dropdown="#new">New</a>');;
 });
