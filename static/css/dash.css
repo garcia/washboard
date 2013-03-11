@@ -100,15 +100,55 @@ noscript p {
     //color: #808080;
 }
 
-.meta .note_count {
+.meta .buttons {
+    display: block;
     float: right;
+}
+
+.meta .buttons a {
+    display: block;
+    float: right;
+    width: 24px;
+    height: 24px;
+    margin: -4px 5px 0 5px;
+    text-indent: -65536em;
+    color: black;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.25;
+    cursor: pointer;
+}
+
+.meta .buttons .note_count {
+    margin-top: 0;
+    text-indent: 0;
+}
+
+.meta .buttons a:hover {
+    opacity: .4;
+}
+
+.meta .like {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAKpJREFUOMtjYEAASSAuAeJWIPZkwATuQNwCxKVALI0uWQvE/9HwXSDmAmIOIL6JRb4FpjkYiyQI/wPik0B8CMrGpiYKZMA5PArwYZCeqyADfpOhGYb/ggz4TIEB30EGHKDACwdBBoRQ4AJvWEwcIUPzZvS0cJ8Er5zHktAYGIH4ChGaDzMQAHvwaF7JQCRYgUXzdAYSwWokzQsZyARngPg0AwVACIhF8SkAAMPynT1kaOy2AAAAAElFTkSuQmCC");
+}
+
+.meta .like.liked {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAALhJREFUOI1jYICC/wwOkkBcAsStQOzJgAaAYu5A3ALEpUAsjS5ZC8T/0fBdIOYCYg4gvolFvgWmORiLJAj/A+KTQHwIysamJgpkwDk8CvBhkJ6rIAN+k6EZhv+CDPhMgQHfQQYcoMALB0EGhFDgAm9YTBwhQ/Nm9LRwnwSvnEdPaCADGIH4ChGaD2NoRjNoDx7NK/FqRjJkBRbN04nSjGTIaiTNC0nSjGTIGSA+TZZmqAFCQCyKTw0ABCZ522SJgWUAAAAASUVORK5CYII=");
+    opacity: 1;
+}
+
+.meta .reblog {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAHdJREFUOMutlFEOwCAIQ7kR979Nb8J+5uJkQ9aVpF+aF4RWs3/lJq5QQ2MH9Y+KCorlAiNXwuLkpNbHQUcJZp1ZNJaCdRFBWiDBZiDjJ3Qc78rUjG4ZWHrlPEsGdgM+bZpOi4tMfQGlKXmLHghZ9TnICmpg6f5OHbqKk+W9SC3rAAAAAElFTkSuQmCC");
+}
+
+.meta .info {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAALFJREFUOMtjYMAEPEAcCcRbgfg/EH+EsiOhcnhBJFQTPhyJS3MzEZphuJlYm/8CsSUQx+NzCQ8em/4AsS4QB+KQ5yHG3yBX/MMXHltxSB4A4g4gTgfiqzjUgPSCowmb5AsglgZiDiD+hkPNR3wGgMRZgNgTj/c+4vPCWmggT8JjwFZ8gZgCNeA2EP/EF4i4olEFiIWAeAcQn8IXjbhc4QHEqkC8jtgkTVFSpkpmIis7AwCcpLDVlUFfKQAAAABJRU5ErkJggg==");
 }
 
 /* inline images */
 
 .body img,
-.caption img,
-.album_art {
+.caption img {
     max-width: 100%;
 }
 
@@ -203,6 +243,12 @@ noscript p {
     max-width: 100px;
     margin: 0 10px 10px 0;
     border: 1px solid white;
+    cursor: pointer;
+    -webkit-transition: max-width .5s ease;
+}
+
+.audio .audiobox .album_art.expanded {
+    max-width: 500px;
 }
 
 .audio .audiobox .album_art,

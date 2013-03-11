@@ -77,13 +77,29 @@ function cb(data) {
             );
             scan.push(post.reblogged_from_name);
         }
+        buttons = elem('div').addClass('buttons');
         if (post.note_count) {
-            meta.append(elem('a')
+            buttons.append(elem('a')
                 .addClass('note_count')
                 .text(post.note_count)
             );
         }
-        // TODO: reblog, like buttons
+        // TODO: don't show like / reblog buttons if it's your own post
+        if (true) {
+            buttons.append(elem('a')
+                .addClass('like')
+                .text('Like')
+            );
+            buttons.append(elem('a')
+                .addClass('reblog')
+                .text('Reblog')
+            );
+        }
+        buttons.append(elem('a')
+            .addClass('info')
+            .text('Info')
+        );
+        meta.append(buttons);
         postelem.append(meta);
 
         // Text
@@ -189,9 +205,11 @@ function cb(data) {
             var audiobox = elem('div').addClass('audiobox');
             audiobox.append($(post.player).addClass('player'));
             if (post.album_art) {
-                audiobox.append(
-                    elem('img').addClass('album_art').attr('src', post.album_art)
-                );
+                var album_art = elem('img')
+                    .addClass('album_art')
+                    .attr('src', post.album_art)
+                    .click(function() { $(this).toggleClass('expanded'); });
+                audiobox.append(album_art);
             }
             if (post.track_name) {
                 audiobox.append(
