@@ -213,7 +213,17 @@ function cb(data) {
         // Audio
         else if (post.type == 'audio') {
             var audiobox = elem('div').addClass('audiobox');
-            audiobox.append($(post.player).addClass('player'));
+            if (post.audio_url) {
+                audiobox.append(
+                    elem('audio')
+                        .attr('src', post.audio_url)
+                        .attr('type', 'audio/mp3')
+                        .addClass('new')
+                );
+            }
+            else {
+                audiobox.append($(post.player).addClass('player'));
+            }
             if (post.album_art) {
                 var album_art = elem('img')
                     .addClass('album_art')
@@ -357,6 +367,19 @@ function cb(data) {
         $('#load_more').text('Load more');
         $('#load_more').removeClass('loading');
     }
+
+    $('audio.new').mediaelementplayer({
+        audioWidth: 415,
+        audioHeight: 30,
+        startVolume: 0.5,
+        loop: true,
+        enableAutosize: true,
+        features: ['playpause', 'progress', 'current', 'duration', 'tracks', 'volume'],
+        iPadUseNativeControls: true,
+        iPhoneUseNativeControls: true,
+        AndroidUseNativeControls: false
+    });
+    $('audio.new').removeClass('new');
 }
 
 function touchstart(e) {
