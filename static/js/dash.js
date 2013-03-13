@@ -221,23 +221,13 @@ function cb(data) {
                     .click(function() { $(this).toggleClass('expanded'); });
                 audiobox.append(album_art);
             }
-            if (post.track_name) {
-                audiobox.append(
-                    elem('p').addClass('track_name').text(post.track_name)
-                );
-                scan.push(post.track_name);
-            }
-            if (post.artist) {
-                audiobox.append(
-                    elem('p').addClass('artist').text(post.artist)
-                );
-                scan.push(post.artist);
-            }
-            if (post.album) {
-                audiobox.append(
-                    elem('p').addClass('album').text(post.album)
-                );
-                scan.push(post.album);
+            var metadata = ['track_name', 'artist', 'album'];
+            for (var i = 0; i < metadata.length; i++) {
+                if (post[metadata[i]]) {
+                    audiobox.append(
+                        elem('p').addClass(metadata[i]).text(post[metadata[i]])
+                    );
+                }
             }
             postelem.append(audiobox);
             if (post.caption) {
