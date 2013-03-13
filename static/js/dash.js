@@ -55,6 +55,7 @@ function cb(data) {
         //console.log(post);
         var postelem = elem('li').addClass('post');
         postelem.addClass(post.type);
+        postelem.attr('id', 'post_' + post.id);
 
         var scan = [];
 
@@ -86,10 +87,19 @@ function cb(data) {
         }
         // TODO: don't show like / reblog buttons if it's your own post
         if (true) {
-            buttons.append(elem('a')
+            var like_button = elem('a')
                 .addClass('like')
                 .text('Like')
-            );
+                .on('click', function(e) {
+                    like({
+                        id: post.id,
+                        reblog_key: post.reblog_key
+                    });
+                });
+            if (post.liked) {
+                like_button.addClass('liked');
+            }
+            buttons.append(like_button);
             buttons.append(elem('a')
                 .addClass('reblog')
                 .text('Reblog')
@@ -431,8 +441,23 @@ function dashboard(data, options) {
         reblog_info: 'true',
         notes_info: 'true'
     }, data);
-    //apicall('http://api.tumblr.com/v2/user/dashboard', _data, options);
-    apicall('/static/js/testdata.js', _data, options);
+    apicall('http://api.tumblr.com/v2/user/dashboard', _data, options);
+    //apicall('/static/js/testdata.js', _data, options);
+}
+
+function like(data, options) {
+    var cb = 'liked_' + data.id;
+    var id = data.id;
+    window[cb] = function(data) {
+        if (data.meta.status == 200) {
+            $('#post_' + id).find('.like').toggleClass('liked');
+        }
+    }
+    var _data = $.extend({
+        callback: cb,
+    }, data);
+    mode = $('#post_' + id).find('.like').hasClass('liked') ? 'unlike' : 'like';
+    apicall('http://api.tumblr.com/v2/user/' + mode, _data, options);
 }
 
 function load_more() {
