@@ -10,5 +10,5 @@ urlpatterns = patterns('',
     url(r'^dash$', 'wb.views.dash.main'),
     url(r'^rules$', 'wb.views.rules.main'),
     url(r'^settings$', 'wb.views.settings.main'),
-    url(r'^favicon\.ico$', RedirectView.as_view(url='/static/favicon.ico')),
+    url(r'^favicon\.ico$', RedirectView.as_view(url='/static/images/favicon.ico')),
 )
