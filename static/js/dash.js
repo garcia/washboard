@@ -114,6 +114,9 @@ function dash(data) {
             buttons.append(elem('a')
                 .addClass('reblog')
                 .text('Reblog')
+                .attr('href', 'http://www.tumblr.com/reblog/' + post.id + '/' +
+                    post.reblog_key + '?redirect_to=' + encodeURIComponent(BASE_URL) + 'dash')
+                .attr('target', '_blank')
             );
         }
         buttons.append(elem('a')
