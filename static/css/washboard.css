@@ -63,11 +63,13 @@ fieldset {
 
 #menu-link {
     float: right;
-    width: 16px;
-    height: 14px;
-    margin-top: 10px;
+    width: 24px;
+    height: 24px;
+    margin-top: 5px;
     text-indent: -65536em;
     background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90DCQM0AZa37TMAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAJElEQVQokWNYcfD6fyhmgOL/pGAGahhAEaaKAaNhMBoGAx8GAEFRZ6/Zklp5AAAAAElFTkSuQmCC");
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 #menu, #new {
@@ -80,7 +82,7 @@ fieldset {
 .dropdown {
     right: -20px !important;
     left: inherit !important;
-    top: 36px !important;
+    top: 37px !important;
 }
 
 .dropdown.dropdown-tip:before {
@@ -89,7 +91,7 @@ fieldset {
 }
 
 #menu.dropdown.dropdown-tip:before {
-    left: 129px !important;
+    left: 126px !important;
 }
 
 .dropdown.dropdown-tip:after {
@@ -98,7 +100,7 @@ fieldset {
 }
 
 #menu.dropdown.dropdown-tip:after {
-    left: 130px !important;
+    left: 127px !important;
 }
 
 .dropdown .dropdown-menu,
@@ -188,16 +190,9 @@ input[type=password]:focus {
         padding: 0 10px;
     }
 
-    #menu {
-        right: 0 !important;
-    }
-
-    .dropdown.dropdown-tip:before {
-        left: 139px !important;
-    }
-
-    .dropdown.dropdown-tip:after {
-        left: 140px !important;
+    .dropdown-tip:before,
+    .dropdown-tip:after {
+        margin-left: -10px;
     }
 
 }
