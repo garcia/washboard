@@ -108,7 +108,14 @@ noscript p {
 }
 
 .meta .reblogged_text {
-    //color: #808080;
+    display: inline-block;
+    width: 24px;
+    height: 18px;
+    text-indent: -65536em;
+    opacity: 0.25;
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAXNSR0IArs4c6QAAAAZiS0dEAAAAAAAA+UO7fwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90DDhI1KE0tteAAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAR0lEQVQoz51QQQoAMAjy/6/yKf7EnQYRbasJQoSSCfRADOFs4oOOprh4UeW5QyRNHtJvE4yDG2KjaOHWFHe+TkPMTxlDqCNanU04I/CzZMEAAAAASUVORK5CYII=");
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .meta .buttons {
@@ -133,6 +140,7 @@ noscript p {
 .meta .buttons .note_count {
     margin-top: 0;
     text-indent: 0;
+    width: auto;
 }
 
 .meta .buttons a:hover {
