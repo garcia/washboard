@@ -385,7 +385,7 @@ function dash(data) {
 
     // Convert audio to MediaElement
     $('audio.new').mediaelementplayer({
-        audioWidth: 300,
+        audioWidth: '100%',
         audioHeight: 30,
         startVolume: 0.8,
         loop: false,
