@@ -42,7 +42,7 @@ function cb(data) {
         $('#load_more').text('There was an error while loading your posts. Try again?');
         $('#load_more').removeClass('loading');
         
-        console.log(e);
+        console.log(e.stack);
     }
 }
 function dash(data) {
@@ -370,6 +370,38 @@ function dash(data) {
             }
             postelem.append(notification);
         }
+
+        // Check for read-more breaks
+        postelem.find('p').contents().filter(function() {
+            return this.nodeType == 8;
+        }).each(function(i, e) {
+            if (e.nodeValue == ' more ') {
+                // Insert "Read more" link
+                var more_link = elem('a')
+                        .html('Read more &rarr;')
+                        .addClass('read_more js')
+                        .on('click', function(e) {
+                            $(this).closest('.post').find('.cut.under').removeClass('under').addClass('over');
+                            $(this).remove();
+                        });
+                $(e).replaceWith(more_link);
+                // Hide anything that appears after the comment but within
+                // the same paragraph by iterating over sibling nodes
+                var parent_node = more_link.get(0).parentNode;
+                var sibling = more_link.get(0).nextSibling;
+                while (sibling) {
+                    var span = elem('span')
+                        .text(sibling.nodeValue)
+                        .addClass('cut under')
+                        .get(0);
+                    parent_node.replaceChild(span, sibling);
+                    sibling = sibling.nextSibling;
+                }
+                // Hide everything else
+                more_link.parent().nextAll().addClass('cut under')
+            }
+        });
+        
 
         // Append element, unless it got blacklisted by a no-notification keyword
         if (!keywords.length || notification) {

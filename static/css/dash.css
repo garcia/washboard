@@ -382,6 +382,28 @@ noscript p {
     border-radius: 6px 0 0 6px;
 }
 
+/* read more breaks */
+
+.read_more {
+    display: block;
+    margin: 10px 0 0 0;
+}
+
+.cut {
+    -webkit-transition: 1s opacity ease;
+}
+
+.cut.under {
+    display: block;
+    height: 0;
+    opacity: 0;
+}
+
+.cut.over {
+    height: auto;
+    opacity: auto;
+}
+
 /* load more */
 
 #load_more {
