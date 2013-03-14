@@ -229,6 +229,7 @@ function dash(data) {
                     elem('audio')
                         .attr('src', post.audio_url)
                         .attr('type', 'audio/mp3')
+                        .attr('preload', 'none')
                         .addClass('new')
                 );
             }
@@ -387,7 +388,7 @@ function dash(data) {
         loop: false,
         enableAutosize: true,
         features: ['playpause', 'progress', 'current', 'duration', 'tracks', 'volume'],
-        iPadUseNativeControls: true,
+        iPadUseNativeControls: false,
         iPhoneUseNativeControls: true,
         AndroidUseNativeControls: false
     });
