@@ -228,6 +228,10 @@ function dash(data) {
         else if (post.type == 'audio') {
             var audiobox = elem('div').addClass('audiobox');
             if (post.audio_url) {
+                // Apparently this is required, otherwise it gives a 403...
+                if (post.audio_url.indexOf('http://www.tumblr.com/') == 0) {
+                    post.audio_url += '?plead=please-dont-download-this-or-our-lawyers-wont-let-us-host-audio';
+                }
                 audiobox.append(
                     elem('audio')
                         .attr('src', post.audio_url)
