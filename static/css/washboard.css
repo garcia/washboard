@@ -70,6 +70,10 @@ fieldset {
     background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90DCQM0AZa37TMAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAJElEQVQokWNYcfD6fyhmgOL/pGAGahhAEaaKAaNhMBoGAx8GAEFRZ6/Zklp5AAAAAElFTkSuQmCC");
 }
 
+#menu, #new {
+    display: none;
+}
+
 /* jquery.dropdown.js overrides 
    TODO: fix tip positioning on small devices */
 

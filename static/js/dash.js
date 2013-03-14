@@ -35,6 +35,17 @@ function best_fit(elements, target_width) {
 }
 
 function cb(data) {
+    try {
+        dash(data);
+    }
+    catch (e) {
+        $('#load_more').text('There was an error while loading your posts. Try again?');
+        $('#load_more').removeClass('loading');
+        
+        console.log(e);
+    }
+}
+function dash(data) {
     //console.log(JSON.stringify(data));
     this.elem = function(elem) {
         if(typeof(elem) != "string") {
@@ -368,11 +379,12 @@ function cb(data) {
         $('#load_more').removeClass('loading');
     }
 
+    // Convert audio to MediaElement
     $('audio.new').mediaelementplayer({
-        audioWidth: 415,
+        audioWidth: 300,
         audioHeight: 30,
-        startVolume: 0.5,
-        loop: true,
+        startVolume: 0.8,
+        loop: false,
         enableAutosize: true,
         features: ['playpause', 'progress', 'current', 'duration', 'tracks', 'volume'],
         iPadUseNativeControls: true,
