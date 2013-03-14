@@ -84,6 +84,9 @@ noscript p {
     border-radius: 6px;
     box-shadow: 0 1px 5px rgba(0, 0, 0, .5);
     -webkit-transition: opacity .5s ease;
+    -moz-transition: opacity .5s ease;
+    -o-transition: opacity .5s ease;
+    transition: opacity .5s ease;
 }
 
 .post p:last-child {
@@ -264,6 +267,9 @@ noscript p {
     border: 1px solid white;
     cursor: pointer;
     -webkit-transition: max-width .5s ease;
+    -moz-transition: max-width .5s ease;
+    -o-transition: max-width .5s ease;
+    transition: max-width .5s ease;
 }
 
 .audio .audiobox .album_art.expanded {
@@ -391,6 +397,9 @@ noscript p {
 
 .cut {
     -webkit-transition: 1s opacity ease;
+    -moz-transition: 1s opacity ease;
+    -o-transition: 1s opacity ease;
+    -transition: 1s opacity ease;
 }
 
 .cut.under {
@@ -440,9 +449,10 @@ noscript p {
     .post {
         width: 100%;
         border-radius: 0;
-        box-sizing: border-box;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
+        -o-box-sizing: border-box;
+        box-sizing: border-box;
     }
 
     .post:first-child {
