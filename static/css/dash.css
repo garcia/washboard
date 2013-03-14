@@ -252,7 +252,7 @@ noscript p {
     display: block;
     float: left;
     max-width: 100px;
-    margin: 0 10px 10px 0;
+    margin: 10px 10px 10px 0;
     border: 1px solid white;
     cursor: pointer;
     -webkit-transition: max-width .5s ease;
@@ -276,12 +276,21 @@ noscript p {
 }
 
 .audio .audiobox .track_name {
+    margin-top: 15px;
     font-weight: bold;
+}
+
+.audio .audiobox .artist {
+    color: #404040;
 }
 
 .audio .audiobox .artist:before {
     content: "by ";
     font-weight: normal;
+}
+
+.audio .audiobox .album {
+    color: #606060;
 }
 
 .audio .audiobox .album:before {
