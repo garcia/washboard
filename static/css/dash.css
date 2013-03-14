@@ -259,7 +259,7 @@ noscript p {
 }
 
 .audio .audiobox .album_art.expanded {
-    max-width: 500px;
+    max-width: 100%;
 }
 
 .audio .audiobox .album_art,
