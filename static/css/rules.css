@@ -63,6 +63,19 @@
     cursor: pointer;
 }
 
+input[type="text"] {
+    font-family: inherit;
+    font-size: inherit;
+    border: 1px solid #88c6c9;
+    border-radius: 2px;
+    padding: 4px;
+}
+
+input[type=text]:focus {
+    outline: none;
+    border: 1px solid #798ee0
+}
+
 /* Showing / suppressing notifications is meaningless for whitelisted keywords,
    but it's still convenient for them to use the same model as blacklisted keywords */
 #whitelist .show_notification {

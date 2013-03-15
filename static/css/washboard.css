@@ -18,6 +18,11 @@ fieldset {
     padding: 0;
 }
 
+input[type=text]:focus,
+input[type=password]:focus {
+    outline: none;
+}
+
 .wrapper {
     display: table-row;
     width: 100%;
@@ -151,23 +156,6 @@ fieldset {
     padding: 40px;
     color: #dce6ef;
     border-radius: 6px;
-}
-
-/* form inputs */
-
-input[type="text"],
-input[type="password"] {
-    font-family: inherit;
-    font-size: inherit;
-    border: 1px solid #88c6c9;
-    border-radius: 2px;
-    padding: 2px;
-}
-
-input[type=text]:focus,
-input[type=password]:focus {
-    outline: none;
-    border: 1px solid #798ee0
 }
 
 @media screen and (max-width: 1000px) {
