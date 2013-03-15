@@ -33,10 +33,6 @@ noscript p {
     color: white;
 }
 
-.js {
-    cursor: pointer;
-}
-
 /* nav */
 
 #top #nav {
@@ -75,7 +71,6 @@ noscript p {
 }
 
 .post {
-    position: relative;
     width: 500px;
     padding: 20px;
     margin: 10px 0;
@@ -98,6 +93,27 @@ noscript p {
 .meta {
     width: 500px;
     padding-bottom: 20px;
+}
+
+.meta .avatar {
+    position: absolute;
+    margin-left: -75px;
+    margin-top: -20px;
+}
+
+.meta .avatar:after {
+    content: "";
+    position: absolute;
+    top: 33%;
+    left: 43px;
+    font-size: 0;
+    border: 6px solid transparent;
+    border-right-color: white;
+}
+
+.meta .avatar img {
+    border-radius: 6px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, .5);
 }
 
 .meta .blog_name,
@@ -424,6 +440,32 @@ noscript p {
 }
 
 #load_more:hover {
+
+}
+
+/* Under 660px, avatars get cut off */
+
+@media screen and (max-width: 660px) {
+    
+    .meta .avatar {
+        position: relative;
+        top: 0;
+        margin: 0 10px 0 -10px;
+    }
+
+    .meta .avatar:after {
+        display: none;
+    }
+
+    .meta .avatar img {
+        vertical-align: middle;
+        border-radius: 3px;
+        box-shadow: none;
+    }
+
+    .buttons {
+        margin-top: 10px;
+    }
 
 }
 

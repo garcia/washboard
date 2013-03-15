@@ -53,6 +53,18 @@ function post2html(post) {
     // Metadata
     var meta = elem('div').addClass('meta');
 
+    // Blog avatar
+    meta.append(elem('a')
+        .addClass('avatar')
+        .attr('href', 'http://' + post.blog_name + '.tumblr.com')
+        .html(elem('img')
+            .attr('src', 'http://api.tumblr.com/v2/blog/'
+                + post.blog_name
+                + '.tumblr.com/avatar/40'
+            )
+        )
+    );
+
     // Blog name
     meta.append(elem('a')
         .addClass('blog_name')
@@ -626,8 +638,8 @@ function dashboard(data, options) {
         reblog_info: 'true',
         notes_info: 'true'
     }, data);
-    //apicall('http://api.tumblr.com/v2/user/dashboard', _data, options);
-    apicall('/static/js/testdata.js', _data, options);
+    apicall('http://api.tumblr.com/v2/user/dashboard', _data, options);
+    //apicall('/static/js/testdata.js', _data, options);
 }
 
 function like(data, options) {
