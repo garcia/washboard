@@ -183,6 +183,12 @@ noscript p {
     background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAALFJREFUOMtjYMAEPEAcCcRbgfg/EH+EsiOhcnhBJFQTPhyJS3MzEZphuJlYm/8CsSUQx+NzCQ8em/4AsS4QB+KQ5yHG3yBX/MMXHltxSB4A4g4gTgfiqzjUgPSCowmb5AsglgZiDiD+hkPNR3wGgMRZgNgTj/c+4vPCWmggT8JjwFZ8gZgCNeA2EP/EF4i4olEFiIWAeAcQn8IXjbhc4QHEqkC8jtgkTVFSpkpmIis7AwCcpLDVlUFfKQAAAABJRU5ErkJggg==");
 }
 
+/* Clear meta, just in case */
+
+.photos, .audiobox {
+    clear: both;
+}
+
 /* inline images */
 
 .body img,
@@ -503,6 +509,14 @@ noscript p {
     
     .post:last-child {
         margin-bottom: 4px;
+    }
+    
+    .buttons {
+        position: absolute;
+        right: 20px;
+        margin-top: -28px;
+        background-color: white;
+        box-shadow: -5px 0 3px white;
     }
     
     .post.photo .row {
