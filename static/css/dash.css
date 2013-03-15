@@ -189,6 +189,12 @@ noscript p {
     clear: both;
 }
 
+/* Stop long words at the padding, not the edge of the post box */
+
+.body, .caption {
+    overflow: hidden;
+}
+
 /* inline images */
 
 .body img,
@@ -372,6 +378,7 @@ noscript p {
 /* blacklisted posts */
 
 .blacklisted {
+    position: relative;
     opacity: .875;
 }
 
