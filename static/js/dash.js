@@ -502,7 +502,10 @@ function dash(data) {
         // Build posts
         $.each(data.response.posts, function(p, post) {
             var post_elem = post2html(post);
-            if (post_elem) {
+            if (post_elem == true) {
+                return true;
+            }
+            else if (post_elem != false) {
                 $('#middle > div > #posts').append(post_elem);
             }
         });
