@@ -28,8 +28,9 @@ function add_rule(src) {
 }
 
 function keyword_keypress(e) {
+    console.log(e);
     if ((e.which || e.keyCode || e.charCode) == 13) {
-        add_rule();
+        add_rule(e.target);
         return false;
     }
 }

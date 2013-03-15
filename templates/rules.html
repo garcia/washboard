@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<form method="post">
+<form method="post" onsubmit="return false">
     <fieldset>
         {% csrf_token %}
         <div id="rules">
@@ -43,7 +43,7 @@
             {% endfor %}
             <div id="submit" class="ruleset">
                 <div class="row submit">
-                    <input type="submit" value="Submit" />
+                    <input type="submit" value="Submit" onclick="form.submit()" />
                 </div>
             </div>
         </div>

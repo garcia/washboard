@@ -112,3 +112,18 @@ input[type=text]:focus {
     }
 
 }
+
+@media screen and (max-width: 540px) {
+
+    input[type="text"] {
+        width: 100%;
+        padding: 2px;
+    }
+
+    input[type="checkbox"] {
+        position: relative;
+        top: 2px;
+        -webkit-transform: scale(.75, .75);
+    }
+
+}
