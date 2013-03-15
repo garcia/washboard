@@ -19,9 +19,7 @@
     <div>
         <div id="nav">
             <h1 id="title">
-                {% if user.is_authenticated %}<a href="/dash">{% endif %}
-                    {% if title %}{{ title }}{% else %}Washboard{% endif %}
-                {% if user.is_authenticated %}</a>{% endif %}
+                <a{% if user.is_authenticated %}href="/dash"{% endif %}>Washboard</a>
             </h1>
             <div id="menu">
                 <ul>
