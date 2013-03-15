@@ -638,8 +638,12 @@ function dashboard(data, options) {
         reblog_info: 'true',
         notes_info: 'true'
     }, data);
-    apicall('http://api.tumblr.com/v2/user/dashboard', _data, options);
-    //apicall('/static/js/testdata.js', _data, options);
+    if (window.location.search.indexOf('testdata') >= 0) {
+        apicall('/static/js/testdata.js', _data, options);
+    }
+    else {
+        apicall('http://api.tumblr.com/v2/user/dashboard', _data, options);
+    }
 }
 
 function like(data, options) {
