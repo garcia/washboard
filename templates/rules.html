@@ -4,7 +4,6 @@
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{% static "css/rules.css" %}" />
 <script type="text/javascript" src="{% static "js/rules.js" %}"></script>
-<script type="text/javascript" src="{% static "js/ios-checkboxes.js" %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -12,31 +11,36 @@
     <fieldset>
         {% csrf_token %}
         <div id="rules">
-            <div class="row header">
-                <div class="delete">Delete</div>
-                <div class="keyword">Keyword</div>
-                <div class="show_notification">Show notification</div>
-                <div class="whole_word">Whole word</div>
-                <div class="regex">Regex</div>
-            </div>
-            {% for rule in rules %}
-            <div class="row{% if not rule.instance.keyword %} defaults{% else %} rule{% endif %}" data-prefix="{{ rule.prefix }}">
-                <div class="delete"><a class="delete-alt" onclick="delete_rule(this)">Delete</a></div>
-                {% if not rule.instance.keyword %}
-                <div class="label">Default values</div>
-                <div class="keyword" style="display: none">{{ rule.keyword }}</div>
-                {% else %}
-                <div class="keyword">{{ rule.keyword }}</div>
-                {% endif %}
-                <div class="show_notification">{{ rule.show_notification }}</div>
-                <div class="whole_word">{{ rule.whole_word }}</div>
-                <div class="regex">{{ rule.regex }}</div>
-                <div class="blacklist" style="display: none">{{ rule.blacklist }}</div>
+            {% for ruleset_name, ruleset in rules.items %}
+            <div id="{{ ruleset_name }}" class="ruleset">
+                <h2>{{ ruleset_name|title }}</h2>
+                <div class="row header">
+                    <div class="delete">Delete</div>
+                    <div class="keyword">Keyword</div>
+                    <div class="show_notification">Show notification</div>
+                    <div class="whole_word">Whole word</div>
+                    <div class="regex">Regex</div>
+                </div>
+                {% for rule in ruleset %}
+                <div class="row{% if not rule.instance.keyword %} defaults{% else %} rule{% endif %}" data-prefix="{{ rule.prefix }}">
+                    <div class="delete"><a class="delete-alt" onclick="delete_rule(this)">Delete</a></div>
+                    {% if not rule.instance.keyword %}
+                    <div class="label">Default values</div>
+                    <div class="keyword" style="display: none">{{ rule.keyword }}</div>
+                    {% else %}
+                    <div class="keyword">{{ rule.keyword }}</div>
+                    {% endif %}
+                    <div class="show_notification">{{ rule.show_notification }}</div>
+                    <div class="whole_word">{{ rule.whole_word }}</div>
+                    <div class="regex">{{ rule.regex }}</div>
+                    <div class="blacklist" style="display: none">{{ rule.blacklist }}</div>
+                </div>
+                {% endfor %}
+                <div class="row add">
+                    <div class="label" onclick="add_rule(this)">Add rule</div>
+                </div>
             </div>
             {% endfor %}
-            <div class="row add">
-                <div class="label" onclick="add_rule()">Add rule</div>
-            </div>
             <div class="row submit">
                 <input type="submit" value="Submit" />
             </div>

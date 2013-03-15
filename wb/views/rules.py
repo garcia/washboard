@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.db import transaction
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+from django.utils.datastructures import SortedDict
 
 from wb.models import *
 
@@ -28,13 +29,22 @@ def main(request):
         return get(request)
     
 def get(request):
-    rules = [RuleForm(prefix='{prefix}')];
-    rules.extend(RuleForm(instance=r, prefix=str(i)) for i, r in enumerate(
-        Rule.objects.filter(user__exact=request.user).order_by('index')
-    ))
+    blacklist = [RuleForm(prefix='{prefix}', instance=Rule())];
+    whitelist = [RuleForm(prefix='{prefix}', instance=Rule(blacklist=False))]
+    for i, r in enumerate(Rule.objects.filter(user__exact=request.user)
+            .order_by('index')):
+        form = RuleForm(instance=r, prefix=str(i))
+        if r.blacklist:
+            blacklist.append(form)
+        else:
+            whitelist.append(form)
     data = {
         'title': 'Rules',
-        'rules': rules,
+        'rulesets': ('blacklist', 'whitelist'),
+        'rules': SortedDict([
+            ('blacklist', blacklist),
+            ('whitelist', whitelist),
+        ]),
     }
     return render(request, 'rules.html', data)
 

@@ -5,7 +5,7 @@
     color: black;
 }
 
-#rules {
+.ruleset {
     display: table;
     width: 100%;
     text-align: center;
@@ -63,8 +63,15 @@
     cursor: pointer;
 }
 
+/* Showing / suppressing notifications is meaningless for whitelisted keywords,
+   but it's still convenient for them to use the same model as blacklisted keywords */
+#whitelist .show_notification {
+    color: transparent;
+}
 
-/* pure CSS delete icon from http://nicolasgallagher.com/pure-css-gui-icons/ */
+#whitelist .show_notification input {
+    display: none;
+}
 
 .defaults .delete {
     visibility: hidden;
