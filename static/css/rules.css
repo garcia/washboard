@@ -80,11 +80,7 @@ input[type=text]:focus {
 /* Showing / suppressing notifications is meaningless for whitelisted keywords,
    but it's still convenient for them to use the same model as blacklisted keywords */
 #whitelist .show_notification {
-    color: transparent;
-}
-
-#whitelist .show_notification input {
-    display: none;
+    text-indent: -65536em;
 }
 
 .defaults .delete {
