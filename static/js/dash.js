@@ -123,12 +123,46 @@ function post2html(post) {
             .attr('target', '_blank')
         );
     }
+
+    // Info button
     buttons.append(elem('a')
         .addClass('info')
         .text('Info')
+        .attr('data-dropdown', '#post_' + post.id + ' .info-menu')
     );
     meta.append(buttons);
     postelem.append(meta);
+
+    // Info dropdown
+    var infomenu = elem('div').addClass('info-menu');
+    var infolist = elem('ul');
+    var timestamp = elem('a')
+        .attr('href', post.post_url)
+        .text('Posted ')
+        .append(elem('abbr')
+            .addClass('timeago')
+            .attr('title', post.date.replace(' ', 'T').replace(' GMT', 'Z'))
+            .text(post.date)
+            .timeago()
+        );
+    infolist.append(elem('li').append(timestamp));
+    if (post.link_url) {
+        infolist.append(elem('li').append(elem('a')
+            .attr('href', post.link_url)
+            .text('Clickthrough link')));
+    }
+    infolist.append(elem('li').append(elem('a')
+        .on('click', function() {
+            // TODO
+        })
+        .text('Hide this post')
+    ));
+    infomenu.append(infolist);
+    meta.append(infomenu);
+    
+    infomenu.addClass('dropdown').addClass('dropdown-tip');
+    infolist.addClass('dropdown-menu');
+
     
     // Text posts
     if (post.type == 'text') {

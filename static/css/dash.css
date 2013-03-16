@@ -195,6 +195,17 @@ noscript p {
     clear: both;
 }
 
+/* info menu / jquery.dropdown.js overrides */
+
+.info-menu {
+    display: none;
+    margin-left: -4px;
+}
+
+.info-menu ul {
+    margin-left: -60px !important;
+}
+
 /* Stop long words at the padding, not the edge of the post box */
 
 .body, .caption {
