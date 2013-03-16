@@ -204,6 +204,10 @@ noscript p {
 
 /* photo */
 
+.post.photo .photos {
+    padding-bottom: 5px;
+}
+
 .post.photo .row {
     margin-top: 10px;
 }
@@ -415,6 +419,23 @@ noscript p {
     opacity: 0;
     border-right: 1px solid #00ffff;
     border-radius: 6px 0 0 6px;
+}
+
+/* tags */
+
+.tags {
+    margin-top: 10px;
+}
+
+.tags a {
+    margin-right: 10px;
+    color: #a0a0a0;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.tags a:hover {
+    text-decoration: underline;
 }
 
 /* read more breaks */

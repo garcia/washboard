@@ -376,6 +376,18 @@ function post2html(post) {
             "Sorry, I don't know how to render " + post.type + " posts yet."
         ));
     }
+
+    // Tags
+    if (post.tags.length) {
+        var tags = elem('div').addClass('tags');
+        $(post.tags).each(function(t, tag) {
+            tags.append(elem('a')
+                .attr('href', 'http://www.tumblr.com/tagged/' + encodeURIComponent(tag))
+                .html('#' + tag)
+            );
+        });
+        postelem.append(tags)
+    }
     
     // Check for blacklisted keywords
     keywords = [];
@@ -606,7 +618,16 @@ function unhide(a) {
         function() {
             // Fade in post from white
             post.removeClass('blacklisted');
-            post.children().css('opacity', 0).animate({opacity: 1}, 600);
+            post.children().css('opacity', 0).animate(
+                {opacity: 1},
+                600,
+                // Remove the opacity declaration after animation
+                function() {
+                    post.children().css('opacity', '');
+                    post.children().each(function(c, child) {
+                        $(child).attr('style') || $(child).removeAttr('style')
+                    });
+                });
         }
     );
 }
