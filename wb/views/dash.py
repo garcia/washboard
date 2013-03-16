@@ -27,5 +27,8 @@ def main(request):
         'rules': json.dumps(list(
                 Rule.objects.filter(user__exact=request.user).values()
             )),
+        'hidden_posts': json.dumps(list(
+                HiddenPost.objects.filter(user__exact=request.user).values()
+            )),
     }
     return render(request, 'dash.html', data)

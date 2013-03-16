@@ -50,6 +50,13 @@ function post2html(post) {
     postelem.attr('id', 'post_' + post.id);
     posts.push(post);
 
+    // Check if this post was specifically hidden
+    for (var hp = 0; hp < hidden_posts.length; hp++) {
+        if ((post.reblogged_root_url || post.post_url) == hidden_posts[hp].post) {
+            return true;
+        }
+    }
+
     // Metadata
     var meta = elem('div').addClass('meta');
 
@@ -136,7 +143,9 @@ function post2html(post) {
     // Info dropdown
     var infomenu = elem('div').addClass('info-menu');
     var infolist = elem('ul');
-    var timestamp = elem('a')
+
+    // Timestamp
+    infolist.append(elem('li').append(elem('a')
         .attr('href', post.post_url)
         .text('Posted ')
         .append(elem('abbr')
@@ -144,16 +153,19 @@ function post2html(post) {
             .attr('title', post.date.replace(' ', 'T').replace(' GMT', 'Z'))
             .text(post.date)
             .timeago()
-        );
-    infolist.append(elem('li').append(timestamp));
+        )));
+
+    // Clickthrough
     if (post.link_url) {
         infolist.append(elem('li').append(elem('a')
             .attr('href', post.link_url)
-            .text('Clickthrough link')));
+            .text('Clickthrough')));
     }
+
+    // Hide this post
     infolist.append(elem('li').append(elem('a')
         .on('click', function(e) {
-            var hide_url = post.reblogged_from_url || post.post_url
+            var hide_url = post.reblogged_root_url || post.post_url
             $.ajax('/hide', {
                 data: {
                     post: hide_url,
