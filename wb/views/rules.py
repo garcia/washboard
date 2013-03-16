@@ -49,6 +49,7 @@ def get(request):
     return render(request, 'rules.html', data)
 
 def post(request):
+    # TODO: CSRF validation
     Rule.objects.filter(user__exact=request.user).delete()
     prefixes = filter(
         lambda k: k.endswith('-keyword') and not k.startswith('{prefix}'),
