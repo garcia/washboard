@@ -80,3 +80,28 @@ def post(request):
         r.save()
         i += 1
     return redirect('/rules')
+
+class HidePostForm(forms.ModelForm):
+    class Meta:
+        model = HiddenPost
+        exclude = ('user',)
+
+def hide(request):
+    form = HidePostForm(request.POST)
+    if not form.is_valid():
+        return HttpResponse(json.dumps({
+            'meta': {
+                'status': 403,
+                'msg': 'Form validation failed.',
+            },
+            'response': {},
+        }))
+    hidden_post = HiddenPost(user=request.user, post=form.cleaned_data['post'])
+    hidden_post.save()
+    return HttpResponse(json.dumps({
+        'meta': {
+            'status': 200,
+            'msg': 'OK',
+        },
+        'response': {},
+    }), content_type='application/json')

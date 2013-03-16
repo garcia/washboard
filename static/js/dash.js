@@ -157,10 +157,14 @@ function post2html(post) {
             $.ajax('/hide', {
                 data: {
                     post: hide_url,
-                    csrf_token: csrf_token
+                    csrfmiddlewaretoken: csrf_token
                 },
                 dataType: 'json',
                 type: 'POST'
+            }).success(function(data) {
+                if (data.meta.status != 200) {
+                    alert(data.meta.msg);
+                }
             }).fail(function() {
                 alert('The server was unable to hide the post permanently, sorry.');
             }).always(function() {

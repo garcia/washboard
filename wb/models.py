@@ -59,3 +59,7 @@ class Rule(models.Model):
 class WhitelistUser(models.Model):
     user = models.ForeignKey(User)
     other_user = models.TextField(max_length=64)
+
+class HiddenPost(models.Model):
+    user = models.ForeignKey(User)
+    post = models.URLField()
