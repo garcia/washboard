@@ -247,9 +247,11 @@ function post2html(post) {
         // Dialogue
         chat = elem('ul').addClass('dialogue');
         $.each(post.dialogue, function(l, line) {
-            chat.append(elem('li').addClass('line').text(
-                line.label + " " + line.phrase
-            ));
+            chat.append(elem('li').addClass('line')
+                .append(elem('b').text(line.label))
+                .append(' ')
+                .append(elem('span').text(line.phrase))
+            );
             scan.push(line.label);
             scan.push(line.phrase);
         });
