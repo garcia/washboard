@@ -152,8 +152,24 @@ function post2html(post) {
             .text('Clickthrough link')));
     }
     infolist.append(elem('li').append(elem('a')
-        .on('click', function() {
-            // TODO
+        .on('click', function(e) {
+            var hide_url = post.reblogged_from_url || post.post_url
+            $.ajax('/hide', {
+                data: {
+                    post: hide_url,
+                    csrf_token: csrf_token
+                },
+                dataType: 'json',
+                type: 'POST'
+            }).fail(function() {
+                alert('The server was unable to hide the post permanently, sorry.');
+            }).always(function() {
+                $('#post_' + post.id).animate({opacity: 0}, 600, function() {
+                    setTimeout(function() {
+                        $('#post_' + post.id).css('display', 'none');
+                    }, 300);
+                });
+            });
         })
         .text('Hide this post')
     ));
