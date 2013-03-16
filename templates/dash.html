@@ -10,13 +10,12 @@
 <script type="text/javascript" src="{% static "js/json2.js" %}"></script>
 <script type="text/javascript" src="{% static "mediaelement/mediaelement-and-player.min.js" %}"></script>
 <script type="text/javascript">
-API_KEY         = "{{ api_key }}"
-API_SECRET      = "{{ api_secret }}"
-TOKEN_KEY       = "{{ token_key }}"
-TOKEN_SECRET    = "{{ token_secret }}"
-BASE_URL        = "{{ BASE_URL }}"
-
-rules = {{ rules|safe }}
+API_KEY      = "{{ api_key }}";
+API_SECRET   = "{{ api_secret }}";
+TOKEN_KEY    = "{{ token_key }}";
+TOKEN_SECRET = "{{ token_secret }}";
+BASE_URL     = "{{ BASE_URL }}";
+rules = {{ rules|safe }};
 </script>
 <script type="text/javascript" src="{% static "js/dash.js" %}"></script>
 {% endblock %}

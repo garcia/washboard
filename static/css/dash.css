@@ -275,6 +275,8 @@ noscript p {
 /* link */
 
 .link .link {
+    display: block;
+    margin: 10px 0;
     font-size: 20px;
     font-weight: bold;
 }
@@ -297,6 +299,10 @@ noscript p {
 }
 
 /* audio */
+
+.audio .audiobox {
+    margin: 10px 0;
+}
 
 .audio .audiobox .album_art {
     display: block;
@@ -347,7 +353,17 @@ noscript p {
     clear: left;
 }
 
+/* video */
+
+.post.video .player {
+    margin: 10px 0;
+}
+
 /* answer */
+
+.answerbox {
+    margin: 10px 0;
+}
 
 .question {
     position: relative;
@@ -431,11 +447,12 @@ noscript p {
 /* tags */
 
 .tags {
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 .tags a {
-    margin-right: 10px;
+    display: inline-block;
+    margin: 5px 10px 0 0;
     color: #a0a0a0;
     text-decoration: none;
     font-size: 12px;
