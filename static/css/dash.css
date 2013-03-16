@@ -84,7 +84,13 @@ noscript p {
     transition: opacity .5s ease;
 }
 
-.post p:last-child {
+.post p:first-child,
+.post blockquote:first-child {
+    margin-top: 0;
+}
+
+.post p:last-child,
+.post blockquote:last-child {
     margin-bottom: 0;
 }
 
@@ -92,7 +98,7 @@ noscript p {
 
 .meta {
     width: 500px;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
 }
 
 .meta .avatar {
@@ -176,7 +182,7 @@ noscript p {
 }
 
 .meta .reblog {
-    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAHdJREFUOMutlFEOwCAIQ7kR979Nb8J+5uJkQ9aVpF+aF4RWs3/lJq5QQ2MH9Y+KCorlAiNXwuLkpNbHQUcJZp1ZNJaCdRFBWiDBZiDjJ3Qc78rUjG4ZWHrlPEsGdgM+bZpOi4tMfQGlKXmLHghZ9TnICmpg6f5OHbqKk+W9SC3rAAAAAElFTkSuQmCC");
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90DEAEXFoVY0+4AAAB8SURBVDjLrZNBDsAgCAT3R3zRp/ITemmNFaRkCwknzUTZAfhXguaybqhlUCHaTtABQLcLTE9oB8xujnv6c1BpB8PXLIqh6B4GA0MEW4GMT1oxnhX16KKRMPfLdZYM7AWMkqa3RZqknsDOLTmunhI9IqeMTDkVtRWY2l+pC/EMlUPEiG+vAAAAAElFTkSuQmCC");
 }
 
 .meta .info {
@@ -193,6 +199,7 @@ noscript p {
 
 .body, .caption {
     overflow: hidden;
+    margin-top: 10px;
 }
 
 /* inline images */
@@ -205,7 +212,7 @@ noscript p {
 /* photo */
 
 .post.photo .photos {
-    padding-bottom: 5px;
+    margin: 10px 0;
 }
 
 .post.photo .row {
@@ -424,7 +431,7 @@ noscript p {
 /* tags */
 
 .tags {
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
 .tags a {
