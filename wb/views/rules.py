@@ -49,7 +49,6 @@ def get(request):
     return render(request, 'rules.html', data)
 
 def post(request):
-    # TODO: CSRF validation
     Rule.objects.filter(user__exact=request.user).delete()
     prefixes = filter(
         lambda k: k.endswith('-keyword') and not k.startswith('{prefix}'),
@@ -90,18 +89,12 @@ def hide(request):
     form = HidePostForm(request.POST)
     if not form.is_valid():
         return HttpResponse(json.dumps({
-            'meta': {
-                'status': 403,
-                'msg': 'Form validation failed.',
-            },
+            'meta': {'status': 403, 'msg': 'Form validation failed.'},
             'response': {},
         }))
     hidden_post = HiddenPost(user=request.user, post=form.cleaned_data['post'])
     hidden_post.save()
     return HttpResponse(json.dumps({
-        'meta': {
-            'status': 200,
-            'msg': 'OK',
-        },
+        'meta': {'status': 200, 'msg': 'OK'},
         'response': {},
     }), content_type='application/json')
