@@ -34,6 +34,17 @@ function best_fit(elements, target_width) {
     return elements[best];
 }
 
+function special_entities(html) {
+    return html
+        .replace('&#160;', ' ')
+        .replace('&#8217;', "'")
+        .replace('&#8220;', '"')
+        .replace('&#8221;', '"')
+        .replace('&amp;', '&')
+        .replace('&lt;', '<')
+        .replace('&gt;', '>');
+}
+
 function post2html(post) {
     // Check post's ID against currently loaded posts
     if (post.id >= $(posts).last().prop('id')) {
@@ -471,15 +482,21 @@ function post2html(post) {
             var kw = rule.keyword;
 
             // Convert "whole words" to Regex patterns
-            // TODO: this will cause unexpected results if the word contains
-            //       valid Regex code!
             if (rule.whole_word) {
-                kw = new RegExp('(?:^|\s)' + kw + '(?:\s|$)', 'i');
+                kw = new RegExp(
+                    // Match whitespace or start of line
+                    '(?:^|\\W)'
+                    // Escape metacharacters within the keyword
+                    + kw.replace(/[-[\]{}()*+?.,\/\\^$|#\s]/g, "\\$&")
+                    // Match whitespace or end of line
+                    + '(?=\\W|$)', 'i'
+                );
                 rule.regex = true;
             }
 
-            if ((rule.regex && scan_element.search(kw) >= 0) ||
-                (!rule.regex && scan_element.toLowerCase().indexOf(kw.toLowerCase()) >= 0)) {
+            scanned = special_entities(scan_element);
+            if ((rule.regex && scanned.search(kw) >= 0) ||
+                (!rule.regex && scanned.toLowerCase().indexOf(kw.toLowerCase()) >= 0)) {
                 
                 // Post contains a whitelisted keyword; stop scanning
                 if (!rule.blacklist) {
