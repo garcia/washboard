@@ -1,7 +1,10 @@
 function add_rule(src) {
     console.log(src);
+    // Set the prefix to the largest prefix + 1
+    var prefix = Array.max($('.row.rule').map(function() {
+        return $(this).data('prefix');
+    }).get()) + 1;
     // Insert the default rules
-    var prefix = $('.row.rule').last().data('prefix') + 1;
     var rule = $(src).closest('.ruleset').find('.row.defaults')
         .clone()
         .removeClass('defaults')
@@ -57,4 +60,9 @@ function delete_rule(e) {
 $(function() {
     $('.keyword input').keypress(keyword_keypress);
     $('input[type=checkbox]').click(checkbox_click);
+    
+    Array.max = function( array ){
+        return Math.max.apply( Math, array );
+    };
+    
 });
