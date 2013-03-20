@@ -555,15 +555,27 @@ function post2html(post) {
 
             // Hide anything that appears after the comment but within
             // the same paragraph by iterating over sibling nodes
-            // and wrapping them in <span>s
             var parent_node = more_link.get(0).parentNode;
             var sibling = more_link.get(0).nextSibling;
             while (sibling) {
-                var span = elem('span')
-                    .text(sibling.nodeValue)
-                    .addClass('cut under')
-                    .get(0);
-                parent_node.replaceChild(span, sibling);
+                // Add appropriate classes to element nodes
+                if (sibling.nodeType == 1) {
+                    $(sibling).addClass('cut under');
+                }
+                // Wrap text nodes in <span class="cut under">...</span>
+                else if (sibling.nodeType == 3) {
+                    var span = elem('span')
+                        .text(sibling.nodeValue)
+                        .addClass('cut under')
+                        .get(0);
+                    parent_node.replaceChild(span, sibling);
+                    sibling = span;
+                }
+                // Unknown node type
+                else {
+                    console.log("Unable to hide nodeType " + sibling.nodeType);
+                    console.log(sibling);
+                }
                 sibling = sibling.nextSibling;
             }
 

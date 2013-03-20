@@ -480,7 +480,7 @@ noscript p {
 
 .read_more {
     display: block;
-    margin: 10px 0 0 0;
+    margin: 10px 0 -16px 0;
 }
 
 .cut {
@@ -494,6 +494,7 @@ noscript p {
     display: block;
     height: 0;
     opacity: 0;
+    pointer-events: none;
 }
 
 .cut.over {
