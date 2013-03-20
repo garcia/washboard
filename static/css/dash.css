@@ -208,7 +208,9 @@ noscript p {
 
 /* Stop long words at the padding, not the edge of the post box */
 
-.body, .caption {
+.body,
+.caption,
+.description {
     overflow: hidden;
     margin-top: 10px;
 }
@@ -216,7 +218,8 @@ noscript p {
 /* inline images */
 
 .body img,
-.caption img {
+.caption img,
+.description img {
     max-width: 100%;
 }
 
