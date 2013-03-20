@@ -449,6 +449,7 @@ function post2html(post) {
     if (post.tags.length) {
         var tags = elem('div').addClass('tags');
         $(post.tags).each(function(t, tag) {
+            scan.push('#' + tag);
             tags.append(elem('a')
                 .attr('href', 'http://www.tumblr.com/tagged/' + encodeURIComponent(tag))
                 .html('#' + tag)
@@ -473,7 +474,7 @@ function post2html(post) {
             // TODO: this will cause unexpected results if the word contains
             //       valid Regex code!
             if (rule.whole_word) {
-                kw = new RegExp('\\b' + kw + '\\b', 'i');
+                kw = new RegExp('(?:^|\s)' + kw + '(?:\s|$)', 'i');
                 rule.regex = true;
             }
 
