@@ -49,20 +49,27 @@ function checkbox_click(e) {
     }
 }
 
-function delete_rule(e) {
-    var ruleset = $(e).closest('.ruleset');
-    $(e).closest('.rule').remove();
+function check_no_rules(ruleset) {
     if (!ruleset.children('.rule').length) {
         add_rule(ruleset);
     }
+}
+
+function delete_rule(e) {
+    var ruleset = $(e).closest('.ruleset');
+    $(e).closest('.rule').remove();
+    check_no_rules(ruleset);
 }
 
 $(function() {
     $('.keyword input').keypress(keyword_keypress);
     $('input[type=checkbox]').click(checkbox_click);
     
-    Array.max = function( array ){
-        return Math.max.apply( Math, array );
+    Array.max = function(array) {
+        result = Math.max.apply( Math, array );
+        return (result < 0) ? -1 : result;
     };
-    
+
+    $('.ruleset').each(function(r, ruleset) { check_no_rules($(ruleset)); });
+    $('input').blur();
 });
