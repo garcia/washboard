@@ -137,8 +137,22 @@ function post2html(post) {
             .addClass('reblog')
             .text('Reblog')
             .attr('href', 'http://www.tumblr.com/reblog/' + post.id + '/' +
-                post.reblog_key + '?redirect_to=' + encodeURIComponent(BASE_URL) + 'dash')
-            .attr('target', '_blank')
+                post.reblog_key + '?redirect_to=' + encodeURIComponent(BASE_URL) +
+                'dash?reblogged%3D' + post.id)
+            .click(function(e) {
+                // Save posts
+                localStorage.setItem('posts_' + post.id, JSON.stringify(posts));
+                localStorage.setItem('behind_by_' + post.id, behind_by);
+                // Note that we've saved the posts for this reblog
+                var saved = {};
+                if (localStorage.getItem('saved')) {
+                    saved = JSON.parse(localStorage.getItem('saved'));
+                }
+                saved[post.id] = new Date().getTime();
+                localStorage.setItem('saved', JSON.stringify(saved));
+                // Update URL
+                location.hash = 'reblogged=' + post.id;
+            })
         );
     }
 
@@ -811,8 +825,47 @@ $(function() {
     allow_selection = -1;
     unhiding = -1;
     
-    // Load first page of dashboard
-    dashboard();
+    query = URI(location.search).query(true);
+    hash = URI('?' + location.hash.slice(1)).query(true);
+    reblogged = query.reblogged || hash.reblogged;
+    
+    // Load saved posts upon returning from a reblog
+    if (reblogged && localStorage.getItem('posts_' + reblogged)) {
+        behind_by = parseInt(localStorage.getItem('behind_by_' + reblogged));
+        dash({
+            'meta': {'status': 200, 'msg': 'OK'},
+            'response': {'posts': JSON.parse(localStorage.getItem('posts_' + reblogged))}
+        });
+
+        // Cleanup
+        localStorage.removeItem('behind_by_' + reblogged);
+        localStorage.removeItem('posts_' + reblogged);
+
+        // Go to the post
+        location.hash = 'post_' + reblogged;
+    }
+    // Otherwise, load the first page of the dashboard
+    else {
+        dashboard();
+    }
+
+    // Clean up outdated save states
+    if (localStorage.getItem('saved')) {
+        console.log('Checking for outdated saves');
+        var saved = JSON.parse(localStorage.getItem('saved'));
+        var time = new Date().getTime();
+        for (var id in saved) {
+            console.log(id);
+            // Expire saves after 1 hour
+            if (time - saved[id] > 3600000) {
+                console.log('Removing outdated save ' + id);
+                localStorage.removeItem('posts_' + id);
+                localStorage.removeItem('behind_by_' + id);
+                delete saved[id];
+            }
+        }
+        localStorage.setItem('saved', JSON.stringify(saved));
+    }
 
     // Insert new post button
     $('#new').addClass('dropdown').addClass('dropdown-tip');
