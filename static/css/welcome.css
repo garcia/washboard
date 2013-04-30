@@ -151,6 +151,10 @@ a:hover {
     border-bottom: 1px dotted hsla(210, 38%, 90%, .4);
 }
 
+#namechange {
+    font-size: 20px;
+}
+
 @media screen and (max-width: 540px) {
 
     #intro,

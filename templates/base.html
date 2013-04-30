@@ -41,6 +41,7 @@
 
 <div id="middle" class="wrapper">
     <div>
+        {% if not dash %}
         {% if messages %}
         <ul id="messages">
             {% for message in messages %}
@@ -48,7 +49,6 @@
             {% endfor %}
         </ul>
         {% endif %}
-        {% if not dash %}
         <div id="content">
             {% block content %}{% endblock %}
         </div>

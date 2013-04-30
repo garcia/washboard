@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static "css/welcome.css" %}" />
+{% endblock %}
+
+{% block content %}
+<div id="namechange">
+    <p>Hey, we noticed you changed your Tumblr username. We've updated your Washboard username accordingly &mdash;
+        from now on, use <strong>{{ newname }}</strong> instead of <strong>{{ oldname }}</strong> to log in.</p>
+    <p><a href="/">Alright, got it</a></p>
+</p>
+</div>
+{% endblock %}

@@ -11,5 +11,6 @@ urlpatterns = patterns('',
     url(r'^rules$', 'wb.views.rules.main'),
     url(r'^hide$', 'wb.views.rules.hide'),
     url(r'^settings$', 'wb.views.settings.main'),
+    url(r'^namechange$', 'wb.views.namechange.main'),
     url(r'^favicon\.ico$', RedirectView.as_view(url='/static/images/favicon.ico')),
 )
