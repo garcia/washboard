@@ -231,6 +231,7 @@ noscript p {
 
 .post.photo .row {
     margin-top: 10px;
+    overflow: hidden;
 }
 
 .post.photo .row:first-child {

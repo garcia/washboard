@@ -240,6 +240,7 @@ function post2html(post) {
         var photos = elem('div').addClass('photos');
         var row = elem('div').addClass('row');
         var last_row = 0;
+        var row_height = 700;
 
         // Insert each photo
         $.each(post.photos, function(ph, photo) {
@@ -263,21 +264,24 @@ function post2html(post) {
             running_row--;
             if (running_row > last_row) {
                 row.addClass('row-' + layout[last_row]);
+                row.css('height', row_height);
                 photos.append(row);
                 row = elem('div').addClass('row');
+                row_height = 700;
             }
             last_row = running_row;
 
             // Determine optimal photo size to load
-            var target_size = {'1': 500 * scale, '2': 245 * scale, '3': 160 * scale}[
-                layout[running_row]
-            ];
+            var target_size = optimal_sizes[layout[running_row]];
             var best_photo = best_fit(photo.alt_sizes, target_size);
             var photoelem = elem('img')
                 .attr('src', best_photo.url);
             row.append(photoelem);
+            row_height = Math.min(row_height,
+                optimal_sizes[layout[running_row]] / best_photo.width * best_photo.height)
         });
         row.addClass('row-' + layout[last_row]);
+        row.css('height', row_height);
         photos.append(row);
         postelem.append(photos);
 
@@ -812,6 +816,7 @@ $(function() {
     // Get scale for photos
     // TODO: adjust when window resizes?
     scale = Math.min(500, screen.width) / 500;
+    optimal_sizes = {'1': 500 * scale, '2': 245 * scale, '3': 160 * scale};
     
     // Detect touch screen
     touchscreen = 'ontouchstart' in window;
