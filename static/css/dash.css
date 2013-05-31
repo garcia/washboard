@@ -176,7 +176,7 @@ noscript p {
 
 .meta .like.liked {
     background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAALhJREFUOI1jYICC/wwOkkBcAsStQOzJgAaAYu5A3ALEpUAsjS5ZC8T/0fBdIOYCYg4gvolFvgWmORiLJAj/A+KTQHwIysamJgpkwDk8CvBhkJ6rIAN+k6EZhv+CDPhMgQHfQQYcoMALB0EGhFDgAm9YTBwhQ/Nm9LRwnwSvnEdPaCADGIH4ChGaD2NoRjNoDx7NK/FqRjJkBRbN04nSjGTIaiTNC0nSjGTIGSA+TZZmqAFCQCyKTw0ABCZ522SJgWUAAAAASUVORK5CYII=");
-    opacity: 1;
+    opacity: 1 !important;
 }
 
 .meta .reblog {
