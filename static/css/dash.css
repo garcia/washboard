@@ -535,9 +535,9 @@ noscript p {
     background-repeat: no-repeat;
 }
 
-/* Over 660px, high res photosets can be expanded */
+/* Over 800px, high res photosets can be expanded */
 
-@media screen and (min-width: 660px) {
+@media screen and (min-width: 800px) {
 
     .post.photo.hr {
         width: 80%;
@@ -632,14 +632,17 @@ noscript p {
         margin-left: 0;
     }
     
+    .row-1 a,
     .row-1 img {
         width: 100%;
     }
 
+    .row-2 a,
     .row-2 img {
         width: 49%;
     }
 
+    .row-3 a,
     .row-3 img {
         width: 32%;
     }
