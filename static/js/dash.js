@@ -280,7 +280,6 @@ function post2html(post) {
                 .attr('target', '_blank')
                 .click(function(e) {
                     var this_post = $('#post_' + post.id);
-                    console.log(this_post);
                     this_post.find('.photos').animate(
                         {opacity: 0},
                         600,
@@ -296,6 +295,11 @@ function post2html(post) {
                                     $(img).attr('src', $(img).attr('hr_src'));
                                 }
                             );
+                            console.log(e.currentTarget);
+                            $('body').animate(
+                                {scrollTop: this_post.offset().top - 5},
+                                200
+                            );
                         }
                     );
                     return false;
@@ -307,7 +311,27 @@ function post2html(post) {
 
             // Optimal high-res size
             best_photo = best_fit(photo.alt_sizes, window.innerWidth);
-            photoelem = elem('img').attr('hr_src', best_photo.url);
+            photoelem = elem('img')
+                .attr('hr_src', best_photo.url)
+                .click(function(e) {
+                    var this_post = $('#post_' + post.id);
+                    this_post.find('.hr_photos').animate(
+                        {opacity: 0},
+                        600,
+                        function() {
+                            this_post.find('.hr_photos').css('display', 'none');
+                            this_post.removeClass('hr')
+                                .find('.photos')
+                                .css('display', 'block')
+                                .css('opacity', 0)
+                                .animate({opacity: 1}, 600);
+                            $('body').animate(
+                                {scrollTop: this_post.offset().top - 5},
+                                200
+                            );
+                        }
+                    );
+                });
             hr_photos.append(photoelem);
         });
         row.addClass('row-' + layout[last_row]);
