@@ -238,6 +238,7 @@ function post2html(post) {
     // Photo posts
     else if (post.type == 'photo') {
         var photos = elem('div').addClass('photos');
+        var hr_photos = elem('div').addClass('hr_photos');
         var row = elem('div').addClass('row');
         var last_row = 0;
         var row_height = 700;
@@ -281,7 +282,9 @@ function post2html(post) {
                 optimal_sizes[layout[running_row]] / best_photo.width * best_photo.height)
         });
         row.addClass('row-' + layout[last_row]);
-        row.css('height', row_height);
+        if (layout != '1') {
+            row.css('height', row_height);
+        }
         photos.append(row);
         postelem.append(photos);
 
