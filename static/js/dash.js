@@ -103,122 +103,7 @@ function post2html(post) {
         scan.push(post.reblogged_from_name);
     }
 
-    // Buttons
-    buttons = elem('div').addClass('buttons');
-
-    // Note count
-    if (post.note_count) {
-        buttons.append(elem('a')
-            .addClass('note_count')
-            .text(post.note_count)
-        );
-    }
-
-    // TODO: don't show like / reblog buttons if it's your own post
-    if (true) {
-
-        // Like button
-        var like_button = elem('a')
-            .addClass('like')
-            .text('Like')
-            .on('click', function(e) {
-                like({
-                    id: post.id,
-                    reblog_key: post.reblog_key
-                });
-            });
-        if (post.liked) {
-            like_button.addClass('liked');
-        }
-        buttons.append(like_button);
-
-        // Reblog button
-        buttons.append(elem('a')
-            .addClass('reblog')
-            .text('Reblog')
-            .attr('href', 'http://www.tumblr.com/reblog/' + post.id + '/' +
-                post.reblog_key + '?redirect_to=' + encodeURIComponent(BASE_URL) +
-                'dash?reblogged%3D' + post.id)
-            .click(function(e) {
-                // Save posts
-                localStorage.setItem('posts_' + post.id, JSON.stringify(posts));
-                localStorage.setItem('behind_by_' + post.id, behind_by);
-                // Note that we've saved the posts for this reblog
-                var saved = {};
-                if (localStorage.getItem('saved')) {
-                    saved = JSON.parse(localStorage.getItem('saved'));
-                }
-                saved[post.id] = new Date().getTime();
-                localStorage.setItem('saved', JSON.stringify(saved));
-                // Update URL
-                location.hash = 'reblogged=' + post.id;
-            })
-        );
-    }
-
-    // Info button
-    buttons.append(elem('a')
-        .addClass('info')
-        .text('Info')
-        .attr('data-dropdown', '#post_' + post.id + ' .info-menu')
-    );
-    meta.append(buttons);
     postelem.append(meta);
-
-    // Info dropdown
-    var infomenu = elem('div').addClass('info-menu');
-    var infolist = elem('ul');
-
-    // Timestamp
-    infolist.append(elem('li').append(elem('a')
-        .attr('href', post.post_url)
-        .text('Posted ')
-        .append(elem('abbr')
-            .addClass('timeago')
-            .attr('title', post.date.replace(' ', 'T').replace(' GMT', 'Z'))
-            .text(post.date)
-            .timeago()
-        )));
-
-    // Clickthrough
-    if (post.link_url) {
-        infolist.append(elem('li').append(elem('a')
-            .attr('href', post.link_url)
-            .text('Clickthrough')));
-    }
-
-    // Hide this post
-    infolist.append(elem('li').append(elem('a')
-        .on('click', function(e) {
-            var hide_url = post.reblogged_root_url || post.post_url
-            $.ajax('/hide', {
-                data: {
-                    post: hide_url,
-                    csrfmiddlewaretoken: csrf_token
-                },
-                dataType: 'json',
-                type: 'POST'
-            }).success(function(data) {
-                if (data.meta.status != 200) {
-                    alert(data.meta.msg);
-                }
-            }).fail(function() {
-                alert('The server was unable to hide the post permanently, sorry.');
-            }).always(function() {
-                $('#post_' + post.id).animate({opacity: 0}, 600, function() {
-                    setTimeout(function() {
-                        $('#post_' + post.id).css('display', 'none');
-                    }, 300);
-                });
-            });
-        })
-        .text('Hide this post')
-    ));
-    infomenu.append(infolist);
-    meta.append(infomenu);
-    
-    infomenu.addClass('dropdown').addClass('dropdown-tip');
-    infolist.addClass('dropdown-menu');
 
     
     // Text posts
@@ -543,6 +428,123 @@ function post2html(post) {
         });
         postelem.append(tags)
     }
+    
+    // Buttons
+    buttons = elem('div').addClass('buttons');
+
+    // TODO: don't show like / reblog buttons if it's your own post
+    if (true) {
+
+        // Like button
+        var like_button = elem('a')
+            .addClass('like')
+            .text('Like')
+            .on('click', function(e) {
+                like({
+                    id: post.id,
+                    reblog_key: post.reblog_key
+                });
+            });
+        if (post.liked) {
+            like_button.addClass('liked');
+        }
+        buttons.append(like_button);
+
+        // Reblog button
+        buttons.append(elem('a')
+            .addClass('reblog')
+            .text('Reblog')
+            .attr('href', 'http://www.tumblr.com/reblog/' + post.id + '/' +
+                post.reblog_key + '?redirect_to=' + encodeURIComponent(BASE_URL) +
+                'dash?reblogged%3D' + post.id)
+            .click(function(e) {
+                // Save posts
+                localStorage.setItem('posts_' + post.id, JSON.stringify(posts));
+                localStorage.setItem('behind_by_' + post.id, behind_by);
+                // Note that we've saved the posts for this reblog
+                var saved = {};
+                if (localStorage.getItem('saved')) {
+                    saved = JSON.parse(localStorage.getItem('saved'));
+                }
+                saved[post.id] = new Date().getTime();
+                localStorage.setItem('saved', JSON.stringify(saved));
+                // Update URL
+                location.hash = 'reblogged=' + post.id;
+            })
+        );
+    }
+
+    // Info button
+    buttons.append(elem('a')
+        .addClass('info')
+        .text('Info')
+        .attr('data-dropdown', '#post_' + post.id + ' .info-menu')
+    );
+
+    // Note count
+    if (post.note_count) {
+        buttons.append(elem('a')
+            .addClass('note_count')
+            .text(post.note_count)
+        );
+    }
+
+    postelem.append(buttons);
+
+    // Info dropdown
+    var infomenu = elem('div').addClass('info-menu');
+    var infolist = elem('ul');
+
+    // Timestamp
+    infolist.append(elem('li').append(elem('a')
+        .attr('href', post.post_url)
+        .text('Posted ')
+        .append(elem('abbr')
+            .addClass('timeago')
+            .attr('title', post.date.replace(' ', 'T').replace(' GMT', 'Z'))
+            .text(post.date)
+            .timeago()
+        )));
+
+    // Clickthrough
+    if (post.link_url) {
+        infolist.append(elem('li').append(elem('a')
+            .attr('href', post.link_url)
+            .text('Clickthrough')));
+    }
+
+    // Hide this post
+    infolist.append(elem('li').append(elem('a')
+        .on('click', function(e) {
+            var hide_url = post.reblogged_root_url || post.post_url
+            $.ajax('/hide', {
+                data: {
+                    post: hide_url,
+                    csrfmiddlewaretoken: csrf_token
+                },
+                dataType: 'json',
+                type: 'POST'
+            }).success(function(data) {
+                if (data.meta.status != 200) {
+                    alert(data.meta.msg);
+                }
+            }).fail(function() {
+                alert('The server was unable to hide the post permanently, sorry.');
+            }).always(function() {
+                $('#post_' + post.id).animate({opacity: 0}, 600, function() {
+                    setTimeout(function() {
+                        $('#post_' + post.id).css('display', 'none');
+                    }, 300);
+                });
+            });
+        })
+        .text('Hide this post')
+    ));
+    infomenu.append(infolist);
+    postelem.append(infomenu);
+    
+    infomenu.addClass('dropdown').addClass('dropdown-tip');
+    infolist.addClass('dropdown-menu');
     
     // Check for blacklisted keywords
     keywords = [];
