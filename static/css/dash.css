@@ -63,9 +63,7 @@ noscript p {
 /* posts */
 
 #posts {
-    width: 540px;
     padding: 0;
-    margin: 0 auto;
     list-style-type: none;
     overflow-x: hidden;
 }
@@ -73,7 +71,7 @@ noscript p {
 .post {
     width: 500px;
     padding: 20px;
-    margin: 10px 0;
+    margin: 10px auto;
     background-color: white;
     list-style-type: none; /* IE9 fix */
     border-radius: 6px;
@@ -97,7 +95,7 @@ noscript p {
 /* .meta */
 
 .meta {
-    width: 500px;
+    width: 100%;
     padding-bottom: 10px;
 }
 
@@ -238,25 +236,37 @@ noscript p {
     margin-top: 0;
 }
 
-.post.photo .row img {
+.post.photo .row a {
+    display: inline-block;
     margin-left: 10px;
     vertical-align: top;
 }
 
-.post.photo .row img:first-child {
+.post.photo .row a:first-child {
     margin-left: 0;
 }
 
+.row-1 a,
 .row-1 img {
     width: 500px;
 }
 
+.row-2 a,
 .row-2 img {
     width: 245px;
 }
 
+.row-3 a,
 .row-3 img {
     width: 160px;
+}
+
+/* high res photosets */
+
+.hr_photos img {
+    display: block;
+    margin: 10px auto;
+    max-width: 100%;
 }
 
 /* quote */
@@ -522,6 +532,16 @@ noscript p {
     background-image: url("data:image/gif;base64,R0lGODlhEAAQAPIAABYkMf///0xXYcHFyP///6SproeOlXiAiCH+GkNyZWF0ZWQgd2l0aCBhamF4bG9hZC5pbmZvACH5BAAKAAAAIf8LTkVUU0NBUEUyLjADAQAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQACgABACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkEAAoAAgAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkEAAoAAwAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkEAAoABAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQACgAFACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQACgAGACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAAKAAcALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==");
     background-position: left center;
     background-repeat: no-repeat;
+}
+
+/* Over 660px, high res photosets can be expanded */
+
+@media screen and (min-width: 660px) {
+
+    .post.photo.hr {
+        width: 80%;
+    }
+
 }
 
 /* Under 660px, avatars get cut off */
