@@ -101,15 +101,15 @@ noscript p {
 
 .meta .avatar {
     position: absolute;
-    margin-left: -75px;
+    margin-left: -100px;
     margin-top: -20px;
 }
 
 .meta .avatar:after {
     content: "";
     position: absolute;
-    top: 33%;
-    left: 43px;
+    top: 24px;
+    left: 68px;
     font-size: 0;
     border: 6px solid transparent;
     border-right-color: white;
@@ -128,6 +128,7 @@ noscript p {
     font-weight: bold;
     font-size: 90%;
     color: #a8b1ba;
+    text-decoration: none;
 }
 
 .meta .reblogged_text {
@@ -547,9 +548,13 @@ noscript p {
 
 }
 
-/* Under 660px, avatars get cut off */
+/* Under 720px, avatars get cut off */
 
-@media screen and (max-width: 660px) {
+@media screen and (max-width: 720px) {
+    
+    .post {
+        padding-top: 10px;
+    }
     
     .meta .avatar {
         position: relative;
@@ -562,6 +567,7 @@ noscript p {
     }
 
     .meta .avatar img {
+        width: 40px;
         vertical-align: middle;
         border-radius: 3px;
         box-shadow: none;
@@ -609,12 +615,8 @@ noscript p {
         margin-bottom: 4px;
     }
     
-    .buttons {
-        position: absolute;
-        right: 20px;
-        margin-top: -28px;
-        background-color: white;
-        box-shadow: -5px 0 3px white;
+    .meta .reblogged_text {
+        padding-top: 2px;
     }
     
     .post.photo .row {

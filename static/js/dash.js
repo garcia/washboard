@@ -78,7 +78,7 @@ function post2html(post) {
         .html(elem('img')
             .attr('src', 'http://api.tumblr.com/v2/blog/'
                 + post.blog_name
-                + '.tumblr.com/avatar/40'
+                + '.tumblr.com/avatar/64'
             )
         )
     );
