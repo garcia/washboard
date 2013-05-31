@@ -815,7 +815,7 @@ function load_more() {
 $(function() {
     // Get scale for photos
     // TODO: adjust when window resizes?
-    scale = Math.min(500, screen.width) / 500;
+    scale = Math.min(500, window.innerWidth) / 500;
     optimal_sizes = {'1': 500 * scale, '2': 245 * scale, '3': 160 * scale};
     
     // Detect touch screen
