@@ -438,7 +438,8 @@ noscript p {
     display: none;
 }
 
-.blacklisted > * {
+.blacklisted > *,
+.blacklisted > .link {
     display: none;
 }
 
