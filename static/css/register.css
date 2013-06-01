@@ -1,3 +1,7 @@
+#content {
+    margin: 5% auto;
+}
+
 #register {
     width: 500px;
     font-size: 18px;
@@ -11,6 +15,10 @@
     font-size: 14px;
     border-bottom: 1px dotted hsla(210, 35%, 90%, .5);
     cursor: pointer;
+}
+
+#the-box:after {
+    content: " to the right";
 }
 
 #why {
@@ -95,10 +103,26 @@
         font-size: 14px;
     }
 
+    #register-example {
+        width: 100%;
+        margin: 0;
+        float: none;
+        box-sizing: border-box;
+    }
+
     #register-example h2 a:after {
         margin-bottom: 1px;
     }
+
+    #register {
+        width: 100%;
+        margin-top: 20px;
+    }
     
+    #the-box:after {
+        content: " above";
+    }
+
     #why {
         font-size: 12px;
     }

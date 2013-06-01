@@ -1,3 +1,7 @@
+#top {
+    display: none;
+}
+
 #middle > div {
     background: #395c7f; /* Old browsers */
     background: -moz-radial-gradient(center, ellipse cover,  #395c7f 0%, #2c4762 100%); /* FF3.6+ */
@@ -31,6 +35,10 @@ a:hover {
     margin-bottom: 40px;
     font-family: "Signika";
     text-shadow: 0 2px 2px rgba(0, 0, 0, .25);
+}
+
+#logo a {
+    text-decoration: none;
 }
 
 #logo * {

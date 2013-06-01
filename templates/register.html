@@ -8,6 +8,12 @@
 {% endblock %}
 
 {% block content %}
+<div id="logo">
+    <h1><a href="/">Washboard</a></h1>
+    <h2>for Tumblr</h2>
+    <h3>beta</h3>
+</div>
+
 <div id="register-example">
     <h2><a href="http://www.tumblr.com/oauth/register" target="_blank">Register an application</a></h2>
     <p>Application name:</p>
@@ -18,8 +24,9 @@
     <p>Default callback URL:</p>
     <input type="text" value="{{ BASE_URL }}callback" readonly />
 </div>
+
 <form id="register" method="post">
-    <p>Because Washboard runs in your browser, we need you to register your own app using the information in the box to the right. <em>(Wait, but why?)</em></p>
+    <p>Because Washboard runs in your browser, we need you to register your own app using the information in the <span id="the-box">box</span>. <em>(Wait, but why?)</em></p>
     <p id="why">Unlike most apps, Washboard doesn't act as a middleman &mdash; your browser communicates directly with Tumblr.
         This gives you better security and us better performance.
         The downside is that Tumblr doesn't allow us to send your browser our own API key, which is required for authentication purposes.
@@ -38,4 +45,8 @@
         <input type="submit" value="Register" />
     </fieldset>
 </fieldset></form>
+{% endblock %}
+
+{% block bottom %}
+{% include "links.html" %}
 {% endblock %}
