@@ -1,6 +1,6 @@
 ![Washboard](static/images/washboard-logo.png)
 
-Washboard is an interface to the Tumblr Dashboard that features keyword blacklisting.
+[**Washboard**](http://washboard.ws) is an interface to the Tumblr Dashboard that features keyword blacklisting.
 Think of it as a [Tumblr Savior](http://bjornstar.com/tumblr-savior) port for mobile devices.
 
 Written in [Python](http://python.org) using [Django](https://www.djangoproject.com/) and [South](http://south.aeracode.org/).
