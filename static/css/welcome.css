@@ -48,6 +48,12 @@ a:hover {
     margin-top: -0.4em;
 }
 
+#logo h3 {
+    font-size: 1.5em;
+    margin-top: -0.2em;
+    color: #ffa0a0;
+}
+
 #intro {
     width: 60%;
     float: right;
@@ -59,7 +65,7 @@ a:hover {
 }
 
 #login {
-    padding-top: 12px;
+    padding-top: 2px;
     width: 40%;
 }
 
