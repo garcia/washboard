@@ -144,8 +144,10 @@ noscript p {
 
 .buttons {
     display: block;
-    margin-top: 12px;
-    height: 12px;
+    height: 10px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #f0f0f0;
 }
 
 .buttons a {
@@ -329,14 +331,22 @@ noscript p {
 /* audio */
 
 .audio .audiobox {
-    margin: 10px 0;
+    margin: 10px 0 15px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.audio .audiobox:after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: left;
 }
 
 .audio .audiobox .album_art {
     display: block;
     float: left;
     max-width: 100px;
-    margin: 10px 10px 10px 0;
+    margin: 15px 10px 15px 0;
     border: 1px solid white;
     cursor: pointer;
     -webkit-transition: max-width .5s ease;
@@ -362,8 +372,15 @@ noscript p {
     white-space: nowrap;
 }
 
-.audio .audiobox .track_name {
+.audio .audiobox p:first-of-type {
     margin-top: 15px;
+}
+
+.audio .audiobox p:last-of-type {
+    margin-bottom: 15px;
+}
+
+.audio .audiobox .track_name {
     font-weight: bold;
 }
 
@@ -428,6 +445,12 @@ noscript p {
 
 .asking_name.anonymous {
     color: gray;
+}
+
+.answer {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #f0f0f0;
 }
 
 /* blacklisted posts */
@@ -571,10 +594,6 @@ noscript p {
         vertical-align: middle;
         border-radius: 3px;
         box-shadow: none;
-    }
-
-    .buttons {
-        margin-top: 10px;
     }
 
 }
