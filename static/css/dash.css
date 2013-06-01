@@ -528,7 +528,7 @@ noscript p {
 
 .read_more {
     display: block;
-    margin: 10px 0 -16px 0;
+    margin-top: 10px;
 }
 
 .cut {
