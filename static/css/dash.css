@@ -343,8 +343,7 @@ noscript p {
 /* audio */
 
 .audio .audiobox {
-    margin: 10px 0 15px 0;
-    border-bottom: 1px solid #f0f0f0;
+    margin: 10px 0 0 0;
 }
 
 .audio .audiobox:after {
@@ -358,7 +357,7 @@ noscript p {
     display: block;
     float: left;
     max-width: 100px;
-    margin: 15px 10px 15px 0;
+    margin: 15px 10px 0 0;
     border: 1px solid white;
     cursor: pointer;
     -webkit-transition: max-width .5s ease;
@@ -388,10 +387,6 @@ noscript p {
     margin-top: 15px;
 }
 
-.audio .audiobox p:last-of-type {
-    margin-bottom: 15px;
-}
-
 .audio .audiobox .track_name {
     font-weight: bold;
 }
@@ -407,7 +402,10 @@ noscript p {
 }
 
 .audio .caption {
+    margin-top: 15px;
+    padding-top: 15px;
     clear: left;
+    border-top: 1px solid #f0f0f0;
 }
 
 /* video */
