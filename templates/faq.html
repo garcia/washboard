@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static "css/welcome.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/faq.css" %}" />
+{% endblock %}
+
+{% block content %}
+<div id="logo">
+    <h1><a href="/">Washboard</a></h1>
+    <h2>FAQ</h2>
+</div>
+
+<ul id="faq">
+    <li><p class="question">What is Washboard?</p>
+        <p class="answer">Washboard is a web app that provides an alternative frontend to Tumblr. Its primary goal is to give mobile users a way to blacklist keywords, since mobile devices don't have Tumblr Savior or XKit.</p>
+    </li>
+    <li><p class="question">How does signing up work?</p>
+        <p class="answer">Washboard guides the user through the steps to register their own Tumblr application and then authenticates the user with their own app. The user's primary blog name is used for their Washboard username.</p>
+    </li>
+    <li><p class="question">What happens if I change my username on Tumblr?</p>
+        <p class="answer">After changing your Tumblr username, you can log in once using your old username. After doing so, Washboard will update your username automatically and inform you of the change.</p>
+    </li>
+    <li><p class="question">How does blacklisting work?</p>
+        <p class="answer">The "Rules" page allows users to manage their blacklisted and whitelisted keywords. Words or phrases can be blacklisted, and there are per-keyword options to show a notification upon blacklisting and to only match the whole world (as opposed to the keyword "board" matching "Washboard", for example).</p>
+    </li>
+    <li><p class="question">Will the blacklist stop working if Tumblr updates the layout?</p>
+        <p class="answer">Nope. Although this happens occasionally with desktop browser extensions, Washboard uses the Tumblr API, which is relatively stable. In the event that something critical breaks, Washboard will not display posts at all, rather than displaying all posts indiscriminately.</p>
+    </li>
+    <li><p class="question">It's not working! What do I do?</p>
+        <p class="answer">Please <a href="mailto:admin@washboard.ws">email me</a> or <a href="http://blog.grantgarcia.org/ask">send me an ask</a> with as many details as you can provide. Your feedback is critical!</p>
+    </li>
+</div>
+{% endblock %}
+
+{% block bottom %}
+{% include "links.html" %}
+{% endblock %}
