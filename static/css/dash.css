@@ -277,22 +277,34 @@ noscript p {
 /* quote */
 
 .quote .quote {
-    margin-left: 10px;
-    font-weight: bold;
+    margin: 10px 0 15px 10px;
+    font-size: 20px;
 }
 
 .quote .quote:before {
     content: "\201c";
     display: block;
     position: absolute;
+    margin-left: -20px;
     margin-top: -6px;
-    margin-left: -24px;
-    font-size: 36px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #c0c0c0;
+}
+
+.quote .quote > p:last-of-type:after {
+    content: "\201d";
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 28px;
+    font-weight: bold;
     color: #c0c0c0;
 }
 
 .quote .source {
-    margin-left: 30px;
+    margin-top: 15px;
+    padding: 15px 0 0 30px;
+    border-top: 1px solid #f0f0f0;
 }
 
 .quote .source:before {
