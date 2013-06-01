@@ -128,6 +128,11 @@ function post2html(post) {
         var last_row = 0;
         var row_height = 700;
 
+        var largest_width = 0;
+        $.each(post.photos, function(ph, photo) {
+            largest_width = Math.max(largest_width, best_fit(photo.alt_sizes, 1280).width);
+        });
+
         // Insert each photo
         $.each(post.photos, function(ph, photo) {
 
@@ -171,6 +176,7 @@ function post2html(post) {
                         function() {
                             this_post.find('.photos').css('display', 'none');
                             this_post.addClass('hr')
+                                .css('max-width', Math.max(540, largest_width))
                                 .find('.hr_photos')
                                 .css('display', 'block')
                                 .css('opacity', 0)
@@ -206,6 +212,7 @@ function post2html(post) {
                         function() {
                             this_post.find('.hr_photos').css('display', 'none');
                             this_post.removeClass('hr')
+                                .css('max-width', 'none')
                                 .find('.photos')
                                 .css('display', 'block')
                                 .css('opacity', 0)

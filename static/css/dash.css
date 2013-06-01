@@ -275,6 +275,32 @@ noscript p {
     cursor: pointer;
 }
 
+.post.hr {
+    width: 98%;
+    padding-top: 10px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.post.hr .meta .avatar {
+    position: relative;
+    top: 0;
+    margin: 0 10px 0 -10px;
+}
+
+.post.hr .meta .avatar:after {
+    display: none;
+}
+
+.post.hr .meta .avatar img {
+    width: 40px;
+    vertical-align: middle;
+    border-radius: 3px;
+    box-shadow: none;
+}
+
 /* quote */
 
 .quote .quote {
@@ -572,16 +598,6 @@ noscript p {
     background-repeat: no-repeat;
 }
 
-/* Over 800px, high res photosets can be expanded */
-
-@media screen and (min-width: 800px) {
-
-    .post.photo.hr {
-        width: 80%;
-    }
-
-}
-
 /* Under 720px, avatars get cut off */
 
 @media screen and (max-width: 720px) {
@@ -628,7 +644,8 @@ noscript p {
         top: 32px !important;
     }
     
-    .post {
+    .post,
+    .post.hr {
         width: 100%;
         border-radius: 0;
         -webkit-box-sizing: border-box;
