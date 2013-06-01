@@ -8,7 +8,10 @@ class LoginForm(forms.Form):
         error_messages={
             'required': 'Please enter your name.',
         },  
-        widget=forms.TextInput(attrs={'placeholder': 'Username'}),
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Username',
+            'autofocus': 'autofocus',
+        }),
     )   
     password = forms.CharField(
         label='Password',

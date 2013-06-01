@@ -48,7 +48,7 @@ def main(request):
     if request.method != 'POST':
         request.session['nonce'] = str(random.randrange(sys.maxsize))
         return render(request, 'register.html', {
-            'title': 'Register',
+            'title': 'Sign Up',
             'BASE_URL': settings.BASE_URL,
             'form': RegistrationForm(),
         })
