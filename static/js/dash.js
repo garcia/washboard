@@ -245,6 +245,10 @@ function post2html(post) {
     else if (post.type == 'quote') {
         
         // Quote
+        if (post.text.indexOf('<') == -1) {
+            // Enclose in <p> tag if necessary
+            post.text = '<p>' + post.text + '</p>';
+        }
         postelem.append(elem('div').addClass('quote').html(post.text));
         scan.push(post.text);
 

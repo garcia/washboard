@@ -316,9 +316,7 @@ noscript p {
     content: "\201c";
     display: block;
     position: absolute;
-    margin-left: -20px;
-    margin-top: -6px;
-    font-size: 28px;
+    margin-left: -16px;
     font-weight: bold;
     color: #c0c0c0;
 }
@@ -327,7 +325,6 @@ noscript p {
     content: "\201d";
     display: inline-block;
     margin-left: 5px;
-    font-size: 28px;
     font-weight: bold;
     color: #c0c0c0;
 }
