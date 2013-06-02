@@ -943,7 +943,6 @@ $(function() {
     if (!session) {
         session = (new Date()).getTime().toString();
         location.hash = 'session=' + session;
-        save_session_interval = setInterval(save_session, 5000);
 
         // Record this session
         var sessions = [];
@@ -970,6 +969,8 @@ $(function() {
         }
         localStorage.setItem('sessions', JSON.stringify(sessions));
     }
+        
+    save_session_interval = setInterval(save_session, 5000);
 
     // Insert new post button
     $('#new').addClass('dropdown').addClass('dropdown-tip');
