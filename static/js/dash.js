@@ -74,7 +74,7 @@ function post2html(post) {
     // Blog avatar
     meta.append(elem('a')
         .addClass('avatar')
-        .attr('href', 'http://' + post.blog_name + '.tumblr.com')
+        .attr('href', '/blog/' + post.blog_name)
         .html(elem('img')
             .attr('src', 'http://api.tumblr.com/v2/blog/'
                 + post.blog_name

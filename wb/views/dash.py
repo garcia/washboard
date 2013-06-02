@@ -37,7 +37,7 @@ def main(request, data_=None):
 
     return render(request, 'dash.html', data)
 
-def user(request, username):
+def blog(request, username):
     return main(request, data_={
         'title': "%s's blog" % username,
         'api_url': 'http://api.tumblr.com/v2/blog/%s.tumblr.com/posts' % username,
