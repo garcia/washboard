@@ -192,6 +192,10 @@ noscript p {
     background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAALFJREFUOMtjYMAEPEAcCcRbgfg/EH+EsiOhcnhBJFQTPhyJS3MzEZphuJlYm/8CsSUQx+NzCQ8em/4AsS4QB+KQ5yHG3yBX/MMXHltxSB4A4g4gTgfiqzjUgPSCowmb5AsglgZiDiD+hkPNR3wGgMRZgNgTj/c+4vPCWmggT8JjwFZ8gZgCNeA2EP/EF4i4olEFiIWAeAcQn8IXjbhc4QHEqkC8jtgkTVFSpkpmIis7AwCcpLDVlUFfKQAAAABJRU5ErkJggg==");
 }
 
+.buttons .edit {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90GAgI5FFDnFdMAAABbSURBVDjLY2BAAHsg/g+lKQYww2ZSy1CQIQ1QdgOaoTA+LowV4DKEGEMZyDUUm6/wGkiqoUQZSIqhRBuIz1CyDMTmspmUGIgvdsk2kBiFowYOBwOJxfQ3cHABAOE1awRQ4wVQAAAAAElFTkSuQmCC");
+}
+
 /* Clear meta, just in case */
 
 .photos, .audiobox {

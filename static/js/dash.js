@@ -439,10 +439,8 @@ function post2html(post) {
     // Buttons
     buttons = elem('div').addClass('buttons');
 
-    // TODO: don't show like / reblog buttons if it's your own post
-    if (true) {
-
-        // Like button
+    // Like button (only on posts by others)
+    if (post.blog_name != username) {
         var like_button = elem('a')
             .addClass('like')
             .text('Like')
@@ -456,13 +454,15 @@ function post2html(post) {
             like_button.addClass('liked');
         }
         buttons.append(like_button);
+    }
 
-        // Reblog button
+    // Edit button (only on own posts)
+    else {
         buttons.append(elem('a')
-            .addClass('reblog')
-            .text('Reblog')
-            .attr('href', 'http://www.tumblr.com/reblog/' + post.id + '/' +
-                post.reblog_key + '?redirect_to=' + encodeURIComponent(BASE_URL) +
+            .addClass('edit')
+            .text('Edit')
+            .attr('href', 'http://www.tumblr.com/edit/' + post.id +
+                '?redirect_to=' + encodeURIComponent(BASE_URL) +
                 'dash?reblogged%3D' + post.id)
             .click(function(e) {
                 // Save posts
@@ -480,6 +480,29 @@ function post2html(post) {
             })
         );
     }
+
+    // Reblog button
+    buttons.append(elem('a')
+        .addClass('reblog')
+        .text('Reblog')
+        .attr('href', 'http://www.tumblr.com/reblog/' + post.id + '/' +
+            post.reblog_key + '?redirect_to=' + encodeURIComponent(BASE_URL) +
+            'dash?reblogged%3D' + post.id)
+        .click(function(e) {
+            // Save posts
+            localStorage.setItem('posts_' + post.id, JSON.stringify(posts));
+            localStorage.setItem('behind_by_' + post.id, behind_by);
+            // Note that we've saved the posts for this reblog
+            var saved = {};
+            if (localStorage.getItem('saved')) {
+                saved = JSON.parse(localStorage.getItem('saved'));
+            }
+            saved[post.id] = new Date().getTime();
+            localStorage.setItem('saved', JSON.stringify(saved));
+            // Update URL
+            location.hash = 'reblogged=' + post.id;
+        })
+    );
 
     // Info button
     buttons.append(elem('a')
