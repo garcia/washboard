@@ -11,7 +11,7 @@ from django.template import RequestContext
 
 from wb.models import *
 
-def main(request):
+def main(request, data_=None):
     if not request.user.is_authenticated():
         return redirect('/')
     
@@ -19,7 +19,9 @@ def main(request):
     data = {
         'title': 'Dashboard',
         'dash': True,
-        'BASE_URL': settings.BASE_URL,
+        'base_url': settings.BASE_URL,
+        'api_url': 'http://api.tumblr.com/v2/user/dashboard',
+        'append_key': 0,
         'api_key': profile.api_key,
         'api_secret': profile.api_secret,
         'token_key': profile.token_key,
@@ -31,4 +33,13 @@ def main(request):
                 HiddenPost.objects.filter(user__exact=request.user).values()
             )),
     }
+    if data_: data.update(data_)
+
     return render(request, 'dash.html', data)
+
+def user(request, username):
+    return main(request, data_={
+        'title': "%s's blog" % username,
+        'api_url': 'http://api.tumblr.com/v2/blog/%s.tumblr.com/posts' % username,
+        'append_key': 1,
+    })

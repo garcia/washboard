@@ -868,7 +868,12 @@ function dashboard(data, options) {
         apicall('/static/js/testdata.js', _data, options);
     }
     else {
-        apicall('http://api.tumblr.com/v2/user/dashboard', _data, options);
+        if (APPEND_KEY) {
+            _data = $.extend({
+                'api_key': API_KEY,
+            }, _data);
+        }
+        apicall(API_URL, _data, options);
     }
 }
 
