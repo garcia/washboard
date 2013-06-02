@@ -885,11 +885,20 @@ function load_more() {
 }
 
 function save_session() {
-    localStorage.setItem('session_' + session, JSON.stringify({
-        'behind_by': behind_by,
-        'posts': posts,
-        'position': $('body').scrollTop(),
-    }));
+    try {
+        localStorage.setItem('session_' + session, JSON.stringify({
+            'behind_by': behind_by,
+            'posts': posts,
+            'position': $('body').scrollTop(),
+        }));
+    }
+    catch (err) {
+        console.log('Ran out of localStorage quota. Clearing...');
+        if (err.name.toLowerCase().indexOf('quota') > -1) {
+            localStorage.clear();
+            localStorage.setItem('sessions', JSON.stringify([session]));
+        }
+    }
 }
 
 $(function() {
@@ -912,7 +921,7 @@ $(function() {
     
     query = URI(location.search).query(true);
     hash = URI('?' + location.hash.slice(1)).query(true);
-    session = query.session || hash.session;
+    session = hash.session || query.session;
     
     // Load session, if present
     if (session) {
@@ -925,10 +934,13 @@ $(function() {
             });
             $('body').scrollTop(session_data.position);
         }
+        else {
+            session = null;
+        }
     }
 
     // Otherwise, start a new session and load the first page of the dashboard
-    else {
+    if (!session) {
         session = (new Date()).getTime().toString();
         location.hash = 'session=' + session;
         save_session_interval = setInterval(save_session, 5000);
@@ -939,6 +951,7 @@ $(function() {
             sessions = JSON.parse(localStorage.getItem('sessions'));
         }
         sessions.push(session);
+        localStorage.setItem('sessions', JSON.stringify(sessions));
         
         dashboard();
     }
