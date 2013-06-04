@@ -15,4 +15,7 @@ DATABASES = {
     }
 }
 
+OAUTH_CONSUMER_KEY = ''
+SECRET_KEY = ''
+
 BASE_URL = 'http://localhost/'
