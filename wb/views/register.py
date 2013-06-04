@@ -18,21 +18,23 @@ def tryagain(message):
     return message + """
         You can try again, but please contact us if the problem persists."""
 
-class RegistrationForm(forms.Form):
-    api_key = forms.CharField(
-        max_length=64,
-        widget=forms.TextInput(attrs={'placeholder': 'OAuth Consumer Key'}),
+
+class ChangeNameForm(forms.Form):
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': 'Old username'}),
         error_messages={
-            'required': 'Please enter your OAuth Consumer Key.',
+            'reqired': 'Please enter your old username.',
+        }
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'placeholder': 'Password'}),
+        error_messages={
+            'required': 'Please enter your password.',
         },
     )
-    api_secret = forms.CharField(
-        max_length=64,
-        widget=forms.TextInput(attrs={'placeholder': 'Secret Key'}),
-        error_messages={
-            'required': 'Please enter your Secret Key.',
-        },
-    )
+
+
+class PasswordForm(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={'placeholder': 'Password'}),
         error_messages={
@@ -45,48 +47,25 @@ def main(request):
     if request.user.is_authenticated():
         return redirect('/')
     
-    if request.method != 'POST':
-        request.session['nonce'] = str(random.randrange(sys.maxsize))
-        return render(request, 'register.html', {
-            'title': 'Sign Up',
-            'BASE_URL': settings.BASE_URL,
-            'form': RegistrationForm(),
-        })
-    
-    if not RegistrationForm(request.POST).is_valid():
-        messages.error(request, 'Please fill in all of the fields.')
-        return redirect('/register')
-    
-    # Get request token for the user
+    # Get request token
     req_token = Tumblr(
-        request.POST['api_key'],
-        request.POST['api_secret'],
+        settings.OAUTH_CONSUMER_KEY,
+        settings.SECRET_KEY,
     )
     token = req_token.request_qsl(Tumblr.REQUEST_TOKEN, 'POST')
     
     if not ('oauth_token' in token and
             'oauth_token_secret' in token):
         messages.error(request, tryagain(
-            "Sorry, we were unable to retrieve request tokens for the app."
+            "Sorry, we were unable to retrieve request tokens."
         ))
-        return redirect('/register')
+        return redirect('/')
     
     # Save input for after the authorization has been completed
-    request.session['api_key'] = request.POST['api_key']
-    request.session['api_secret'] = request.POST['api_secret']
     request.session['token_key'] = token['oauth_token']
     request.session['token_secret'] = token['oauth_token_secret']
-    request.session['password'] = request.POST['password']
     
     return redirect(Tumblr.AUTHORIZE % token['oauth_token'])
-
-
-def app(request):
-    if request.user.is_authenticated():
-        return redirect('/')
-    if request.method != 'POST':
-        messages.error(request, 'Invalid request.') # TODO: more details
-        return redirect('/register')
 
 
 def callback(request):
@@ -94,22 +73,17 @@ def callback(request):
         return redirect('/')
     if request.method != 'GET':
         messages.error(request, 'Invalid request.')
-        return redirect('/register')
+        return redirect('/')
     if 'oauth_verifier' not in request.GET:
         messages.error(request, """
-            You need to grant your application access to your blog.
+            You need to grant the application access to your blog.
         """)
-        return redirect('/register')
-    for sessionvar in ('api_key', 'api_secret', 'token_key',
-                       'token_secret', 'password', 'nonce'):
-        if sessionvar not in request.session:
-            messages.error(request, 'Invalid request.')
-            return redirect('/register')
+        return redirect('/')
 
     # Get the access token for the user
     req_access = Tumblr(
-        request.session['api_key'],
-        request.session['api_secret'],
+        settings.OAUTH_CONSUMER_KEY,
+        settings.SECRET_KEY,
         request.session['token_key'],
         request.session['token_secret'],
         request.GET['oauth_verifier'],
@@ -120,12 +94,12 @@ def callback(request):
         messages.error(request, tryagain(
             "Sorry, we were unable to retrieve access tokens for your account."
         ))
-        return redirect('/register')
+        return redirect('/')
 
     # Get the user's name
     req_username = Tumblr(
-        request.session['api_key'],
-        request.session['api_secret'],
+        settings.OAUTH_CONSUMER_KEY,
+        settings.SECRET_KEY,
         access_token['oauth_token'],
         access_token['oauth_token_secret'],
     )
@@ -135,44 +109,81 @@ def callback(request):
         messages.warning(request, tryagain(
             "Tumblr returned a malformed message when we asked for your name."
         ))
-        return redirect('/register')
+        return redirect('/')
     if not str(userinfo['meta']['status']).startswith('2'):
         messages.warning(request, tryagain(
             "Tumblr refused to give us your name for some reason."
         ))
-        return redirect('/register')
+        return redirect('/')
     name = userinfo['response']['user']['name']
 
     # Check for duplicate user
     try:
-        User.objects.get(username__exact=name)
-        messages.error(request, """
-            It looks like you've already signed up for Washboard!
-
-            Contact us if you're absolutely sure you didn't.
-        """)
-        return redirect('/register')
+        user = User.objects.get(username__exact=name)
+        # Log in existing user
     except User.DoesNotExist:
-        pass
-
-    # Save the user's information
-    # TODO: What happens when a user changes their username on Tumblr?
-    user = User(username=name)
-    password = request.session['password']
-    user.set_password(password)
-    user.save()
-    profile = user.get_profile()
-    profile.api_key = request.session['api_key']
-    profile.api_secret = request.session['api_secret']
-    profile.token_key = access_token['oauth_token']
-    profile.token_secret = access_token['oauth_token_secret']
-    profile.save()
+        # Save the user's information
+        user = User(username=name)
+        user.save()
+        profile = user.get_profile()
+        profile.token_key = access_token['oauth_token']
+        profile.token_secret = access_token['oauth_token_secret']
+        profile.save()
     
     # Cleanup
     for key in request.session.keys():
         del request.session[key]
     
-    # Authenticate the user
-    authenticated_user = authenticate(username=name, password=password)
-    login(request, authenticated_user)
-    return redirect('/')
+    # Hack - authenticate the user despite having no password
+    user.backend = 'django.contrib.auth.backends.ModelBackend'
+    login(request, user)
+
+    if user.has_usable_password():
+        return redirect('/')
+    else:
+        return redirect('/setpassword')
+
+def setpassword(request):
+    if not request.user.is_authenticated():
+        return redirect('/')
+
+    if request.method == 'GET':
+        return render(request, 'setpassword.html', {
+            'setpassword': PasswordForm(),
+            'changename': ChangeNameForm(),
+        })
+    
+    elif request.method != 'POST':
+        messages.error(request, 'Invalid request.')
+        return redirect('/')
+    
+    form = PasswordForm(request.POST)
+    if form.is_valid():
+        request.user.set_password(form.cleaned_data['password'])
+        request.user.save()
+        return redirect('/')
+
+def changename(request):
+    if not request.user.is_authenticated():
+        return redirect('/')
+
+    if request.method != 'POST':
+        messages.error(request, 'Invalid request.')
+        return redirect('/')
+    
+    form = ChangeNameForm(request.POST)
+    if form.is_valid():
+        user = authenticate(
+            username=form.cleaned_data['username'],
+            password=form.cleaned_data['password']
+        )
+        if user is None:
+            messages.error(request, 'Invalid username or password.')
+            return redirect('/setpassword')
+        else:
+            user.username = request.user.username
+            request.user.delete()
+            user.save()
+            login(request, user)
+
+        return redirect('/')
