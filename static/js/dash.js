@@ -475,8 +475,7 @@ function post2html(post) {
             .addClass('edit')
             .text('Edit')
             .attr('href', 'http://www.tumblr.com/edit/' + post.id +
-                '?redirect_to=' + encodeURIComponent(BASE_URL) +
-                'dash?session%3D' + session)
+                redirect_query)
             .click(function(e) {
                 save_session();
             })
@@ -488,8 +487,7 @@ function post2html(post) {
         .addClass('reblog')
         .text('Reblog')
         .attr('href', 'http://www.tumblr.com/reblog/' + post.id + '/' +
-            post.reblog_key + '?redirect_to=' + encodeURIComponent(BASE_URL) +
-            'dash?session%3D' + session)
+            post.reblog_key + redirect_query)
         .click(function(e) {
             save_session();
         })
@@ -890,6 +888,14 @@ function like(data) {
     });
 }
 
+function load_redirect_query() {
+    redirect_query = '?redirect_to=' + encodeURIComponent(BASE_URL +
+        location.pathname.slice(1) + '?session=' + session)
+    $('#new a').each(function(n, new_link) {
+        $(new_link).attr('href', $(new_link).attr('href') + redirect_query);
+    });
+}
+
 function load_more() {
     // Set the offset, accounting for posts that have been made since initial load
     dashboard({
@@ -947,6 +953,7 @@ $(function() {
     if (session) {
         session_data = JSON.parse(localStorage.getItem('session_' + session));
         if (session_data) {
+            load_redirect_query();
             behind_by = session_data.behind_by;
             dash({
                 'meta': {'status': 304, 'msg': 'Not Modified'},
@@ -963,6 +970,7 @@ $(function() {
     if (!session) {
         session = (new Date()).getTime().toString();
         location.hash = 'session=' + session;
+        load_redirect_query();
 
         // Record this session
         var sessions = [];

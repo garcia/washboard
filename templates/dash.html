@@ -32,7 +32,7 @@ csrf_token = "{{ csrf_token }}";
     <ul>
         {% with 'text photo quote link chat audio video' as types %}
         {% for type in types.split %}
-        <li><a href="http://www.tumblr.com/new/{{ type }}?redirect_to={{ BASE_URL|urlencode }}dash">{{ type|title }}</a></li>
+        <li><a href="http://www.tumblr.com/new/{{ type }}">{{ type|title }}</a></li>
         {% endfor %}
         {% endwith %}
     </ul>
