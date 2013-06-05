@@ -220,6 +220,7 @@ noscript p {
 .description {
     overflow: hidden;
     margin-top: 10px;
+    word-break: break-word;
 }
 
 /* inline images */

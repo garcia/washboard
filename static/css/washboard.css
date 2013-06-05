@@ -194,7 +194,7 @@ input[type=password]:focus {
 @media screen and (max-width: 500px) {
 
     body {
-        font-size: 9px;
+        font-size: 12px;
     }
 
     #menu-link:before,

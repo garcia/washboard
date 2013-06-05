@@ -143,3 +143,11 @@ input[type=submit]:active {
     text-decoration: none;
     border-bottom: 1px dotted hsla(210, 38%, 90%, .4);
 }
+
+@media screen and (max-width: 500px) {
+    
+    #intro {
+        width: 90%;
+    }
+
+}

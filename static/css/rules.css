@@ -124,3 +124,12 @@ input[type=text]:focus {
     }
 
 }
+
+/* Hide Regex column, but allow iPhone users to use landscape mode to access it */
+@media screen and (max-width: 475px) {
+    
+    .regex {
+        display: none !important;
+    }
+
+}
