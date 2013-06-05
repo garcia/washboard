@@ -13,22 +13,15 @@
 </div>
 
 <div id="intro">
-    <p>Washboard is an interface to the Tumblr Dashboard that features keyword blacklisting.
-        Think of it as a <a href="http://bjornstar.com/tumblr-savior">Tumblr Savior</a> port for mobile devices.</p>
-    <p>Signing up is free and only takes a minute. <a href="/register">Try it out!</a></p>
-    <p>Check the <a href="/faq">FAQ</a> if you have any questions.</p>
-</p>
-</div>
-
-<div id="login">
-    <form action="/login" method="POST">
+    <p>Washboard is a Tumblr interface that features keyword blacklisting.
+       Like <a href="http://bjornstar.com/tumblr-savior">Tumblr Savior</a>, but for mobile devices.</p>
+    <form id="signin" method="get" action="/register">
         <fieldset>
-            {% csrf_token %}
-            {{ form.username }}
-            {{ form.password }}
-            <input type="submit" value="Login" />
+            <input type="submit" value="Sign in with Tumblr" />
         </fieldset>
     </form>
+    <p>Check the <a href="/faq">FAQ</a> if you have any questions.</p>
+</p>
 </div>
 {% endblock %}
 
