@@ -507,6 +507,9 @@ function post2html(post) {
         buttons.append(elem('a')
             .addClass('note_count')
             .text(post.note_count)
+            .click(function(e) {
+                $('#post_' + post.id).find('.notes').fadeToggle();
+            })
         );
     }
 
@@ -566,6 +569,32 @@ function post2html(post) {
     
     infomenu.addClass('dropdown').addClass('dropdown-tip');
     infolist.addClass('dropdown-menu');
+
+    // Notes
+    notes = elem('ol').addClass('notes');
+    if (post.notes) {
+        $.each(post.notes, function(n, note) {
+            noteelem = elem('li')
+                .addClass(note.type)
+                .html(elem('a')
+                    .attr('href', '/blog/' + note.blog_name)
+                    .text(note.blog_name)
+                );
+            if (note.type == 'reply') {
+                noteelem.append(elem('span')
+                    .addClass('reply-text')
+                    .text(note.reply_text)
+                );
+            }
+            else if (note.type == 'photo') {
+                noteelem.append(elem('span').addClass('reply-text'));
+                noteelem.append(elem('img').attr('src', note.photo_url));
+            }
+            notes.append(noteelem);
+        });
+    }
+
+    postelem.append(notes);
     
     // Check for blacklisted keywords
     keywords = [];

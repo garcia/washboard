@@ -491,6 +491,49 @@ noscript p {
     border-top: 1px solid #f0f0f0;
 }
 
+/* notes */
+
+.notes {
+    display: none;
+    margin-top: 20px;
+    margin-bottom: 0;
+    padding-left: 0;
+    font-size: 12px;
+    color: #484848;
+    border: 1px solid #e0e0e0;
+    border-bottom: none;
+    border-radius: 2px;
+    list-style-type: none;
+}
+
+.notes li {
+    padding: 6px;
+    background-color: #f8f8f8;
+    border-top: 1px solid white;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.notes .like:after {
+    content: " liked this";
+}
+
+.notes .reblog:after {
+    content: " reblogged this";
+}
+
+.notes .posted:after {
+    content: " posted this";
+}
+
+.notes .photo img {
+    max-width: 100%;
+    padding-top: 10px;
+}
+
+.reply-text:before {
+    content: " replied: ";
+}
+
 /* blacklisted posts */
 
 .blacklisted {
