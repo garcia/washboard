@@ -116,6 +116,10 @@ def callback(request):
         ))
         return redirect('/')
     name = userinfo['response']['user']['name']
+    
+    # Cleanup
+    for key in request.session.keys():
+        del request.session[key]
 
     # Check for duplicate user
     try:
@@ -126,13 +130,11 @@ def callback(request):
         user = User(username=name)
         user.save()
         profile = user.get_profile()
-        profile.token_key = access_token['oauth_token']
-        profile.token_secret = access_token['oauth_token_secret']
         profile.save()
     
-    # Cleanup
-    for key in request.session.keys():
-        del request.session[key]
+    # Save user tokens
+    request.session['oauth_token'] = access_token['oauth_token']
+    request.session['oauth_token_secret'] = access_token['oauth_token_secret']
     
     # Hack - authenticate the user despite having no password
     user.backend = 'django.contrib.auth.backends.ModelBackend'

@@ -29,12 +29,11 @@ def main(request, data_=None):
     if request.method != 'POST':
         request.POST = request.GET
         
-    profile = request.user.get_profile()
     req = Tumblr(
         settings.OAUTH_CONSUMER_KEY,
         settings.SECRET_KEY,
-        profile.token_key,
-        profile.token_secret,
+        request.session['oauth_token'],
+        request.session['oauth_token_secret'],
     )
 
     if 'data' not in request.POST:

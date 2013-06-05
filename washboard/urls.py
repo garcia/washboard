@@ -3,7 +3,7 @@ from django.views.generic.base import RedirectView
 
 urlpatterns = patterns('',
     url(r'^$', 'wb.views.welcome.main'),
-    url(r'^logout$', 'wb.views.login.logout'),
+    url(r'^logout$', 'wb.views.logout.main'),
     url(r'^register$', 'wb.views.register.main'),
     url(r'^callback$', 'wb.views.register.callback'),
     url(r'^setpassword$', 'wb.views.register.setpassword'),
