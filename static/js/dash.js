@@ -46,10 +46,19 @@ function special_entities(html) {
 }
 
 function post2html(post) {
+    // Convenience function to create new jQuery-wrapped elements
+    this.elem = function(elem) {
+        if(typeof(elem) != "string") {
+            return false;
+        }
+        return $(document.createElement(elem));
+    }
+
     // Check post's ID against currently loaded posts
     if (post.id >= $(posts).last().prop('id')) {
         // If it wasn't posted before the last post, ignore it
         // and note that we're now one more post behind
+        console.log(post.id + ' >= ' + $(posts).last().prop('id'));
         behind_by++;
         return true;
     }
@@ -697,16 +706,8 @@ function post2html(post) {
     return false;
 }
 
-function dash(data) {
+function dash(data, textStatus, jqXHR) {
     try {
-        // Convenience function to create new jQuery-wrapped elements
-        this.elem = function(elem) {
-            if(typeof(elem) != "string") {
-                return false;
-            }
-            return $(document.createElement(elem));
-        }
-
         // Global variable for debugging purposes
         d = data;
 
@@ -743,8 +744,7 @@ function dash(data) {
         $('audio.new').removeClass('new');
     }
     catch (e) {
-        $('#load_more').text('There was an error while loading your posts. Try again?');
-        $('#load_more').removeClass('loading');
+        load_more_error();
         console.log(e.stack);
     }
 }
@@ -819,64 +819,46 @@ function unhide(a) {
     );
 }
 
-function apicall(url, data, options) {
-    var _data = $.extend({
-        // Empty body hash (perhaps I shouldn't assume it'll always be empty?)
-        oauth_body_hash: '2jmj7l5rSw0yVb/vlWAYkK/YBwk='
-    }, data);
-    var _options = $.extend({
-        url: url,
+function apicall(endpoint, data, callback) {
+    var _data = {
+        csrfmiddlewaretoken: csrf_token,
+        endpoint: endpoint,
+        data: JSON.stringify(data),
+    }
+    if (endpoint == 'blog') {
+        _data = $.extend({blog: BLOG}, _data);
+    }
+    console.log(_data)
+    $.ajax({
+        type: 'POST',
+        url: '/api',
         data: _data,
-        dataType: 'jsonp',
-        jsonp: false,
-        // Allow caching, otherwise jQuery messes with the query string
-        cache: true,
-        consumerKey: API_KEY,
-        consumerSecret: API_SECRET,
-        token: TOKEN_KEY,
-        tokenSecret: TOKEN_SECRET,
-    }, options);
-    console.log(url + ' : ' + JSON.stringify(_data));
-    $.oauth(_options);
+        success: callback,
+        error: load_more_error,
+        dataType: 'json',
+    });
 }
 
-function dashboard(data, options) {
+function dashboard(data) {
     var _data = $.extend({
-        callback: 'dash',
         reblog_info: 'true',
         notes_info: 'true'
     }, data);
-    if (window.location.search.indexOf('testdata') >= 0) {
-        apicall('/static/js/testdata.js', _data, options);
-    }
-    else {
-        if (APPEND_KEY) {
-            _data = $.extend({
-                'api_key': API_KEY,
-            }, _data);
-        }
-        apicall(API_URL, _data, options);
-    }
+    apicall(ENDPOINT, _data, dash);
 }
 
-function like(data, options) {
+function like(data) {
     var cb = 'liked_' + data.id;
     var id = data.id;
     
-    // Create global callback function for this post
-    window[cb] = function(data) {
-        if (data.meta.status == 200) {
-            $('#post_' + id).find('.like').toggleClass('liked');
-        }
-    }
-
     // Determine whether to like or unlike the post
     mode = $('#post_' + id).find('.like').hasClass('liked') ? 'unlike' : 'like';
 
-    var _data = $.extend({
-        callback: cb,
-    }, data); 
-    apicall('http://api.tumblr.com/v2/user/' + mode, _data, options);
+    apicall('user/' + mode, data, function(data) {
+        if (data.meta.status == 200) {
+            $('#post_' + id).find('.like').toggleClass('liked');
+        }
+    });
 }
 
 function load_more() {
@@ -886,6 +868,11 @@ function load_more() {
     });
     $('#load_more').text('Loading...');
     $('#load_more').addClass('loading');
+}
+
+function load_more_error() {
+    $('#load_more').text('There was an error while loading your posts. Try again?');
+    $('#load_more').removeClass('loading');
 }
 
 function save_session() {

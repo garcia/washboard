@@ -15,17 +15,11 @@ def main(request, data_=None):
     if not request.user.is_authenticated():
         return redirect('/')
     
-    profile = request.user.get_profile()
     data = {
         'title': 'Dashboard',
         'dash': True,
         'base_url': settings.BASE_URL,
-        'api_url': 'http://api.tumblr.com/v2/user/dashboard',
-        'append_key': 0,
-        'api_key': profile.api_key,
-        'api_secret': profile.api_secret,
-        'token_key': profile.token_key,
-        'token_secret': profile.token_secret,
+        'endpoint': 'dashboard',
         'rules': json.dumps(list(
                 Rule.objects.filter(user__exact=request.user).values()
             )),
@@ -37,9 +31,9 @@ def main(request, data_=None):
 
     return render(request, 'dash.html', data)
 
-def blog(request, username):
+def blog(request, blog):
     return main(request, data_={
-        'title': "%s's blog" % username,
-        'api_url': 'http://api.tumblr.com/v2/blog/%s.tumblr.com/posts' % username,
-        'append_key': 1,
+        'title': "%s's blog" % blog,
+        'endpoint': 'blog',
+        'blog': blog,
     })

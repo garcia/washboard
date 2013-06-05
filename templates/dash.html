@@ -12,14 +12,11 @@
 <script type="text/javascript" src="{% static "js/URI.min.js" %}"></script>
 <script type="text/javascript" src="{% static "mediaelement/mediaelement-and-player.min.js" %}"></script>
 <script type="text/javascript">
-API_KEY      = "{{ api_key }}";
-API_SECRET   = "{{ api_secret }}";
-TOKEN_KEY    = "{{ token_key }}";
-TOKEN_SECRET = "{{ token_secret }}";
 BASE_URL     = "{{ base_url }}";
-API_URL      = "{{ api_url }}";
-APPEND_KEY   = {{ append_key }};
-
+ENDPOINT     = "{{ endpoint }}";
+{% if blog %}
+BLOG         = "{{ blog }}";
+{% endif %}
 username = "{{ user.username }}"
 rules = {{ rules|safe }};
 hidden_posts = {{ hidden_posts|safe }};

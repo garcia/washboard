@@ -23,10 +23,13 @@ class Tumblr(object):
         else:
             self.client = oauth2.Client(consumer)
 
-    def request_qsl(self, url, method):
-        resp, content = self.client.request(url, method)
+    def request_qsl(self, url, method, data=''):
+        resp, content = self.client.request(url, method, data)
         return dict(urlparse.parse_qsl(content))
 
-    def request_json(self, url, method):
-        resp, content = self.client.request(url, method)
-        return json.loads(content)
+    def request_json(self, url, method, data=''):
+        resp, content = self.client.request(url, method, data)
+        try:
+            return json.loads(content)
+        except ValueError:
+            raise ValueError(content)
