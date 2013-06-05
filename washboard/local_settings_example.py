@@ -15,7 +15,7 @@ DATABASES = {
     }
 }
 
-# Make this a unique, and don't share it with anybody.
+# Make this unique, and don't share it with anybody.
 SECRET_KEY = ''
 
 OAUTH_CONSUMER_KEY = ''
