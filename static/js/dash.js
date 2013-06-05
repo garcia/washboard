@@ -852,9 +852,9 @@ function like(data) {
     var id = data.id;
     
     // Determine whether to like or unlike the post
-    mode = $('#post_' + id).find('.like').hasClass('liked') ? 'unlike' : 'like';
+    endpoint = $('#post_' + id).find('.like').hasClass('liked') ? 'unlike' : 'like';
 
-    apicall('user/' + mode, data, function(data) {
+    apicall(endpoint, data, function(data) {
         if (data.meta.status == 200) {
             $('#post_' + id).find('.like').toggleClass('liked');
         }

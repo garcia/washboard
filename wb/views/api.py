@@ -51,6 +51,8 @@ def main(request, data_=None):
         url += {
             'dashboard': 'user/dashboard',
             'blog': 'blog/%s.tumblr.com/posts',
+            'like': 'user/like',
+            'unlike': 'user/unlike',
         }[request.POST['endpoint']]
     except KeyError:
         return api_error(500, 'Invalid endpoint')
