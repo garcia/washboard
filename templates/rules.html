@@ -1,9 +1,14 @@
 {% extends "base.html" %}
 {% load static %}
+{% load compress %}
 
 {% block head %}
+{% compress css %}
 <link rel="stylesheet" type="text/css" href="{% static "css/rules.css" %}" />
+{% endcompress %}
+{% compress js %}
 <script type="text/javascript" src="{% static "js/rules.js" %}"></script>
+{% endcompress %}
 {% endblock %}
 
 {% block content %}

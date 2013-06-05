@@ -1,4 +1,5 @@
 {% load static %}
+{% load compress %}
 <!DOCTYPE html> 
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 <meta name="viewport" content="initial-scale=1, minimum-scale=1" />
@@ -6,13 +7,17 @@
 <link rel="apple-touch-icon" href="{% static "images/apple-touch-icon-57x57.png" %}" />
 <link rel="apple-touch-icon" sizes="72x72" href="{% static "images/apple-touch-icon-72x72.png" %}" />
 <link rel="apple-touch-icon" sizes="112x114" href="{% static "images/apple-touch-icon-114x114.png" %}" />
+{% compress css %}
 <link rel="stylesheet" type="text/css" href="{% static "css/washboard.css" %}" />
 <link rel="stylesheet" type="text/css" href="{% static "css/jquery.dropdown.css" %}" />
 <link rel="stylesheet" type="text/css" href="{% static "signika/stylesheet.css" %}" />
+{% endcompress %}
+{% compress js %}
 <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
 <script type="text/javascript" src="{% static "js/jquery.fix.clone.js" %}"></script>
 <script type="text/javascript" src="{% static "js/jquery.dropdown.js" %}"></script>
 <script type="text/javascript" src="{% static "js/washboard.js" %}"></script>
+{% endcompress %}
 {% block head %}{% endblock %}
 
 <div id="top" class="wrapper">
@@ -27,6 +32,7 @@
                     <li><a href="/dash">Dashboard</a></li>
                     <li><a href="/rules">Rules</a></li>
                     <li><a href="/settings">Settings</a></li>
+                    <li><a href="/faq">FAQ</a></li>
                     <li><a href="/logout">Logout</a></li>
                     {% else %}
                     <li><a href="/">Login</a></li>

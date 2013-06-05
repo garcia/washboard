@@ -57,7 +57,8 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    
+    'compressor.finders.CompressorFinder',
 )
 
 # List of callables that know how to import templates from various sources.
@@ -98,6 +99,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'south',
+    'compressor',
     
     'wb',
 )
@@ -132,6 +134,8 @@ LOGGING = {
 }
 
 AUTH_PROFILE_MODULE = 'wb.UserProfile'
+
+COMPRESS_OUTPUT_DIR = 'cache'
 
 # From http://djangosnippets.org/snippets/1873/
 try:
