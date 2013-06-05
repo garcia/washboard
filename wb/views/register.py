@@ -50,7 +50,7 @@ def main(request):
     # Get request token
     req_token = Tumblr(
         settings.OAUTH_CONSUMER_KEY,
-        settings.SECRET_KEY,
+        settings.OAUTH_SECRET_KEY,
     )
     token = req_token.request_qsl(Tumblr.REQUEST_TOKEN, 'POST')
     
@@ -83,7 +83,7 @@ def callback(request):
     # Get the access token for the user
     req_access = Tumblr(
         settings.OAUTH_CONSUMER_KEY,
-        settings.SECRET_KEY,
+        settings.OAUTH_SECRET_KEY,
         request.session['token_key'],
         request.session['token_secret'],
         request.GET['oauth_verifier'],
@@ -99,7 +99,7 @@ def callback(request):
     # Get the user's name
     req_username = Tumblr(
         settings.OAUTH_CONSUMER_KEY,
-        settings.SECRET_KEY,
+        settings.OAUTH_SECRET_KEY,
         access_token['oauth_token'],
         access_token['oauth_token_secret'],
     )

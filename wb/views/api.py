@@ -31,7 +31,7 @@ def main(request, data_=None):
         
     req = Tumblr(
         settings.OAUTH_CONSUMER_KEY,
-        settings.SECRET_KEY,
+        settings.OAUTH_SECRET_KEY,
         request.session['oauth_token'],
         request.session['oauth_token_secret'],
     )

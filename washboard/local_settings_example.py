@@ -15,7 +15,10 @@ DATABASES = {
     }
 }
 
-OAUTH_CONSUMER_KEY = ''
+# Make this a unique, and don't share it with anybody.
 SECRET_KEY = ''
+
+OAUTH_CONSUMER_KEY = ''
+OAUTH_SECRET_KEY = ''
 
 BASE_URL = 'http://localhost/'
