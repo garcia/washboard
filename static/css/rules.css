@@ -35,7 +35,8 @@
     text-align: left;
 }
 
-.keyword {
+.keyword,
+.post {
     text-align: left;
 }
 
@@ -53,6 +54,10 @@
     color: #000080;
     border-bottom: none;
     cursor: pointer;
+}
+
+#submit {
+    margin-top: 20px;
 }
 
 .row.submit input {
@@ -100,6 +105,10 @@ input[type=text]:focus {
     background-repeat: no-repeat;
     background-position: center;
     cursor: pointer;
+}
+
+#hiddenposts .post input {
+    width: 100%;
 }
 
 @media screen and (max-width: 1000px) {

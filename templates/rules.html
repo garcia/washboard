@@ -17,8 +17,8 @@
         {% csrf_token %}
         <div id="rules">
             {% for ruleset_name, ruleset in rules.items %}
+            <h2>{{ ruleset_name|title }}</h2>
             <div id="{{ ruleset_name }}" class="ruleset">
-                <h2>{{ ruleset_name|title }}</h2>
                 <div class="row header">
                     <div class="delete">Delete</div>
                     <div class="keyword">Keyword</div>
@@ -46,9 +46,24 @@
                 </div>
             </div>
             {% endfor %}
+
+            <h2>Hidden posts</h2>
+            <div id="hiddenposts" class="ruleset">
+                <div class="row header">
+                    <div class="delete">Delete</div>
+                    <div class="post">Post</div>
+                </div>
+                {% for post in hiddenposts %}
+                <div class="row">
+                    <div class="delete"><a class="delete-alt" onclick="delete_hiddenpost(this)">Delete</a></div>
+                    <div class="post">{{ post.post }}</div>
+                </div>
+                {% endfor %}
+            </div>
+
             <div id="submit">
                 <div class="row submit">
-                    <input type="submit" value="Submit" onclick="form.submit()" />
+                    <input type="submit" value="Save" onclick="form.submit()" />
                 </div>
             </div>
         </div>

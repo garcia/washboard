@@ -19,6 +19,11 @@ class RuleForm(forms.ModelForm):
         model = Rule
         widgets = {'keyword': forms.TextInput()}
 
+class HiddenPostForm(forms.ModelForm):
+    class Meta:
+        model = HiddenPost
+        widgets = {'post': forms.TextInput(attrs={'readonly': 'readonly'})}
+
 @transaction.commit_on_success
 def main(request):
     if not request.user.is_authenticated():
@@ -38,6 +43,8 @@ def get(request):
             blacklist.append(form)
         else:
             whitelist.append(form)
+    hiddenposts = [HiddenPostForm(instance=p, prefix='hp-'+str(i)) for i, p in
+        enumerate(HiddenPost.objects.filter(user__exact=request.user))]
     data = {
         'title': 'Rules',
         'rulesets': ('blacklist', 'whitelist'),
@@ -45,11 +52,15 @@ def get(request):
             ('blacklist', blacklist),
             ('whitelist', whitelist),
         ]),
+        'hiddenposts': hiddenposts,
     }
     return render(request, 'rules.html', data)
 
 def post(request):
     Rule.objects.filter(user__exact=request.user).delete()
+    HiddenPost.objects.filter(user__exact=request.user).delete()
+
+    # Rule prefixes
     prefixes = filter(
         lambda k: k.endswith('-keyword') and not k.startswith('{prefix}'),
         request.POST
@@ -64,6 +75,8 @@ def post(request):
             You can try again, but please contact us if the problem persists.
         """)
     i = 0
+
+    # Add rules
     for prefix in prefixes:
         # Empty?
         if not request.POST.get('%s-%s' % (prefix, 'keyword'), ''):
@@ -78,6 +91,13 @@ def post(request):
         r = Rule(user=request.user, index=i, **form)
         r.save()
         i += 1
+
+    # Add hidden posts
+    hiddenposts = filter(lambda k: k.startswith('hp-'), request.POST)
+    for post in hiddenposts:
+        hp = HiddenPost(user=request.user, post=request.POST.get(post))
+        hp.save()
+
     return redirect('/rules')
 
 class HidePostForm(forms.ModelForm):

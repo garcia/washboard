@@ -1,5 +1,4 @@
 function add_rule(src) {
-    console.log(src);
     // Set the prefix to the largest prefix + 1
     var prefix = Array.max($('.row.rule').map(function() {
         return $(this).data('prefix');
@@ -31,7 +30,6 @@ function add_rule(src) {
 }
 
 function keyword_keypress(e) {
-    console.log(e);
     if ((e.which || e.keyCode || e.charCode) == 13) {
         add_rule(e.target);
         return false;
@@ -39,7 +37,6 @@ function keyword_keypress(e) {
 }
 
 function checkbox_click(e) {
-    console.log(e);
     if (e.shiftKey) {
         if ($(this).closest('.row').hasClass('defaults')) {
             $('.' + $(this).closest('div').attr('class'))
@@ -59,6 +56,10 @@ function delete_rule(e) {
     var ruleset = $(e).closest('.ruleset');
     $(e).closest('.rule').remove();
     check_no_rules(ruleset);
+}
+
+function delete_hiddenpost(e) {
+    $(e).closest('.row').remove();
 }
 
 $(function() {
