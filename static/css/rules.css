@@ -40,6 +40,11 @@
     text-align: left;
 }
 
+.ruleset .keyword input,
+.ruleset .post input {
+    width: 100%;
+}
+
 .row.defaults .label {
     color: #808080;
 }
@@ -105,10 +110,6 @@ input[type=text]:focus {
     background-repeat: no-repeat;
     background-position: center;
     cursor: pointer;
-}
-
-#hiddenposts .post input {
-    width: 100%;
 }
 
 @media screen and (max-width: 1000px) {

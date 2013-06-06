@@ -22,7 +22,7 @@ class RuleForm(forms.ModelForm):
 class HiddenPostForm(forms.ModelForm):
     class Meta:
         model = HiddenPost
-        widgets = {'post': forms.TextInput(attrs={'readonly': 'readonly'})}
+        widgets = {'post': forms.TextInput()}
 
 @transaction.commit_on_success
 def main(request):
@@ -34,8 +34,9 @@ def main(request):
         return get(request)
     
 def get(request):
-    blacklist = [RuleForm(prefix='{prefix}', instance=Rule())];
+    blacklist = [RuleForm(prefix='{prefix}', instance=Rule())]
     whitelist = [RuleForm(prefix='{prefix}', instance=Rule(blacklist=False))]
+    hiddenposts = [HiddenPostForm(prefix='hp-{prefix}', instance=HiddenPost())]
     for i, r in enumerate(Rule.objects.filter(user__exact=request.user)
             .order_by('index')):
         form = RuleForm(instance=r, prefix=str(i))
@@ -43,8 +44,9 @@ def get(request):
             blacklist.append(form)
         else:
             whitelist.append(form)
-    hiddenposts = [HiddenPostForm(instance=p, prefix='hp-'+str(i)) for i, p in
-        enumerate(HiddenPost.objects.filter(user__exact=request.user))]
+    for i, p in enumerate(HiddenPost.objects.filter(user__exact=request.user)):
+        hiddenposts.extend([HiddenPostForm(instance=p, prefix='hp-'+str(i))])
+
     data = {
         'title': 'Rules',
         'rulesets': ('blacklist', 'whitelist'),
@@ -62,18 +64,22 @@ def post(request):
 
     # Rule prefixes
     prefixes = filter(
-        lambda k: k.endswith('-keyword') and not k.startswith('{prefix}'),
+        lambda k: k.endswith('-keyword') and
+                  not k.startswith('hp-') and
+                  '{prefix}' not in k,
         request.POST
     )
     prefixes = [k.split('-')[0] for k in prefixes]
     try:
         prefixes.sort(key=int)
-    except ValueError:
+    except NameError:
+        pass
+    '''except ValueError:
         messages.error(request, """
             There was an invalid input name in your request.
 
             You can try again, but please contact us if the problem persists.
-        """)
+        """)'''
     i = 0
 
     # Add rules
@@ -92,10 +98,30 @@ def post(request):
         r.save()
         i += 1
 
+    # XXX duplicated code follows; maybe merge HiddenPost into Blacklist?
+
+    # Hidden post prefixes
+    hp_prefixes= filter(
+        lambda k: k.startswith('hp-') and
+                  k.endswith('-post') and
+                  '{prefix}' not in k,
+        request.POST
+    )
+    hp_prefixes = [k.split('-')[1] for k in hp_prefixes]
+
     # Add hidden posts
-    hiddenposts = filter(lambda k: k.startswith('hp-'), request.POST)
-    for post in hiddenposts:
-        hp = HiddenPost(user=request.user, post=request.POST.get(post))
+    for prefix in hp_prefixes:
+        # Empty?
+        if not request.POST.get('hp-%s-%s' % (prefix, 'post'), ''):
+            continue
+        form = {}
+        for field in HiddenPost._meta.fields:
+            # Ignored fields
+            if field.name in ('id', 'user'):
+                continue
+            postname = 'hp-%s-%s' % (prefix, field.name)
+            form[field.name] = request.POST.get(postname, False)
+        hp = HiddenPost(user=request.user, **form)
         hp.save()
 
     return redirect('/rules')

@@ -51,3 +51,4 @@ class WhitelistUser(models.Model):
 class HiddenPost(models.Model):
     user = models.ForeignKey(User)
     post = models.URLField()
+    show_notification = models.BooleanField(default=True)

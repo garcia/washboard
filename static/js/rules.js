@@ -1,8 +1,12 @@
 function add_rule(src) {
     // Set the prefix to the largest prefix + 1
     var prefix = Array.max($('.row.rule').map(function() {
-        return $(this).data('prefix');
-    }).get()) + 1;
+        p = $(this).data('prefix');
+        if (typeof(p) == 'string' && p.indexOf('-') >= 0) {
+            p = p.slice(p.indexOf('-') + 1);
+        }
+        return p;
+    }).get()) + 1 || 0;
     // Insert the default rules
     var rule = $(src).closest('.ruleset').find('.row.defaults')
         .clone()
@@ -21,6 +25,7 @@ function add_rule(src) {
 
     // Make the keyword input visible again
     rule.find('.keyword').removeAttr('style');
+    rule.find('.post').removeAttr('style');
     rule.find('.delete').removeAttr('style');
 
     // Insert the new row into the rules table
@@ -56,10 +61,6 @@ function delete_rule(e) {
     var ruleset = $(e).closest('.ruleset');
     $(e).closest('.rule').remove();
     check_no_rules(ruleset);
-}
-
-function delete_hiddenpost(e) {
-    $(e).closest('.row').remove();
 }
 
 $(function() {

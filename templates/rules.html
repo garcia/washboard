@@ -52,13 +52,23 @@
                 <div class="row header">
                     <div class="delete">Delete</div>
                     <div class="post">Post</div>
+                    <div class="show_notification">Show notification</div>
                 </div>
                 {% for post in hiddenposts %}
-                <div class="row">
-                    <div class="delete"><a class="delete-alt" onclick="delete_hiddenpost(this)">Delete</a></div>
+                <div class="row{% if not post.instance.post %} defaults{% else %} rule{% endif %}" data-prefix="{{ post.prefix }}">
+                    <div class="delete"><a class="delete-alt" onclick="delete_rule(this)">Delete</a></div>
+                    {% if not post.instance.post %}
+                    <div class="label">Default values</div>
+                    <div class="post" style="display: none">{{ post.post }}</div>
+                    {% else %}
                     <div class="post">{{ post.post }}</div>
+                    {% endif %}
+                    <div class="show_notification">{{ post.show_notification }}</div>
                 </div>
                 {% endfor %}
+                <div class="row add">
+                    <div class="label" onclick="add_rule(this)">Add rule</div>
+                </div>
             </div>
 
             <div id="submit">
