@@ -139,6 +139,44 @@ input[type=password]:focus {
     text-shadow: 0 1px 1px rgba(0, 0, 0, .5);
 }
 
+#messages li {
+    margin-top: 10px;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+#messages .success {
+    background-color: #008000;
+    border: 1px solid #00c000;
+    border-top: 1px solid #006000;
+    box-shadow: 0 -1px 0 #00c000,
+                0 0 3px black;
+}
+
+#messages .info {
+    background-color: hsl(210, 38%, 22%);
+    border: 1px solid hsl(210, 38%, 44%);
+    border-top: 1px solid hsl(210, 38%, 11%);
+    box-shadow: 0 -1px 0 hsl(210, 38%, 44%),
+                0 0 3px black;
+}
+
+#messages .warning {
+    background-color: #c08000;
+    border: 1px solid #f0c000;
+    border-top: 1px solid #604000;
+    box-shadow: 0 -1px 0 #f0c000,
+                0 0 3px black;
+}
+
+#messages .error {
+    background-color: #c00000;
+    border: 1px solid #f04000;
+    border-top: 1px solid #800000;
+    box-shadow: 0 -1px 0 #f04000,
+                0 0 3px black;
+}
+
 /* middle / content */
 
 #middle > div {

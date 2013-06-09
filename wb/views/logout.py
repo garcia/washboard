@@ -9,5 +9,5 @@ from wb.tumblr import Tumblr
 
 def main(request):
     auth.logout(request)
-    messages.success(request, 'You have logged out.')
+    messages.info(request, 'You have logged out.')
     return redirect('/')

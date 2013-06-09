@@ -124,6 +124,8 @@ def post(request):
         hp = HiddenPost(user=request.user, **form)
         hp.save()
 
+    messages.success(request, 'Your rules have been saved.')
+
     return redirect('/rules')
 
 class HidePostForm(forms.ModelForm):
