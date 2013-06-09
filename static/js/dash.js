@@ -594,10 +594,12 @@ function post2html(post) {
 
     postelem.append(notes);
     
-    // Check for blacklisted keywords
-    keywords = [];
-    blacklist = true;
-    notification = true;
+    // Blacklisting
+    blacklist_keywords = [];
+    whitelist_keywords = [];
+    // 0 = show post; 1 = hide with notification; 2 = hide without notification
+    blacklist_level = 0;
+    whitelist = false;
 
     // Iterate over elements to be scanned
     $.each(scan, function(s, scan_element) {
@@ -623,27 +625,46 @@ function post2html(post) {
             if ((rule.regex && scanned.search(kw) >= 0) ||
                 (!rule.regex && scanned.toLowerCase().indexOf(kw.toLowerCase()) >= 0)) {
                 
-                // Post contains a whitelisted keyword; stop scanning
-                if (!rule.blacklist) {
-                    blacklist = false;
-                    return false;
+                // Blacklist
+                if (rule.blacklist) {
+                    // Hide with notification
+                    if (rule.show_notification) {
+                        blacklist_level = Math.max(blacklist_level, 1);
+                    }
+                    // Hide without notification
+                    else {
+                        blacklist_level = 2;
+                    }
+                    if (blacklist_keywords.indexOf(rule.keyword) == -1) {
+                        blacklist_keywords.push(rule.keyword);
+                    }
                 }
-
-                // Don't give the user the option to show the post
-                if (!rule.show_notification) {
-                    notification = false;
-                }
-                
-                // Note that the keyword has already been found
-                if (keywords.indexOf(rule.keyword) == -1) {
-                    keywords.push(rule.keyword);
+                // Whitelist
+                else {
+                    whitelist = true;
+                    if (whitelist_keywords.indexOf(rule.keyword) == -1) {
+                        whitelist_keywords.push(rule.keyword);
+                    }
                 }
             }
         });
     });
+    
+    /* If both blacklisted and whitelisted keywords were matched: show the post
+     * if none of the blacklisted keywords hid the notification. If at least
+     * one blacklisted keyword hides the notification, don't show the post,
+     * but do show the notification. */
+    if (whitelist && blacklist_level) {
+        blacklist_level--;
+    }
+    
+    // Do not show the post or notification; return now
+    if (blacklist_level == 2) {
+        return false;
+    }
 
-    // Mark the post as blacklisted if necessary
-    if (keywords.length && blacklist && notification) {
+    // Hide the post under a notification
+    if (blacklist_level == 1) {
         postelem.addClass('blacklisted');
 
         // Insert notification
@@ -651,10 +672,17 @@ function post2html(post) {
         notification.append(
             elem('h2').text('Post blacklisted')
         );
-        notification.append(
-            elem('p').html('This post contains the keyword' +
-                plural(keywords) + ' ' + kw_list(keywords) + '.')
-        );
+
+        // Construct notification text
+        notify_text = 'This post contains the keyword' +
+            plural(blacklist_keywords) + ' ' + kw_list(blacklist_keywords);
+        if (whitelist_keywords.length) {
+            notify_text += ', but also matched the whitelisted keyword'
+                + plural(whitelist_keywords) + ' ' + kw_list(whitelist_keywords);
+        }
+        notify_text += '.';
+
+        notification.append(elem('p').html(notify_text));
         notification.append(elem('a')
             .addClass('instructions')
             .text(
@@ -726,11 +754,7 @@ function post2html(post) {
         }
     });
     
-    // Return element, unless it got blacklisted by a no-notification keyword
-    if (!keywords.length || notification) {
-        return postelem;
-    }
-    return false;
+    return postelem;
 }
 
 function dash(data, textStatus, jqXHR) {
