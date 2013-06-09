@@ -135,6 +135,9 @@ LOGGING = {
 
 AUTH_PROFILE_MODULE = 'wb.UserProfile'
 
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 60 # Two months
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
 COMPRESS_OUTPUT_DIR = 'cache'
 
 # From http://djangosnippets.org/snippets/1873/
