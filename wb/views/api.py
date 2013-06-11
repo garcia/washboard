@@ -12,6 +12,40 @@ from django.template import RequestContext
 from wb.models import *
 from wb.tumblr import Tumblr
 
+endpoints = {
+    'dashboard': {
+        'url': 'user/dashboard',
+        'method': 'GET',
+        'api_key': False,
+    },
+    'blog': {
+        'url': 'blog/{blog}.tumblr.com/posts',
+        'method': 'GET',
+        'api_key': True,
+    },
+    'like': {
+        'url': 'user/like',
+        'method': 'GET',
+        'api_key': False,
+    },
+    'unlike': {
+        'url': 'user/unlike',
+        'method': 'GET',
+        'api_key': False,
+    },
+    # Not supported for mainline Tumblr apps yet
+    #'notifications': {
+    #    'url': 'user/notifications',
+    #    'method': 'POST',
+    #    'api_key': True,
+    #},
+    'reply': {
+        'url': 'user/post/reply',
+        'method': 'POST',
+        'api_key': True,
+    },
+}
+
 def api_error(status, msg):
     return HttpResponse(json.dumps({'meta': {
         'status': str(status),
@@ -41,32 +75,36 @@ def main(request, data_=None):
     if 'endpoint' not in request.POST:
         return api_error(500, 'No endpoint')
 
+    if request.POST['endpoint'] in endpoints:
+        endpoint = endpoints[request.POST['endpoint']]
+    else:
+        return api_error(500, 'Invalid endpoint')
+
     try:
         data = json.loads(request.POST['data'])
     except ValueError:
         return api_error(500, 'Invalid data')
 
+    # Build endpoint URL
     url = 'http://api.tumblr.com/v2/'
     try:
-        url += {
-            'dashboard': 'user/dashboard',
-            'blog': 'blog/%s.tumblr.com/posts',
-            'like': 'user/like',
-            'unlike': 'user/unlike',
-        }[request.POST['endpoint']]
-    except KeyError:
-        return api_error(500, 'Invalid endpoint')
+        url += endpoint['url'].format(
+            **{k: v for k, v in request.POST.items()}
+        )
+    except KeyError as error:
+        return api_error(500, 'Missing ' + error.message)
 
-    if request.POST['endpoint'] == 'blog':
+    # Add API key if required
+    if endpoint['api_key']:
         data['api_key'] = settings.OAUTH_CONSUMER_KEY
-        try:
-            url %= request.POST['blog']
-        except KeyError:
-            return api_error(500, 'No blog')
-        
+    
     response = req.request_json(
         url + '?' + '&'.join('='.join(str(p) for p in pair) for pair in data.items()),
-        'GET'
+        endpoint['method']
     )
+    response['washboard'] = {
+        'url': url,
+        'data': data,
+    }
     
     return HttpResponse(json.dumps(response), content_type='application/json')
