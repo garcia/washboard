@@ -493,6 +493,44 @@ function post2html(post) {
         })
     );
 
+    // Reply button
+    if (post.can_reply) {
+        buttons.append(elem('a')
+            .addClass('reply')
+            .text('Reply')
+            .click(function(e) {
+                var this_post = $('#post_' + post.id);
+                if (this_post.hasClass('replying')) {
+                    this_post.find('.reply-box').fadeOut({
+                        complete: function() {
+                            this_post.removeClass('replying');
+                        }
+                    });
+                }
+                else {
+                    this_post.addClass('replying');
+                    this_post.find('.reply-box').fadeIn();
+                    this_post.find('.reply-box input').click().focus();
+                }
+            })
+        );
+        postelem.append(elem('div')
+            .addClass('reply-box')
+            .css('display', 'none')
+            .append(elem('input')
+                .attr('type', 'text')
+                .attr('placeholder', 'Reply')
+                .keypress(function(e) {
+                    if ((e.which || e.keyCode || e.charCode) == 13) {
+                        if (e.target.value.length) {
+                            reply(post, e.target.value);
+                        }
+                    }
+                })
+            )
+        );
+    }
+
     // Info button
     buttons.append(elem('a')
         .addClass('info')
@@ -914,6 +952,29 @@ function like(data) {
     apicall(endpoint, data, function(data) {
         if (data.meta.status == 200) {
             $('#post_' + id).find('.like').toggleClass('liked');
+        }
+        else {
+            console.log('Like error');
+            console.log(data);
+        }
+    });
+}
+
+function reply(post, reply_text) {
+    data = {
+        post_id: post.id,
+        reblog_key: post.reblog_key,
+        reply_text: reply_text
+    };
+    apicall('reply', data, function(data) {
+        if (data.meta.status == 200) {
+            var this_post = $('#post_' + post.id);
+            this_post.find('.buttons .reply').click();
+            this_post.find('.reply-box input').prop('value', '');
+        }
+        else {
+            console.log('Reply error');
+            console.log(data);
         }
     });
 }

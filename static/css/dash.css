@@ -69,6 +69,7 @@ noscript p {
 }
 
 .post {
+    position: relative;
     width: 500px;
     padding: 20px;
     margin: 10px auto;
@@ -196,6 +197,10 @@ noscript p {
     background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90GAgI5FFDnFdMAAABbSURBVDjLY2BAAHsg/g+lKQYww2ZSy1CQIQ1QdgOaoTA+LowV4DKEGEMZyDUUm6/wGkiqoUQZSIqhRBuIz1CyDMTmspmUGIgvdsk2kBiFowYOBwOJxfQ3cHABAOE1awRQ4wVQAAAAAElFTkSuQmCC");
 }
 
+.buttons .reply {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90GCwYSCT+QYzUAAAEGSURBVDjL1dS/SgNBEMfxT2El+L/XN7BWECwFHyBYiNFa8EF8CRutBYlaaCFWijaWSSFX2VtIPA05m1HO40zC5RoHhmVnhu/+dnd2+S/WQAdZRe8E4weW1eQNfyj7wC1eKigtTVyE+u0KKkuDu9jANN5L8j2kowJTzOIugGe5XII1TGICTfSHAc+xGIVb2Cksdh3jUxxLexiwiX10cYKZwvYucRA18DAImAagaK3IX2EqFjodBdjCfKj7DN+MS8pwiOU4jscA3g8CNrFXiB1jLuBtLGAJq1jBURGYb+xuSTv08Zqbv+E54r3wX41d+9Or/XMoWpIrvMH6uF9ZUifsG1gbzLiwL51J7gUjt+dIAAAAAElFTkSuQmCC");
+}
+
 /* Clear meta, just in case */
 
 .photos, .audiobox {
@@ -211,6 +216,60 @@ noscript p {
 
 .info-menu ul {
     margin-left: -60px !important;
+}
+
+/* reply box */
+
+.post.replying {
+    margin-bottom: 60px;
+}
+
+.reply-box {
+    position: absolute;
+    margin: 0;
+    bottom: -51px;
+    left: 0;
+    right: 0;
+    background-color: #162431;
+    border: 1px solid hsl(210, 38%, 38%);
+    border-radius: 2px;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, .4);
+}
+
+.reply-box input {
+    margin: 0;
+    padding: 10px;
+    width: 100%;
+    color: white;
+    font-size: 16px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.reply-box:before {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    margin-left: -4px;
+    top: -8px;
+    right: 96px;
+    border-bottom: 8px solid hsl(210, 38%, 38%);
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+}
+
+.reply-box:after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    margin-left: -2px;
+    top: -6px;
+    right: 98px;
+    border-bottom: 6px solid #101a23;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
 }
 
 /* Stop long words at the padding, not the edge of the post box */
@@ -709,6 +768,12 @@ noscript p {
     
     .meta .reblogged_text {
         padding-top: 2px;
+    }
+    
+    .reply-box {
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
     }
     
     .post.photo .row {

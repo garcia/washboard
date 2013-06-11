@@ -1,6 +1,7 @@
 import json
 import random
 import sys
+import urllib
 import urlparse
 
 from django.conf import settings
@@ -99,7 +100,7 @@ def main(request, data_=None):
         data['api_key'] = settings.OAUTH_CONSUMER_KEY
     
     response = req.request_json(
-        url + '?' + '&'.join('='.join(str(p) for p in pair) for pair in data.items()),
+        url + '?' + '&'.join('='.join(urllib.quote(str(p)) for p in pair) for pair in data.items()),
         endpoint['method']
     )
     response['washboard'] = {
