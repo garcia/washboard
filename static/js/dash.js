@@ -535,7 +535,7 @@ function post2html(post) {
     buttons.append(elem('a')
         .addClass('info')
         .text('Info')
-        .attr('data-dropdown', '#post_' + post.id + ' .info-menu')
+        .attr('data-dropdown', '#info_' + post.id)
     );
 
     // Note count
@@ -552,7 +552,7 @@ function post2html(post) {
     postelem.append(buttons);
 
     // Info dropdown
-    var infomenu = elem('div').addClass('info-menu');
+    var infomenu = elem('div').attr('id', 'info_' + post.id).addClass('info-menu');
     var infolist = elem('ul');
 
     // Timestamp
@@ -607,7 +607,7 @@ function post2html(post) {
         .text('Hide this post')
     ));
     infomenu.append(infolist);
-    postelem.append(infomenu);
+    $('#dropdowns').append(infomenu);
     
     infomenu.addClass('dropdown').addClass('dropdown-tip');
     infolist.addClass('dropdown-menu');
@@ -1028,7 +1028,7 @@ $(function() {
     touchscreen = 'ontouchstart' in window;
     
     // Remove unnecessary elements from center
-    $('#middle > div').html('<div id="posts"></div>');
+    $('#middle > div').html('<div id="posts"></div><div id="dropdowns"></div>');
     
     // Initial variables
     posts = [];
