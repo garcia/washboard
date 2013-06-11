@@ -535,6 +535,12 @@ function post2html(post) {
             .text('Clickthrough')));
     }
 
+    // View on Dashboard
+    infolist.append(elem('li').append(elem('a')
+        .attr('href', 'http://www.tumblr.com/dashboard/10/' + (post.id + 1))
+        .attr('target', '_blank')
+        .text('View on Dashboard')));
+
     // Hide this post
     infolist.append(elem('li').append(elem('a')
         .on('click', function(e) {
