@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" sizes="112x114" href="{% static "images/apple-touch-icon-114x114.png" %}" />
 
 {% compress css %}
-<link rel="stylesheet" type="text/css" href="{% static "css/jquery.dropdown.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "jquery.dropdown/jquery.dropdown.css" %}" />
 <link rel="stylesheet" type="text/css" href="{% static "signika/stylesheet.css" %}" />
 {% block css %}
 <link rel="stylesheet" type="text/less" href="{% static "less/washboard.less" %}" />
@@ -21,7 +21,7 @@
 {% compress js %}
 <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
 <script type="text/javascript" src="{% static "js/jquery.fix.clone.js" %}"></script>
-<script type="text/javascript" src="{% static "js/jquery.dropdown.js" %}"></script>
+<script type="text/javascript" src="{% static "jquery.dropdown/jquery.dropdown.js" %}"></script>
 <script type="text/javascript" src="{% static "js/washboard.js" %}"></script>
 {% block js %}{% endblock %}
 {% endcompress %}
