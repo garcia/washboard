@@ -103,9 +103,5 @@ def main(request, data_=None):
         url + '?' + '&'.join('='.join(urllib.quote(str(p)) for p in pair) for pair in data.items()),
         endpoint['method']
     )
-    response['washboard'] = {
-        'url': url,
-        'data': data,
-    }
     
     return HttpResponse(json.dumps(response), content_type='application/json')
