@@ -885,7 +885,7 @@ function touchend(e) {
             {opacity: 0},
             200,
             function() {
-                $(this).css('opacity', .25).css('width', 0);
+                $(this).css('opacity', 0).css('width', 0);
             }
         );
 }

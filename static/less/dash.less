@@ -616,6 +616,21 @@ noscript p {
     display: none;
 }
 
+/* display avatar on blacklisted posts */
+
+.blacklisted .meta {
+    display: block;
+}
+.blacklisted .meta > * {
+    display: none;
+}
+.blacklisted .avatar {
+    display: block;
+}
+.blacklisted .avatar:after {
+    display: none;
+}
+
 /* videos have display: block; hardcoded */
 .blacklisted iframe {
     display: none !important;
