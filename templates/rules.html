@@ -1,14 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
-{% load compress %}
 
-{% block head %}
-{% compress css %}
-<link rel="stylesheet" type="text/css" href="{% static "css/rules.css" %}" />
-{% endcompress %}
-{% compress js %}
+{% block css %}
+<link rel="stylesheet" type="text/less" href="{% static "less/rules.less" %}" />
+{% endblock %}
+
+{% block js %}
 <script type="text/javascript" src="{% static "js/rules.js" %}"></script>
-{% endcompress %}
 {% endblock %}
 
 {% block content %}
@@ -67,7 +65,7 @@
                 </div>
                 {% endfor %}
                 <div class="row add">
-                    <div class="label" onclick="add_rule(this)">Add rule</div>
+                    <div class="label" onclick="add_rule(this)">Add post</div>
                 </div>
             </div>
 

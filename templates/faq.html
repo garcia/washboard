@@ -1,12 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
-{% load compress %}
 
-{% block head %}
-{% compress css %}
-<link rel="stylesheet" type="text/css" href="{% static "css/welcome.css" %}" />
-<link rel="stylesheet" type="text/css" href="{% static "css/faq.css" %}" />
-{% endcompress %}
+{% block css %}
+<link rel="stylesheet" type="text/less" href="{% static "less/faq.less" %}" />
 {% endblock %}
 
 {% block content %}

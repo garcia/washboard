@@ -1,0 +1,147 @@
+@import "washboard.less";
+
+#content {
+    margin: 20px auto;
+    background-color: white;
+    border-radius: 6px;
+    color: black;
+}
+
+.ruleset,
+#submit {
+    display: table;
+    width: 100%;
+    text-align: center;
+}
+
+.row {
+    display: table-row;
+    height: 30px;
+}
+
+.row > div {
+    display: table-cell;
+    padding: 10px;
+}
+
+.row:nth-of-type(2n+1) {
+    background-color: lighten(@primary, 48%);
+}
+
+.row:nth-of-type(2n+1) > div {
+    border-bottom: 1px solid lighten(@primary, 44%);
+}
+
+.label {
+    padding-left: 5px;
+    text-align: left;
+}
+
+.keyword,
+.post {
+    text-align: left;
+}
+
+.ruleset .keyword input,
+.ruleset .post input {
+    width: 100%;
+}
+
+.row.defaults .label {
+    color: #808080;
+}
+
+.row.add,
+.row.submit {
+    background-color: inherit;
+}
+
+.row.add .label {
+    text-align: center;
+    color: #000080;
+    border-bottom: none;
+    cursor: pointer;
+}
+
+#submit {
+    margin-top: 20px;
+}
+
+.row.submit input {
+    padding: 5px 20px;
+    background-color: rgba(205, 211, 233, .25);
+    border: 1px solid rgba(205, 211, 233, .75);
+    border-radius: 2px;
+    box-shadow: 0 1px 1px rgba(205, 211, 233, .25);
+    cursor: pointer;
+    -webkit-appearance: none;
+}
+
+input[type="text"] {
+    font-family: inherit;
+    font-size: inherit;
+    border: 1px solid desaturate(lighten(@primary, 30%), 50%);
+    border-radius: 2px;
+    padding: 4px;
+}
+
+input[type=text]:focus {
+    outline: none;
+    border: 1px solid lighten(@primary, 15%);
+}
+
+/* Showing / suppressing notifications is meaningless for whitelisted keywords,
+   but it's still convenient for them to use the same model as blacklisted keywords */
+#whitelist .show_notification {
+    text-indent: -65536em;
+}
+
+.defaults .delete {
+    visibility: hidden;
+    cursor: inherit;
+}
+
+.delete a {
+    display: block;
+    width: 15px;
+    height: 15px;
+    margin: 0 auto;
+    text-indent: -65536em;
+    color: transparent;
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90DCBY3Do90pZ8AAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAaUlEQVQokWP4//8/AwwfDmfQB2FkMXxyKJJHQhkegTC6IlxyKJJHQxn+gzCyInxyGJLoivDJ4dQMVfQHhzhEMzan4cMozkYPFGI1omhGMgCXU/8QjCqSbSbbzxSFNkXxTFEKozhtk5urABt85XGHtftHAAAAAElFTkSuQmCC");
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 1000px) {
+
+    #content {
+        border-radius: 0;
+    }
+
+}
+
+@media screen and (max-width: 540px) {
+
+    input[type="text"] {
+        width: 100%;
+        padding: 2px;
+    }
+
+    input[type="checkbox"] {
+        position: relative;
+        top: 2px;
+        -webkit-transform: scale(.75, .75);
+    }
+
+}
+
+/* Hide Regex column, but allow iPhone users to use landscape mode to access it */
+@media screen and (max-width: 475px) {
+    
+    .regex {
+        display: none !important;
+    }
+
+}

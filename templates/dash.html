@@ -1,18 +1,16 @@
 {% extends "base.html" %}
 {% load static %}
-{% load compress %}
 
-{% block head %}
-{% compress css %}
-<link rel="stylesheet" type="text/css" href="{% static "css/dash.css" %}" />
+{% block css %}
+<link rel="stylesheet" type="text/less" href="{% static "less/dash.less" %}" />
 <link rel="stylesheet" type="text/css" href="{% static "mediaelement/mediaelementplayer.css" %}" />
-{% endcompress %}
-{% compress js %}
+{% endblock %}
+
+{% block js %}
 <script type="text/javascript" src="{% static "js/json2.js" %}"></script>
 <script type="text/javascript" src="{% static "js/jquery.timeago.js" %}"></script>
 <script type="text/javascript" src="{% static "js/URI.min.js" %}"></script>
 <script type="text/javascript" src="{% static "mediaelement/mediaelement-and-player.min.js" %}"></script>
-{% endcompress %}
 <script type="text/javascript">
 BASE_URL     = "{{ base_url }}";
 ENDPOINT     = "{{ endpoint }}";

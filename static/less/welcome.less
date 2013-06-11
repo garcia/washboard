@@ -1,0 +1,156 @@
+@import "washboard.less";
+
+#top {
+    display: none;
+}
+
+@bg1: darken(@primary, 14%);
+@bg2: darken(@primary, 22%);
+
+#middle > div {
+    background: @bg1; /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover,  @bg1 0%, @bg2 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, @bg1), color-stop(100%, @bg2)); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover,  @bg1 0%, @bg2 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover,  @bg1 0%, @bg2 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover,  @bg1 0%, @bg2 100%); /* IE10+ */
+    background: radial-gradient(ellipse at center,  @bg1 0%, @bg2 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='@bg1', endColorstr='@bg2',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+#content, #links, #messages {
+    text-align: center;
+}
+
+#content {
+    margin: 10% auto 5% auto;
+}
+
+a {
+    color: inherit;
+}
+
+a:hover {
+    color: white;
+}
+
+#logo {
+    margin-bottom: 40px;
+    font-family: "Signika";
+    text-shadow: 0 2px 2px fade(black, 25%);
+}
+
+#logo a {
+    text-decoration: none;
+}
+
+#logo * {
+    margin: 0;
+}
+
+#logo h1 {
+    font-size: 4em;
+}
+
+#logo h2 {
+    font-size: 2em;
+    font-weight: normal;
+    font-style: italic;
+    margin-top: -0.4em;
+}
+
+#logo h3 {
+    font-size: 1.5em;
+    margin-top: -0.2em;
+    color: #ffa0a0;
+}
+
+#intro {
+    margin: 0 auto;
+    width: 75%;
+    max-width: 600px;
+    font-size: 18px;
+}
+
+#intro p:first-child {
+    margin-top: 0;
+}
+
+input {
+    display: block;
+    margin: 5px auto;
+    padding: 5px;
+    font-size: 16px;
+    color: lighten(@primary, 38%);
+    background-color: darken(@primary, 30%);
+    border: 1px solid darken(@primary, 40%);
+    border-radius: 4px;
+    box-shadow:  1px 1px 0px darken(@primary, 10%),
+                -1px 1px 0px darken(@primary, 10%);
+}
+
+input[type=submit] {
+    cursor: pointer;
+    padding: 5px 20px;
+    -webkit-appearance: none;
+    background: darken(@primary, 22%); /* Old browsers */
+    background: -moz-linear-gradient(top,  darken(@primary, 22%) 0%, darken(@primary, 26%) 50%, darken(@primary, 30%) 51%, darken(@primary, 34%) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,darken(@primary, 22%)), color-stop(50%,darken(@primary, 26%)), color-stop(51%,darken(@primary, 30%)), color-stop(100%,darken(@primary, 34%))); /* Chrome, Safari 4+ */
+    background: -webkit-linear-gradient(top,  darken(@primary, 22%) 0%,darken(@primary, 26%) 50%,darken(@primary, 30%) 51%,darken(@primary, 34%) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  darken(@primary, 22%) 0%,darken(@primary, 26%) 50%,darken(@primary, 30%) 51%,darken(@primary, 34%) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  darken(@primary, 22%) 0%,darken(@primary, 26%) 50%,darken(@primary, 30%) 51%,darken(@primary, 34%) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  darken(@primary, 22%) 0%,darken(@primary, 26%) 50%,darken(@primary, 30%) 51%,darken(@primary, 34%) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='darken(@primary, 22%)', endColorstr='darken(@primary, 34%)',GradientType=0 ); /* IE6-9 */
+    box-shadow:  1px 1px 0px  darken(@primary, 10%),
+                -1px 1px 0px  darken(@primary, 10%),
+                 0   0   10px fade(white, 10%);
+}
+
+input[type=submit]:hover {
+    background: darken(@primary, 16%); /* Old browsers */
+    background: -moz-linear-gradient(top,  darken(@primary, 16%) 0%, darken(@primary, 22%) 50%, darken(@primary, 26%) 51%, darken(@primary, 30%) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,darken(@primary, 16%)), color-stop(50%,darken(@primary, 22%)), color-stop(51%,darken(@primary, 26%)), color-stop(100%,darken(@primary, 30%))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  darken(@primary, 16%) 0%,darken(@primary, 22%) 50%,darken(@primary, 26%) 51%,darken(@primary, 30%) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  darken(@primary, 16%) 0%,darken(@primary, 22%) 50%,darken(@primary, 26%) 51%,darken(@primary, 30%) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  darken(@primary, 16%) 0%,darken(@primary, 22%) 50%,darken(@primary, 26%) 51%,darken(@primary, 30%) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  darken(@primary, 16%) 0%,darken(@primary, 22%) 50%,darken(@primary, 26%) 51%,darken(@primary, 30%) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='darken(@primary, 16%)', endColorstr='darken(@primary, 30%)',GradientType=0 ); /* IE6-9 */
+}
+
+input[type=submit]:active {
+    background: darken(@primary, 30%); /* Old browsers */
+    background: -moz-linear-gradient(top,  darken(@primary, 30%) 0%, darken(@primary, 26%) 49%, darken(@primary, 22%) 50%, darken(@primary, 16%) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,darken(@primary, 30%)), color-stop(49%,darken(@primary, 26%)), color-stop(50%,darken(@primary, 22%)), color-stop(100%,darken(@primary, 16%))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  darken(@primary, 30%) 0%,darken(@primary, 26%) 49%,darken(@primary, 22%) 50%,darken(@primary, 16%) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  darken(@primary, 30%) 0%,darken(@primary, 26%) 49%,darken(@primary, 22%) 50%,darken(@primary, 16%) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  darken(@primary, 30%) 0%,darken(@primary, 26%) 49%,darken(@primary, 22%) 50%,darken(@primary, 16%) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  darken(@primary, 30%) 0%,darken(@primary, 26%) 49%,darken(@primary, 22%) 50%,darken(@primary, 16%) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='darken(@primary, 30%)', endColorstr='darken(@primary, 16%)',GradientType=0 ); /* IE6-9 */
+}
+
+#links {
+    margin: 0 auto;
+    padding-left: 0;
+    list-style-type: none;
+}
+
+#links li {
+    display: inline;
+}
+
+#links li:after {
+    content: ".\00a0";
+}
+
+#links li a {
+    text-decoration: none;
+    border-bottom: 1px dotted fade(lighten(@primary, 40%), 40%);
+}
+
+@media screen and (max-width: 500px) {
+    
+    #intro {
+        width: 90%;
+    }
+
+}
