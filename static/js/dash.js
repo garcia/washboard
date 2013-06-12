@@ -55,12 +55,15 @@ function post2html(post) {
     }
 
     // Check post's ID against currently loaded posts
-    if (post.id >= $(posts).last().prop('id')) {
+    if (Washboard.well_ordered && post.id >= $(posts).last().prop('id')) {
         // If it wasn't posted before the last post, ignore it
         // and note that we're now one more post behind
         console.log(post.id + ' >= ' + $(posts).last().prop('id'));
         behind_by++;
         return true;
+    }
+    else if ('featured_timestamp' in post) {
+        featured_tag = true;
     }
     
     // General setup
@@ -71,8 +74,8 @@ function post2html(post) {
     posts.push(post);
 
     // Check if this post was specifically hidden
-    for (var hp = 0; hp < hidden_posts.length; hp++) {
-        if ((post.reblogged_root_url || post.post_url) == hidden_posts[hp].post) {
+    for (var hp = 0; hp < Washboard.hidden_posts.length; hp++) {
+        if ((post.reblogged_root_url || post.post_url) == Washboard.hidden_posts[hp].post) {
             return true;
         }
     }
@@ -442,7 +445,7 @@ function post2html(post) {
         $(post.tags).each(function(t, tag) {
             scan.push('#' + tag);
             tags.append(elem('a')
-                .attr('href', 'http://www.tumblr.com/tagged/' + encodeURIComponent(tag))
+                .attr('href', '/tagged/' + encodeURIComponent(tag))
                 .html('#' + tag)
             );
         });
@@ -453,7 +456,7 @@ function post2html(post) {
     buttons = elem('div').addClass('buttons');
 
     // Like button (only on posts by others)
-    if (post.blog_name != username) {
+    if (post.blog_name != Washboard.username) {
         var like_button = elem('a')
             .addClass('like')
             .text('Like')
@@ -691,7 +694,7 @@ function post2html(post) {
     $.each(scan, function(s, scan_element) {
         
         // Iterate over the user's rules
-        $.each(rules, function(r, rule) {
+        $.each(Washboard.rules, function(r, rule) {
             var kw = rule.keyword;
 
             // Convert "whole words" to Regex patterns
@@ -847,9 +850,18 @@ function dash(data, textStatus, jqXHR) {
     try {
         // Global variable for debugging purposes
         d = data;
+        
+        // Some methods return posts in data.response.posts,
+        // others in data.response
+        if ('posts' in data.response) {
+            post_list = data.response.posts;
+        }
+        else {
+            post_list = data.response;
+        }
 
         // Build posts
-        $.each(data.response.posts, function(p, post) {
+        $.each(post_list, function(p, post) {
             var post_elem = post2html(post);
             if (post_elem == true) {
                 return true;
@@ -957,15 +969,12 @@ function unhide(a) {
 }
 
 function apicall(endpoint, data, callback) {
-    var _data = {
+    var _data = $.extend(data, {
         csrfmiddlewaretoken: csrf_token,
         endpoint: endpoint,
-        data: JSON.stringify(data),
-    }
-    if (endpoint == 'blog') {
-        _data = $.extend({blog: BLOG}, _data);
-    }
-    console.log(_data)
+    });
+    _data = $.extend(Washboard.parameters, _data);
+    console.log(_data);
     $.ajax({
         type: 'POST',
         url: '/api',
@@ -981,7 +990,7 @@ function dashboard(data) {
         reblog_info: 'true',
         notes_info: 'true'
     }, data);
-    apicall(ENDPOINT, _data, dash);
+    apicall(Washboard.endpoint, _data, dash);
 }
 
 function like(data) {
@@ -1022,7 +1031,7 @@ function reply(post, reply_text) {
 }
 
 function load_redirect_query() {
-    redirect_query = '?redirect_to=' + encodeURIComponent(BASE_URL +
+    redirect_query = '?redirect_to=' + encodeURIComponent(Washboard.base_url +
         location.pathname.slice(1) + '?session=' + session)
     $('#new a').each(function(n, new_link) {
         $(new_link).attr('href', $(new_link).attr('href') + redirect_query);
@@ -1030,10 +1039,17 @@ function load_redirect_query() {
 }
 
 function load_more() {
-    // Set the offset, accounting for posts that have been made since initial load
-    dashboard({
-        offset: $('#posts').children().length + behind_by * 2
-    });
+    if (Washboard.well_ordered || !featured_tag) {
+        // Set the offset, accounting for posts that have been made since initial load
+        dashboard({
+            offset: $('#posts').children().length + behind_by * 2
+        });
+    }
+    else {
+        dashboard({
+            before: d.response[d.response.length - 1].featured_timestamp
+        });
+    }
     $('#load_more').text('Loading...');
     $('#load_more').addClass('loading');
 }
@@ -1077,6 +1093,7 @@ $(function() {
     behind_by = 0;
     allow_selection = -1;
     unhiding = -1;
+    featured_tag = false;
     
     query = URI(location.search).query(true);
     hash = URI('?' + location.hash.slice(1)).query(true);

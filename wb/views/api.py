@@ -18,21 +18,33 @@ endpoints = {
         'url': 'user/dashboard',
         'method': 'GET',
         'api_key': False,
+        'parameters': [
+            'offset', 'since_id', 'reblog_info', 'notes_info',
+        ],
     },
     'blog': {
         'url': 'blog/{blog}.tumblr.com/posts',
         'method': 'GET',
         'api_key': True,
+        'parameters': [
+            'id', 'tag', 'offset', 'reblog_info', 'notes_info',
+        ],
     },
     'like': {
         'url': 'user/like',
         'method': 'GET',
         'api_key': False,
+        'parameters': [
+            'id', 'reblog_key',
+        ],
     },
     'unlike': {
         'url': 'user/unlike',
         'method': 'GET',
         'api_key': False,
+        'parameters': [
+            'id', 'reblog_key',
+        ],
     },
     # Not supported for mainline Tumblr apps yet
     #'notifications': {
@@ -44,6 +56,17 @@ endpoints = {
         'url': 'user/post/reply',
         'method': 'POST',
         'api_key': True,
+        'parameters': [
+            'post_id', 'reblog_key', 'reply_text',
+        ],
+    },
+    'tagged': {
+        'url': 'tagged',
+        'method': 'GET',
+        'api_key': True,
+        'parameters': [
+            'tag', 'before',
+        ],
     },
 }
 
@@ -71,8 +94,6 @@ def main(request, data_=None):
         request.session['oauth_token_secret'],
     )
 
-    if 'data' not in request.POST:
-        return api_error(500, 'No data')
     if 'endpoint' not in request.POST:
         return api_error(500, 'No endpoint')
 
@@ -81,10 +102,11 @@ def main(request, data_=None):
     else:
         return api_error(500, 'Invalid endpoint')
 
-    try:
-        data = json.loads(request.POST['data'])
-    except ValueError:
-        return api_error(500, 'Invalid data')
+    data = {}
+    for parameter in endpoint['parameters']:
+        value = request.POST.get(parameter)
+        if value:
+            data[parameter] = value
 
     # Build endpoint URL
     url = 'http://api.tumblr.com/v2/'
