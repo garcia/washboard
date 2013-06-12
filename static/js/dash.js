@@ -1085,9 +1085,6 @@ $(function() {
     // Detect touch screen
     touchscreen = 'ontouchstart' in window;
     
-    // Remove unnecessary elements from center
-    $('#middle > div').html('<div id="posts"></div><div id="dropdowns"></div>');
-    
     // Initial variables
     posts = [];
     behind_by = 0;
