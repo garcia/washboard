@@ -500,17 +500,21 @@ function post2html(post) {
             .text('Reply')
             .click(function(e) {
                 var this_post = $('#post_' + post.id);
-                if (this_post.hasClass('replying')) {
+                // Open reply box
+                if (!this_post.hasClass('replying')) {
+                    this_post.addClass('replying');
+                    this_post.animate({'margin-bottom': '60px'});
+                    this_post.find('.reply-box').fadeIn();
+                    this_post.find('.reply-box input').click().focus();
+                }
+                // Close reply box
+                else {
+                    this_post.animate({'margin-bottom': '20px'});
                     this_post.find('.reply-box').fadeOut({
                         complete: function() {
                             this_post.removeClass('replying');
                         }
                     });
-                }
-                else {
-                    this_post.addClass('replying');
-                    this_post.find('.reply-box').fadeIn();
-                    this_post.find('.reply-box input').click().focus();
                 }
             })
         );
@@ -544,7 +548,38 @@ function post2html(post) {
             .addClass('note_count')
             .text(post.note_count)
             .click(function(e) {
-                $('#post_' + post.id).find('.notes').fadeToggle();
+                var notes = $('#post_' + post.id).find('.notes');
+                // Open notes
+                if (notes.css('display') != 'block') {
+                    // Calculate the height now so it can be reused later
+                    if (notes.data('height')) {
+                        var height = notes.data('height');
+                    }
+                    else {
+                        var height = notes.height();
+                        notes.data('height', height);
+                    }
+                    notes.css({
+                        'height': 0,
+                        // Account for margin 'skip' at start of animation
+                        'margin-bottom': '-20px',
+                        'display': 'block',
+                    });
+                    notes.animate({
+                        'height': height,
+                        'margin-bottom': 0,
+                    });
+                }
+                // Close notes
+                else {
+                    notes.animate({
+                        'height': 0,
+                        // Account for margin 'skip' at end of animation
+                        'margin-bottom': '-20px',
+                    }, {complete: function() {
+                        notes.css('display', 'none');
+                    }});
+                }
             })
         );
     }
