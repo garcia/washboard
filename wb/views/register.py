@@ -121,6 +121,9 @@ def callback(request):
     for key in request.session.keys():
         del request.session[key]
 
+    request.session['blogs'] = [blog['name']
+        for blog in userinfo['response']['user']['blogs']]
+
     # Check for duplicate user
     try:
         user = User.objects.get(username__exact=name)
