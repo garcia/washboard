@@ -556,8 +556,15 @@ function post2html(post) {
                         var height = notes.data('height');
                     }
                     else {
+                        notes.css({
+                            'display': 'block',
+                            'position': 'absolute',
+                            'visibility': 'hidden',
+                            'margin-right': '20px',
+                        });
                         var height = notes.height();
                         notes.data('height', height);
+                        notes.removeAttr('style');
                     }
                     notes.css({
                         'height': 0,
