@@ -93,37 +93,18 @@ input[type=submit] {
     cursor: pointer;
     padding: 5px 20px;
     -webkit-appearance: none;
-    background: darken(@primary, 22%); /* Old browsers */
-    background: -moz-linear-gradient(top,  darken(@primary, 22%) 0%, darken(@primary, 26%) 50%, darken(@primary, 30%) 51%, darken(@primary, 34%) 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,darken(@primary, 22%)), color-stop(50%,darken(@primary, 26%)), color-stop(51%,darken(@primary, 30%)), color-stop(100%,darken(@primary, 34%))); /* Chrome, Safari 4+ */
-    background: -webkit-linear-gradient(top,  darken(@primary, 22%) 0%,darken(@primary, 26%) 50%,darken(@primary, 30%) 51%,darken(@primary, 34%) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  darken(@primary, 22%) 0%,darken(@primary, 26%) 50%,darken(@primary, 30%) 51%,darken(@primary, 34%) 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  darken(@primary, 22%) 0%,darken(@primary, 26%) 50%,darken(@primary, 30%) 51%,darken(@primary, 34%) 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  darken(@primary, 22%) 0%,darken(@primary, 26%) 50%,darken(@primary, 30%) 51%,darken(@primary, 34%) 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='darken(@primary, 22%)', endColorstr='darken(@primary, 34%)',GradientType=0 ); /* IE6-9 */
+    .shinybg(darken(@primary, 22%); darken(@primary, 26%); darken(@primary, 30%); darken(@primary, 34%));
     box-shadow:  1px 1px 0px  darken(@primary, 10%),
                 -1px 1px 0px  darken(@primary, 10%),
                  0   0   10px fade(white, 10%);
 }
 
 input[type=submit]:hover {
-    background: darken(@primary, 16%); /* Old browsers */
-    background: -moz-linear-gradient(top,  darken(@primary, 16%) 0%, darken(@primary, 22%) 50%, darken(@primary, 26%) 51%, darken(@primary, 30%) 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,darken(@primary, 16%)), color-stop(50%,darken(@primary, 22%)), color-stop(51%,darken(@primary, 26%)), color-stop(100%,darken(@primary, 30%))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  darken(@primary, 16%) 0%,darken(@primary, 22%) 50%,darken(@primary, 26%) 51%,darken(@primary, 30%) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  darken(@primary, 16%) 0%,darken(@primary, 22%) 50%,darken(@primary, 26%) 51%,darken(@primary, 30%) 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  darken(@primary, 16%) 0%,darken(@primary, 22%) 50%,darken(@primary, 26%) 51%,darken(@primary, 30%) 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  darken(@primary, 16%) 0%,darken(@primary, 22%) 50%,darken(@primary, 26%) 51%,darken(@primary, 30%) 100%); /* W3C */
+    .shinybg(darken(@primary, 18%); darken(@primary, 24%); darken(@primary, 30%); darken(@primary, 36%));
 }
 
 input[type=submit]:active {
-    background: darken(@primary, 30%); /* Old browsers */
-    background: -moz-linear-gradient(top,  darken(@primary, 30%) 0%, darken(@primary, 26%) 49%, darken(@primary, 22%) 50%, darken(@primary, 16%) 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,darken(@primary, 30%)), color-stop(49%,darken(@primary, 26%)), color-stop(50%,darken(@primary, 22%)), color-stop(100%,darken(@primary, 16%))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  darken(@primary, 30%) 0%,darken(@primary, 26%) 49%,darken(@primary, 22%) 50%,darken(@primary, 16%) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  darken(@primary, 30%) 0%,darken(@primary, 26%) 49%,darken(@primary, 22%) 50%,darken(@primary, 16%) 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  darken(@primary, 30%) 0%,darken(@primary, 26%) 49%,darken(@primary, 22%) 50%,darken(@primary, 16%) 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  darken(@primary, 30%) 0%,darken(@primary, 26%) 49%,darken(@primary, 22%) 50%,darken(@primary, 16%) 100%); /* W3C */
+    .shinybg(darken(@primary, 36%); darken(@primary, 30%); darken(@primary, 24%); darken(@primary, 18%));
 }
 
 #links {

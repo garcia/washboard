@@ -1,5 +1,15 @@
 @primary: hsl(210, 38%, 50%);
 
+.shinybg(@c1; @c2; @c3; @c4) {
+    background: @c1;
+    background: -moz-linear-gradient(top, @c1 0%, @c2 50%, @c3 51%, @c4 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, @c1), color-stop(50%, @c2), color-stop(51%, @c3), color-stop(100%, @c4));
+    background: -webkit-linear-gradient(top, @c1 0%, @c2 50%, @c3 51%, @c4 100%);
+    background: -o-linear-gradient(top, @c1 0%, @c2 50%, @c3 51%, @c4 100%);
+    background: -ms-linear-gradient(top, @c1 0%, @c2 50%, @c3 51%, @c4 100%);
+    background: linear-gradient(to bottom, @c1 0%, @c2 50%, @c3 51%, @c4 100%);
+}
+
 html, body {
     width: 100%;
     height: 100%;
@@ -153,9 +163,9 @@ input[type=password]:focus {
 
 .message (@color) {
     background-color: darken(@color, 25%);
-    border: 1px solid darken(@color, 5%);
+    border: 1px solid darken(@color, 10%);
     border-top: 1px solid darken(@color, 40%);
-    box-shadow: 0 -1px 0 darken(@color, 5%),
+    box-shadow: 0 -1px 0 darken(@color, 10%),
                 0 0 3px black;
 }
 

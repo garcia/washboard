@@ -69,12 +69,22 @@
 
 .row.submit input {
     padding: 5px 20px;
-    background-color: rgba(205, 211, 233, .25);
-    border: 1px solid rgba(205, 211, 233, .75);
+    color: white;
+    font-weight: bold;
+    text-shadow: 0 1px 0 fade(black, 25%);
+    .shinybg(lighten(@primary, 12%); lighten(@primary, 8%); lighten(@primary, 4%); @primary);
+    border: 1px solid @primary;
     border-radius: 2px;
-    box-shadow: 0 1px 1px rgba(205, 211, 233, .25);
     cursor: pointer;
     -webkit-appearance: none;
+}
+
+.row.submit input:hover {
+    .shinybg(lighten(@primary, 18%); lighten(@primary, 12%); lighten(@primary, 6%); @primary);
+}
+
+.row.submit input:active {
+    .shinybg(@primary; lighten(@primary, 6%); lighten(@primary, 12%); lighten(@primary, 18%));
 }
 
 input[type="text"] {
