@@ -26,30 +26,38 @@
 {% block js %}{% endblock %}
 {% endcompress %}
 
+{% if user.is_authenticated %}
 <div id="top" class="wrapper">
     <div>
         <div id="nav">
             <h1 id="title">
-                <a href="/{% if user.is_authenticated %}dash{% endif %}">Washboard</a>
+                <a href="/dash">Washboard</a>
             </h1>
-            <div id="menu">
-                <ul>
-                    {% if user.is_authenticated %}
+            <a class="js" id="menu-link" data-dropdown="#menu">Menu</a>
+            <a class="js" id="new-link" data-dropdown="#new">New</a>
+            <a class="js" id="blogs-link" data-dropdown="#blogs">Blogs</a>
+            <div id="menu" class="dropdown dropdown-tip">
+                <ul class="dropdown-menu">
                     <li><a href="/dash">Dashboard</a></li>
                     <li><a href="/rules">Rules</a></li>
                     <li><a href="/settings">Settings</a></li>
                     <li><a href="/faq">FAQ</a></li>
                     <li><a href="/logout">Logout</a></li>
-                    {% else %}
-                    <li><a href="/">Login</a></li>
-                    <li><a href="/register">Register</a></li>
-                    {% endif %}
                 </ul>
             </div>
-            {% block after_menu %}{% endblock %}
+            <div id="new" class="dropdown dropdown-tip">
+                <ul class="dropdown-menu">
+                    {% with 'text photo quote link chat audio video' as types %}
+                    {% for type in types.split %}
+                    <li><a href="http://www.tumblr.com/new/{{ type }}">{{ type|title }}</a></li>
+                    {% endfor %}
+                    {% endwith %}
+                </ul>
+            </div>
         </div>
     </div>
 </div>
+{% endif %}
 
 <div id="middle" class="wrapper">
     <div>

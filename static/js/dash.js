@@ -1132,9 +1132,4 @@ $(function() {
     }
         
     save_session_interval = setInterval(save_session, 5000);
-
-    // Insert new post button
-    $('#new').addClass('dropdown').addClass('dropdown-tip');
-    $('#new ul').addClass('dropdown-menu');
-    $('#new').before('<a class="js" id="new-link" data-dropdown="#new">New</a>');;
 });

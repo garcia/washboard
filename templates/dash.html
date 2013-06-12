@@ -25,18 +25,6 @@ csrf_token = "{{ csrf_token }}";
 <script type="text/javascript" src="{% static "js/dash.js" %}"></script>
 {% endblock %}
 
-{% block after_menu %}
-<div id="new">
-    <ul>
-        {% with 'text photo quote link chat audio video' as types %}
-        {% for type in types.split %}
-        <li><a href="http://www.tumblr.com/new/{{ type }}">{{ type|title }}</a></li>
-        {% endfor %}
-        {% endwith %}
-    </ul>
-</div>
-{% endblock %}
-
 {% block bottom %}
 <a id="load_more" class="js loading" onclick="load_more()">Loading...</a>
 {% endblock %}
