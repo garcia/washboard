@@ -492,12 +492,72 @@ function post2html(post) {
         .attr('href', 'http://www.tumblr.com/reblog/' + post.id + '/' +
             post.reblog_key + redirect_query)
         .click(function(e) {
-            save_session();
+            var this_post = $('#post_' + post.id);
+            // Open reblog box
+            if (!this_post.hasClass('reblogging')) {
+                this_post.addClass('reblogging');
+                this_post.animate({'margin-bottom': '179px'});
+                this_post.find('.action-box:not(.reblog-box)').fadeOut();
+                this_post.find('.reblog-box').fadeIn();
+                this_post.find('.reblog-box .caption').click().focus();
+            }
+            // Close reblog box
+            else {
+                this_post.animate({'margin-bottom': '20px'});
+                this_post.find('.action-box').fadeOut({
+                    complete: function() {
+                        this_post.removeClass('reblogging');
+                    }
+                });
+            }
+            return false;
         })
     );
 
-    // Reply button
+    // Reblog box
+    postelem.append(elem('div')
+        .addClass('action-box reblog-box')
+        .css('display', 'none')
+        .append(elem('textarea').addClass('section caption').attr('placeholder', 'Caption'))
+        .append(elem('input').addClass('section tags').attr('placeholder', 'Tags'))
+        .append(elem('div')
+            .addClass('section controls')
+            .append(elem('button')
+                .addClass('choose-blog')
+                .attr('data-dropdown', '#choose-blog_' + post.id)
+                .text(Washboard.username))
+            .append(elem('input')
+                .attr('type', 'submit')
+                .attr('value', 'Reblog')
+                .click(function(e) {
+                    //reblog();
+                })
+            )
+        )
+    );
+
+    // Choose blog dropdown
+    var chooseblog = elem('div').attr('id', 'choose-blog_' + post.id).addClass('choose-blog-menu');
+    var bloglist = elem('ul');
+    $.each(Washboard.blogs, function(b, blog) {
+        bloglist.append(elem('li')
+            .append(elem('a')
+                .addClass('js')
+                .text(blog)
+                .click(function(e) {
+                    $('#post_' + post.id).find('.choose-blog').text(blog);
+                })
+            )
+        );
+    });
+    chooseblog.append(bloglist);
+    $('#dropdowns').append(chooseblog);
+    chooseblog.addClass('dropdown').addClass('dropdown-tip');
+    bloglist.addClass('dropdown-menu');
+
     if (post.can_reply) {
+        
+        // Reply button
         buttons.append(elem('a')
             .addClass('reply')
             .text('Reply')
@@ -506,14 +566,15 @@ function post2html(post) {
                 // Open reply box
                 if (!this_post.hasClass('replying')) {
                     this_post.addClass('replying');
-                    this_post.animate({'margin-bottom': '60px'});
+                    this_post.animate({'margin-bottom': '61px'});
+                    this_post.find('.action-box:not(.reply-box)').fadeOut();
                     this_post.find('.reply-box').fadeIn();
                     this_post.find('.reply-box input').click().focus();
                 }
                 // Close reply box
                 else {
                     this_post.animate({'margin-bottom': '20px'});
-                    this_post.find('.reply-box').fadeOut({
+                    this_post.find('.action-box').fadeOut({
                         complete: function() {
                             this_post.removeClass('replying');
                         }
@@ -521,8 +582,10 @@ function post2html(post) {
                 }
             })
         );
+
+        // Reply box
         postelem.append(elem('div')
-            .addClass('reply-box')
+            .addClass('action-box reply-box')
             .css('display', 'none')
             .append(elem('input')
                 .attr('type', 'text')

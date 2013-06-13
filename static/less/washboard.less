@@ -62,10 +62,16 @@ input[type=password]:focus {
     background-color: darken(@primary, 36%);
 }
 
-#top #nav {
+#nav {
     position: relative;
     width: 920px;
     margin: 0 auto;
+}
+
+#nav:after {
+    content: "";
+    display: block;
+    clear: both;
 }
 
 #top h1,
@@ -82,17 +88,30 @@ input[type=password]:focus {
     text-decoration: none;
 }
 
-#nav > a.js {
+#top h1 .title {
+    font-size: 16px;
+    color: lighten(@primary, 20%);
+}
+
+#top h1 .title:before {
+    content: " / ";
+}
+
+#links {
     float: right;
+}
+
+#links a {
     width: 24px;
     height: 24px;
     margin: 5px 20px 0 0;
+    float: right;
     text-indent: -65536em;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-#nav > a.js:first-of-type {
+#links a:first-of-type {
     margin-right: 0;
 }
 

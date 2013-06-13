@@ -209,12 +209,11 @@ noscript p {
     margin-left: -60px !important;
 }
 
-/* reply box */
+/* reply / reblog boxes */
 
-.reply-box {
+.action-box {
     position: absolute;
     margin: 0;
-    bottom: -51px;
     left: 0;
     right: 0;
     background-color: darken(@primary, 36%);
@@ -223,11 +222,12 @@ noscript p {
     box-shadow: inset 0 2px 10px fade(black, 40%);
 }
 
-.reply-box input {
+.action-box input,
+.action-box textarea {
     margin: 0;
     padding: 10px;
     width: 100%;
-    color: white;
+    color: lighten(@primary, 40%);
     font-size: 16px;
     background-color: transparent;
     border: none;
@@ -235,28 +235,97 @@ noscript p {
     .box-sizing-border-box;
 }
 
-.reply-box:before {
+.action-box:before,
+.action-box:after {
     content: "";
     display: inline-block;
     position: absolute;
-    margin-left: -4px;
+}
+
+.action-box:before {
     top: -8px;
-    right: 96px;
     border-bottom: 8px solid darken(@primary, 12%);
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
 }
 
-.reply-box:after {
-    content: "";
-    display: inline-block;
-    position: absolute;
-    margin-left: -2px;
+.action-box:after {
     top: -6px;
-    right: 98px;
     border-bottom: 6px solid darken(@primary, 40%);
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
+}
+
+.reply-box {
+    bottom: -51px;
+}
+
+.reply-box:before {
+    margin-left: -4px;
+    right: 96px;
+}
+
+.reply-box:after {
+    margin-left: -2px;
+    right: 98px;
+}
+
+.reblog-box {
+    bottom: -169px;
+}
+
+.reblog-box:before {
+    margin-left: -4px;
+    right: 64px;
+}
+
+.reblog-box:after {
+    margin-left: -2px;
+    right: 66px;
+}
+
+.reblog-box .section {
+    border-bottom: 1px solid darken(@primary, 40%);
+    border-top: 1px solid darken(@primary, 25%);
+}
+.reblog-box .section:first-child {
+    border-top: none;
+}
+.reblog-box .section:last-child {
+    border-bottom: none;
+}
+
+.reblog-box .caption {
+    display: block;
+    height: 75px;
+    margin: 0;
+    font-family: inherit;
+}
+
+.reblox-box .tags {
+    padding-right: 75px;
+}
+
+.reblog-box .controls .choose-blog,
+.reblog-box .controls input[type=submit] {
+    display: block;
+    width: auto;
+    margin: 5px;
+    padding: 6px;
+    font-size: 14px;
+    border: 1px solid darken(@primary, 12%);
+    border-radius: 2px;
+    box-shadow: 0 1px 3px black;
+    .shinybg(darken(@primary, 22%); darken(@primary, 26%); darken(@primary, 30%); darken(@primary, 34%));
+}
+
+.reblog-box .controls .choose-blog {
+    color: lighten(@primary, 40%);
+    float: left;
+}
+
+.reblog-box .controls input[type=submit] {
+    float: right;
 }
 
 /* Stop long words at the padding, not the edge of the post box */
@@ -414,18 +483,18 @@ noscript p {
 
 /* audio */
 
-.audio .audiobox {
+.audiobox {
     margin: 10px 0 0 0;
 }
 
-.audio .audiobox:after {
+.audiobox:after {
     content: " ";
     display: block;
     height: 0;
     clear: left;
 }
 
-.audio .audiobox .album_art {
+.audiobox .album_art {
     display: block;
     float: left;
     max-width: 100px;
@@ -435,37 +504,40 @@ noscript p {
     .transition(max-width; .5s; ease);
 }
 
-.audio .audiobox .album_art.expanded {
+.audiobox .album_art.expanded {
     max-width: 100%;
 }
 
-.audio .audiobox .album_art,
-.audio .audiobox embed {
+.audiobox .album_art,
+.audiobox embed {
     box-shadow: 0 1px 8px fade(black, 20%);
 }
 
-.audio .audiobox p {
+.audiobox p {
     font-weight: bold;
     margin: 5px;
+}
+
+.audiobox.expanded p {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.audio .audiobox p:first-of-type {
+.audiobox p:first-of-type {
     margin-top: 15px;
 }
 
-.audio .audiobox .track_name {
+.audiobox .track_name {
     font-weight: bold;
 }
 
-.audio .audiobox .artist:before {
+.audiobox .artist:before {
     content: "by ";
     font-weight: normal;
 }
 
-.audio .audiobox .album:before {
+.audiobox .album:before {
     content: "from ";
     font-weight: normal;
 }

@@ -31,6 +31,7 @@ def main(request, data_=None):
         'dash': True,
         'wb': {
             'username': request.user.username,
+            'blogs': request.session['blogs'],
             'parameters': {},
             'base_url': settings.BASE_URL,
             'endpoint': 'dashboard',

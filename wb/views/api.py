@@ -60,6 +60,14 @@ endpoints = {
             'post_id', 'reblog_key', 'reply_text',
         ],
     },
+    'reblog': {
+        'url': 'post/reblog',
+        'method': 'POST',
+        'api_key': False,
+        'parameters': [
+            'id', 'reblog_key', 'comment',
+        ],
+    },
     'tagged': {
         'url': 'tagged',
         'method': 'GET',
@@ -93,15 +101,16 @@ def main(request, data_=None):
         request.session['oauth_token'],
         request.session['oauth_token_secret'],
     )
-
+    
+    # Get endpoint information
     if 'endpoint' not in request.POST:
         return api_error(500, 'No endpoint')
-
     if request.POST['endpoint'] in endpoints:
         endpoint = endpoints[request.POST['endpoint']]
     else:
         return api_error(500, 'Invalid endpoint')
 
+    # Get required parameters from POST form
     data = {}
     for parameter in endpoint['parameters']:
         value = request.POST.get(parameter)
