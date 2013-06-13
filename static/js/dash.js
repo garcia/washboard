@@ -45,15 +45,129 @@ function special_entities(html) {
         .replace('&gt;', '>');
 }
 
-function post2html(post) {
-    // Convenience function to create new jQuery-wrapped elements
-    this.elem = function(elem) {
-        if(typeof(elem) != "string") {
-            return false;
+function expand(id) {
+    var this_post = $('#post_' + id);
+    this_post.find('.photos').animate(
+        {opacity: 0},
+        600,
+        function() {
+            this_post.find('.photos').css('display', 'none');
+            this_post.addClass('hr')
+                .css('max-width', Math.max(540, hr_widths[id]))
+                .find('.hr_photos')
+                .css('display', 'block')
+                .css('opacity', 0)
+                .animate({opacity: 1}, 600)
+                .find('img')
+                .each(function(i, img) {
+                    $(img).attr('src', $(img).attr('hr-src'));
+                }
+            );
+            $('body').animate(
+                {scrollTop: this_post.offset().top - 5},
+                200
+            );
         }
-        return $(document.createElement(elem));
-    }
+    );
+}
 
+function collapse(id) {
+    var this_post = $('#post_' + id);
+    this_post.find('.hr_photos').animate(
+        {opacity: 0},
+        600,
+        function() {
+            this_post.find('.hr_photos').css('display', 'none');
+            this_post.removeClass('hr')
+                .css('max-width', 'none')
+                .find('.photos')
+                .css('display', 'block')
+                .css('opacity', 0)
+                .animate({opacity: 1}, 600);
+            $('body').animate(
+                {scrollTop: this_post.offset().top - 5},
+                200
+            );
+        }
+    );
+}
+
+function toggle_album_art(id) {
+    var this_post = $('#post_' + id);
+    this_post.find('.album_art').toggleClass('expanded');
+}
+
+function chooseblog(id, blog) {
+    $('#reblog_' + id).find('.chooseblog').text(blog);
+}
+
+// TODO: separation of presentation from logic (no more .css()!)
+function notes(id) {
+    var notes = $('#post_' + id).find('.notes');
+    // Open notes
+    if (notes.css('display') != 'block') {
+        // Calculate the height now so it can be reused later
+        if (notes.data('height')) {
+            var height = notes.data('height');
+        }
+        else {
+            notes.css({
+                'display': 'block',
+                'position': 'absolute',
+                'visibility': 'hidden',
+                'margin-right': '20px',
+            });
+            var height = notes.height();
+            notes.data('height', height);
+            notes.removeAttr('style');
+        }
+        notes.css({
+            'height': 0,
+            // Account for margin 'skip' at start of animation
+            'margin-bottom': '-20px',
+            'display': 'block',
+        });
+        notes.animate({
+            'height': height,
+            'margin-bottom': 0,
+        });
+    }
+    // Close notes
+    else {
+        notes.animate({
+            'height': 0,
+            // Account for margin 'skip' at end of animation
+            'margin-bottom': '-20px',
+        }, {complete: function() {
+            notes.css('display', 'none');
+        }});
+    }
+}
+
+function hide(id, hide_url) {
+    $.ajax('/hide', {
+        data: {
+            post: hide_url,
+            csrfmiddlewaretoken: csrf_token
+        },
+        dataType: 'json',
+        type: 'POST'
+    }).success(function(data) {
+        if (data.meta.status != 200) {
+            alert(data.meta.msg);
+        }
+    }).fail(function() {
+        alert('The server was unable to hide the post permanently, sorry.');
+    }).always(function() {
+        $('#post_' + id).animate({opacity: 0}, 600, function() {
+            setTimeout(function() {
+                $('#post_' + id).css('display', 'none');
+            }, 300);
+        });
+    });
+}
+
+function check_id(post) {
     // Check post's ID against currently loaded posts
     if (Washboard.well_ordered && post.id >= $(posts).last().prop('id')) {
         // If it wasn't posted before the last post, ignore it
@@ -62,16 +176,12 @@ function post2html(post) {
         behind_by++;
         return true;
     }
-    else if ('featured_timestamp' in post) {
+    else if (!featured_tag && 'featured_timestamp' in post) {
         featured_tag = true;
     }
-    
-    // General setup
-    var scan = [];
-    var postelem = elem('li').addClass('post');
-    postelem.addClass(post.type);
-    postelem.attr('id', 'post_' + post.id);
-    posts.push(post);
+}
+
+function is_blacklisted(post) {
 
     // Check if this post was specifically hidden
     for (var hp = 0; hp < Washboard.hidden_posts.length; hp++) {
@@ -79,683 +189,30 @@ function post2html(post) {
             return true;
         }
     }
-
-    // Metadata
-    var meta = elem('div').addClass('meta');
-
-    // Blog avatar
-    meta.append(elem('a')
-        .addClass('avatar')
-        .attr('href', '/blog/' + post.blog_name)
-        .html(elem('img')
-            .attr('src', 'http://api.tumblr.com/v2/blog/'
-                + post.blog_name
-                + '.tumblr.com/avatar/64'
-            )
-        )
-    );
-
-    // Blog name
-    meta.append(elem('a')
-        .addClass('blog_name')
-        .text(post.blog_name)
-        .attr('href', post.post_url)
-    );
-    // Reblogged blog name
-    if (post.reblogged_from_name) {
-        meta.append(elem('span')
-            .addClass('reblogged_text')
-            .html('&nbsp;reblogged&nbsp;')
-        );
-        meta.append(elem('a')
-            .addClass('reblogged_from_name')
-            .text(post.reblogged_from_name)
-            .attr('href', post.reblogged_from_url)
-        );
-        scan.push(post.reblogged_from_name);
-    }
-
-    postelem.append(meta);
-
     
-    // Text posts
-    if (post.type == 'text') {
-
-        // Title (optional)
-        if (post.title) {
-            postelem.append(elem('h2').text(post.title));
-            scan.push(post.title);
-        }
-
-        // Body
-        postelem.append(elem('div').addClass('body').html(post.body));
-        scan.push(post.body);
-    }
-
-    // Photo posts
-    else if (post.type == 'photo') {
-        var photos = elem('div').addClass('photos');
-        var hr_photos = elem('div').addClass('hr_photos').css('display', 'none');
-        var row = elem('div').addClass('row');
-        var last_row = 0;
-        var row_height = 700;
-
-        var largest_width = 0;
-        $.each(post.photos, function(ph, photo) {
-            largest_width = Math.max(largest_width, best_fit(photo.alt_sizes, 1280).width);
-        });
-
-        // Insert each photo
-        $.each(post.photos, function(ph, photo) {
-
-            // Get photoset layout
-            if (post.photoset_layout) {
-                layout = post.photoset_layout;
-            }
-            // Pseudo-layout for single images
-            else {
-                layout = '1';
-            }
-
-            // Get row of current photo
-            var running_total = 0;
-            var running_row = 0;
-            while (running_total <= ph) {
-                running_total += parseInt(layout[running_row]);
-                running_row++;
-            }
-            running_row--;
-            if (running_row > last_row) {
-                row.addClass('row-' + layout[last_row]);
-                row.css('height', row_height);
-                photos.append(row);
-                row = elem('div').addClass('row');
-                row_height = 700;
-            }
-            last_row = running_row;
-
-            // Determine optimal photo size to load
-            var target_size = optimal_sizes[layout[running_row]];
-            var best_photo = best_fit(photo.alt_sizes, target_size);
-            var photolink = elem('a')
-                .attr('href', best_fit(photo.alt_sizes, 1280).url)
-                .attr('target', '_blank')
-                .click(function(e) {
-                    var this_post = $('#post_' + post.id);
-                    this_post.find('.photos').animate(
-                        {opacity: 0},
-                        600,
-                        function() {
-                            this_post.find('.photos').css('display', 'none');
-                            this_post.addClass('hr')
-                                .css('max-width', Math.max(540, largest_width))
-                                .find('.hr_photos')
-                                .css('display', 'block')
-                                .css('opacity', 0)
-                                .animate({opacity: 1}, 600)
-                                .find('img')
-                                .each(function(i, img) {
-                                    $(img).attr('src', $(img).attr('hr_src'));
-                                }
-                            );
-                            console.log(e.currentTarget);
-                            $('body').animate(
-                                {scrollTop: this_post.offset().top - 5},
-                                200
-                            );
-                        }
-                    );
-                    return false;
-                });
-            photolink.append(elem('img').attr('src', best_photo.url));
-            row.append(photolink);
-            row_height = Math.min(row_height,
-                optimal_sizes[layout[running_row]] / best_photo.width * best_photo.height)
-
-            // Optimal high-res size
-            best_photo = best_fit(photo.alt_sizes, window.innerWidth);
-            photoelem = elem('img')
-                .attr('hr_src', best_photo.url)
-                .click(function(e) {
-                    var this_post = $('#post_' + post.id);
-                    this_post.find('.hr_photos').animate(
-                        {opacity: 0},
-                        600,
-                        function() {
-                            this_post.find('.hr_photos').css('display', 'none');
-                            this_post.removeClass('hr')
-                                .css('max-width', 'none')
-                                .find('.photos')
-                                .css('display', 'block')
-                                .css('opacity', 0)
-                                .animate({opacity: 1}, 600);
-                            $('body').animate(
-                                {scrollTop: this_post.offset().top - 5},
-                                200
-                            );
-                        }
-                    );
-                });
-            hr_photos.append(photoelem);
-        });
-        row.addClass('row-' + layout[last_row]);
-        if (layout != '1') {
-            row.css('height', row_height);
-        }
-        photos.append(row);
-        postelem.append(photos);
-        postelem.append(hr_photos);
-
-        // Caption (optional)
-        if (post.caption) {
-            postelem.append(elem('div').addClass('caption').html(post.caption));
-            scan.push(post.caption);
-        }
-    }
-
-    // Quote posts
-    else if (post.type == 'quote') {
-        
-        // Quote
-        if (post.text.indexOf('<') == -1) {
-            // Enclose in <p> tag if necessary
-            post.text = '<p>' + post.text + '</p>';
-        }
-        postelem.append(elem('div').addClass('quote').html(post.text));
-        scan.push(post.text);
-
-        // Source (optional)
-        if (post.source) {
-            postelem.append(elem('div').addClass('source').html(post.source));
-            scan.push(post.source);
-        }
-    }
-
-    // Link posts
-    else if (post.type == 'link') {
-        
-        // URL
-        var anchor = elem('a').addClass('link').attr('href', post.url);
-        if (post.title) {
-            // Title, if present
-            anchor.text(post.title);
-        }
-        else {
-            // Title defaults to the URL itself
-            anchor.text(post.url);
-        }
-        scan.push(post.title);
-        scan.push(post.url);
-        postelem.append(anchor);
-
-        // Description (optional)
-        if (post.description) {
-            postelem.append(elem('div').addClass('description').html(post.description));
-            scan.push(post.description);
-        }
-    }
-
-    // Chat posts
-    else if (post.type == 'chat') {
-        
-        // Title (optional)
-        if (post.title) {
-            postelem.append(elem('h2').addClass('title').text(post.title));
-            scan.push(post.title);
-        }
-
-        // Dialogue
-        chat = elem('ul').addClass('dialogue');
-        $.each(post.dialogue, function(l, line) {
-            chat.append(elem('li').addClass('line')
-                .append(elem('b').text(line.label))
-                .append(' ')
-                .append(elem('span').text(line.phrase))
-            );
-            scan.push(line.label);
-            scan.push(line.phrase);
-        });
-        postelem.append(chat);
-    }
-
-    // Audio posts
-    else if (post.type == 'audio') {
-
-        // Audio box (container for non-caption data)
-        var audiobox = elem('div').addClass('audiobox');
-
-        // HTML5 player, if possible
-        if (post.audio_url) {
-            // Apparently this is required, otherwise it gives a 403...
-            if (post.audio_url.indexOf('http://www.tumblr.com/') == 0) {
-                post.audio_url += '?plead=please-dont-download-this-or-our-lawyers-wont-let-us-host-audio';
-            }
-            audiobox.append(
-                elem('audio')
-                    .attr('src', post.audio_url)
-                    .attr('type', 'audio/mp3')
-                    .attr('preload', 'none')
-                    .addClass('new')
-            );
-        }
-        // Default to embedded player
-        else {
-            audiobox.append($(post.player).addClass('player'));
-        }
-
-        // Album art (optional)
-        if (post.album_art) {
-            var album_art = elem('img')
-                .addClass('album_art')
-                .attr('src', post.album_art)
-                .click(function() { $(this).toggleClass('expanded'); });
-            audiobox.append(album_art);
-        }
-
-        // Track name, artist, and album (all optional)
-        var metadata = ['track_name', 'artist', 'album'];
-        for (var i = 0; i < metadata.length; i++) {
-            if (post[metadata[i]]) {
-                audiobox.append(
-                    elem('p').addClass(metadata[i]).text(post[metadata[i]])
-                );
-            }
-        }
-        postelem.append(audiobox);
-
-        // Caption (optional)
-        if (post.caption) {
-            postelem.append(
-                elem('div').addClass('caption').html(post.caption)
-            );
-            scan.push(post.caption);
-        }
-    }
-
-    // Video posts
-    else if (post.type == 'video') {
-        
-        // Player
-        var best_player = best_fit(post.player, 500 * scale);
-        postelem.append($(best_player.embed_code).addClass('player'));
-
-        // Caption (optional)
-        if (post.caption) {
-            postelem.append(
-                elem('div').addClass('caption').html(post.caption)
-            );
-            scan.push(post.caption);
-        }
-    }
-
-    // Answer posts
-    else if (post.type == 'answer') {
-        
-        // Answer box
-        var answerbox = elem('div').addClass('answerbox');
-
-        // Question
-        answerbox.append(elem('p').addClass('question').text(post.question));
-
-        // Asker's information
-        var asking = elem('p').addClass('asking');
-        // Avatar
-        asking.append(elem('img')
-            .addClass('asking_avatar')
-            .attr('src', (post.asking_name == 'Anonymous') ?
-                ('http://assets.tumblr.com/images/anonymous_avatar_24.gif') :
-                ('http://api.tumblr.com/v2/blog/'
-                    + post.asking_name
-                    + '.tumblr.com/avatar/24')
-            )
-        );
-        // Name
-        asking_name = elem('a')
-            .addClass('asking_name')
-            .text(post.asking_name);
-        // Blog URL
-        if (post.asking_url) {
-            asking_name.attr('href', post.asking_url);
-        }
-        else {
-            asking_name.addClass('anonymous');
-        }
-        scan.push(post.asking_name);
-        scan.push(post.question);
-        asking.append(asking_name);
-        answerbox.append(asking);
-        postelem.append(answerbox);
-
-        // Answer
-        postelem.append(elem('div').addClass('answer').html(post.answer));
-        scan.push(post.answer);
-
-    }
-    
-    // Unidentifiable posts
-    else {
-        postelem.append(elem('i').text(
-            "Sorry, I don't know how to render " + post.type + " posts yet."
-        ));
-    }
-
-    // Tags
-    if (post.tags.length) {
-        var tags = elem('div').addClass('tags');
-        $(post.tags).each(function(t, tag) {
-            scan.push('#' + tag);
-            tags.append(elem('a')
-                .attr('href', '/tagged/' + encodeURIComponent(tag))
-                .html('#' + tag)
-            );
-        });
-        postelem.append(tags)
-    }
-    
-    // Buttons
-    buttons = elem('div').addClass('buttons');
-
-    // Like button (only on posts by others)
-    if (post.blog_name != Washboard.username) {
-        var like_button = elem('a')
-            .addClass('like')
-            .text('Like')
-            .on('click', function(e) {
-                like({
-                    id: post.id,
-                    reblog_key: post.reblog_key
-                });
-            });
-        if (post.liked) {
-            like_button.addClass('liked');
-        }
-        buttons.append(like_button);
-    }
-
-    // Edit button (only on own posts)
-    else {
-        buttons.append(elem('a')
-            .addClass('edit')
-            .text('Edit')
-            .attr('href', 'http://www.tumblr.com/edit/' + post.id +
-                redirect_query)
-            .click(function(e) {
-                save_session();
-            })
-        );
-    }
-
-    // Reblog button
-    buttons.append(elem('a')
-        .addClass('reblog')
-        .text('Reblog')
-        .attr('href', 'http://www.tumblr.com/reblog/' + post.id + '/' +
-            post.reblog_key + redirect_query)
-        .click(function(e) {
-            var this_post = $('#post_' + post.id);
-            // Open reblog box
-            if (!this_post.hasClass('reblogging')) {
-                this_post.addClass('reblogging');
-                this_post.animate({'margin-bottom': '179px'});
-                this_post.find('.action-box:not(.reblog-box)').fadeOut();
-                this_post.find('.reblog-box').fadeIn();
-                this_post.find('.reblog-box .caption').click().focus();
-            }
-            // Close reblog box
-            else {
-                this_post.animate({'margin-bottom': '20px'});
-                this_post.find('.action-box').fadeOut({
-                    complete: function() {
-                        this_post.removeClass('reblogging');
-                    }
-                });
-            }
-            return false;
-        })
-    );
-
-    // Reblog box
-    postelem.append(elem('div')
-        .addClass('action-box reblog-box')
-        .css('display', 'none')
-        .append(elem('textarea').addClass('section caption').attr('placeholder', 'Caption'))
-        .append(elem('input').addClass('section tags').attr('placeholder', 'Tags'))
-        .append(elem('div')
-            .addClass('section controls')
-            .append(elem('button')
-                .addClass('choose-blog')
-                .attr('data-dropdown', '#choose-blog_' + post.id)
-                .text(Washboard.username))
-            .append(elem('input')
-                .attr('type', 'submit')
-                .attr('value', 'Reblog')
-                .click(function(e) {
-                    //reblog();
-                })
-            )
-        )
-    );
-
-    // Choose blog dropdown
-    var chooseblog = elem('div').attr('id', 'choose-blog_' + post.id).addClass('choose-blog-menu');
-    var bloglist = elem('ul');
-    $.each(Washboard.blogs, function(b, blog) {
-        bloglist.append(elem('li')
-            .append(elem('a')
-                .addClass('js')
-                .text(blog)
-                .click(function(e) {
-                    $('#post_' + post.id).find('.choose-blog').text(blog);
-                })
-            )
-        );
-    });
-    chooseblog.append(bloglist);
-    $('#dropdowns').append(chooseblog);
-    chooseblog.addClass('dropdown').addClass('dropdown-tip');
-    bloglist.addClass('dropdown-menu');
-
-    if (post.can_reply) {
-        
-        // Reply button
-        buttons.append(elem('a')
-            .addClass('reply')
-            .text('Reply')
-            .click(function(e) {
-                var this_post = $('#post_' + post.id);
-                // Open reply box
-                if (!this_post.hasClass('replying')) {
-                    this_post.addClass('replying');
-                    this_post.animate({'margin-bottom': '61px'});
-                    this_post.find('.action-box:not(.reply-box)').fadeOut();
-                    this_post.find('.reply-box').fadeIn();
-                    this_post.find('.reply-box input').click().focus();
-                }
-                // Close reply box
-                else {
-                    this_post.animate({'margin-bottom': '20px'});
-                    this_post.find('.action-box').fadeOut({
-                        complete: function() {
-                            this_post.removeClass('replying');
-                        }
-                    });
-                }
-            })
-        );
-
-        // Reply box
-        postelem.append(elem('div')
-            .addClass('action-box reply-box')
-            .css('display', 'none')
-            .append(elem('input')
-                .attr('type', 'text')
-                .attr('placeholder', 'Reply')
-                .keypress(function(e) {
-                    if ((e.which || e.keyCode || e.charCode) == 13) {
-                        if (e.target.value.length) {
-                            reply(post, e.target.value);
-                        }
-                    }
-                })
-            )
-        );
-    }
-
-    // Info button
-    buttons.append(elem('a')
-        .addClass('info')
-        .text('Info')
-        .attr('data-dropdown', '#info_' + post.id)
-    );
-
-    // Note count
-    if (post.note_count) {
-        buttons.append(elem('a')
-            .addClass('note_count')
-            .text(post.note_count)
-            .click(function(e) {
-                var notes = $('#post_' + post.id).find('.notes');
-                // Open notes
-                if (notes.css('display') != 'block') {
-                    // Calculate the height now so it can be reused later
-                    if (notes.data('height')) {
-                        var height = notes.data('height');
-                    }
-                    else {
-                        notes.css({
-                            'display': 'block',
-                            'position': 'absolute',
-                            'visibility': 'hidden',
-                            'margin-right': '20px',
-                        });
-                        var height = notes.height();
-                        notes.data('height', height);
-                        notes.removeAttr('style');
-                    }
-                    notes.css({
-                        'height': 0,
-                        // Account for margin 'skip' at start of animation
-                        'margin-bottom': '-20px',
-                        'display': 'block',
-                    });
-                    notes.animate({
-                        'height': height,
-                        'margin-bottom': 0,
-                    });
-                }
-                // Close notes
-                else {
-                    notes.animate({
-                        'height': 0,
-                        // Account for margin 'skip' at end of animation
-                        'margin-bottom': '-20px',
-                    }, {complete: function() {
-                        notes.css('display', 'none');
-                    }});
-                }
-            })
-        );
-    }
-
-    postelem.append(buttons);
-
-    // Info dropdown
-    var infomenu = elem('div').attr('id', 'info_' + post.id).addClass('info-menu');
-    var infolist = elem('ul');
-
-    // Timestamp
-    infolist.append(elem('li').append(elem('a')
-        .attr('href', post.post_url)
-        .text('Posted ')
-        .append(elem('abbr')
-            .addClass('timeago')
-            .attr('title', post.date.replace(' ', 'T').replace(' GMT', 'Z'))
-            .text(post.date)
-            .timeago()
-        )));
-
-    // Clickthrough
-    if (post.link_url) {
-        infolist.append(elem('li').append(elem('a')
-            .attr('href', post.link_url)
-            .text('Clickthrough')));
-    }
-
-    // View on Dashboard
-    infolist.append(elem('li').append(elem('a')
-        .attr('href', 'http://www.tumblr.com/dashboard/10/' + (post.id + 1))
-        .attr('target', '_blank')
-        .text('View on Dashboard')));
-
-    // Hide this post
-    infolist.append(elem('li').append(elem('a')
-        .on('click', function(e) {
-            var hide_url = post.reblogged_root_url || post.post_url
-            $.ajax('/hide', {
-                data: {
-                    post: hide_url,
-                    csrfmiddlewaretoken: csrf_token
-                },
-                dataType: 'json',
-                type: 'POST'
-            }).success(function(data) {
-                if (data.meta.status != 200) {
-                    alert(data.meta.msg);
-                }
-            }).fail(function() {
-                alert('The server was unable to hide the post permanently, sorry.');
-            }).always(function() {
-                $('#post_' + post.id).animate({opacity: 0}, 600, function() {
-                    setTimeout(function() {
-                        $('#post_' + post.id).css('display', 'none');
-                    }, 300);
-                });
-            });
-        })
-        .text('Hide this post')
-    ));
-    infomenu.append(infolist);
-    $('#dropdowns').append(infomenu);
-    
-    infomenu.addClass('dropdown').addClass('dropdown-tip');
-    infolist.addClass('dropdown-menu');
-
-    // Notes
-    notes = elem('ol').addClass('notes');
-    if (post.notes) {
-        $.each(post.notes, function(n, note) {
-            noteelem = elem('li')
-                .addClass(note.type)
-                .html(elem('a')
-                    .attr('href', '/blog/' + note.blog_name)
-                    .text(note.blog_name)
-                );
-            if (note.type == 'reply') {
-                noteelem.append(elem('span')
-                    .addClass('reply-text')
-                    .text(note.reply_text)
-                );
-            }
-            else if (note.type == 'photo') {
-                noteelem.append(elem('span').addClass('reply-text'));
-                noteelem.append(elem('img').attr('src', note.photo_url));
-            }
-            notes.append(noteelem);
-        });
-    }
-
-    postelem.append(notes);
-    
-    // Blacklisting
+    // Check blacklist / whitelist
     blacklist_keywords = [];
     whitelist_keywords = [];
     // 0 = show post; 1 = hide with notification; 2 = hide without notification
     blacklist_level = 0;
     whitelist = false;
+    
+    // Find elements to be scanned
+    scan = [];
+    $.each(scan_attributes, function(a, attribute) {
+        if (post[attribute]) {
+            scan.push(post[attribute]);
+        }
+    });
+    // Add tags
+    if (post.tags) {
+        $.each(post.tags, function(t, tag) {
+            scan.push('#' + tag);
+        });
+    }
 
     // Iterate over elements to be scanned
     $.each(scan, function(s, scan_element) {
-        
         // Iterate over the user's rules
         $.each(Washboard.rules, function(r, rule) {
             var kw = rule.keyword;
@@ -812,51 +269,31 @@ function post2html(post) {
     
     // Do not show the post or notification; return now
     if (blacklist_level == 2) {
-        return false;
+        return true;
     }
 
     // Hide the post under a notification
     if (blacklist_level == 1) {
-        postelem.addClass('blacklisted');
-
-        // Insert notification
-        var notification = elem('div').addClass('notification');
-        notification.append(
-            elem('h2').text('Post blacklisted')
-        );
+        
+        notification = {touchscreen: touchscreen};
 
         // Construct notification text
-        notify_text = 'This post contains the keyword' +
+        notification.text = 'This post contains the keyword' +
             plural(blacklist_keywords) + ' ' + kw_list(blacklist_keywords);
         if (whitelist_keywords.length) {
-            notify_text += ', but also matched the whitelisted keyword'
+            notification.text += ', but also matched the whitelisted keyword'
                 + plural(whitelist_keywords) + ' ' + kw_list(whitelist_keywords);
         }
-        notify_text += '.';
+        notification.text += '.';
 
-        notification.append(elem('p').html(notify_text));
-        notification.append(elem('a')
-            .addClass('instructions')
-            .text(
-                touchscreen ? 'Press and hold to unhide'
-                            : 'Click to unhide')
-        );
-        notification.append(elem('div').addClass('progress'));
-
-        // Add listeners for touchscreens
-        if (touchscreen) {
-            postelem.on('touchstart', touchstart);
-            postelem.on('touchend', touchend);
-        }
-        // Default to a simple click listener
-        else {
-            notification.attr('onclick', 'unhide(this)');
-        }
-
-        postelem.append(notification);
+        return notification;
     }
+    
+    // Not blacklisted
+    return false;
+}
 
-    // Check for read-more breaks
+function read_more(postelem) {
     postelem.find('p').contents().filter(function() {
         // Select comment nodes
         return this.nodeType == 8;
@@ -866,7 +303,7 @@ function post2html(post) {
         if (e.nodeValue == ' more ') {
 
             // Replace comment with "Read more" link
-            var more_link = elem('a')
+            var more_link = $(document.createElement('a'))
                     .html('Read more &rarr;')
                     .addClass('read_more js')
                     .on('click', function(e) {
@@ -886,7 +323,7 @@ function post2html(post) {
                 }
                 // Wrap text nodes in <span class="cut under">...</span>
                 else if (sibling.nodeType == 3) {
-                    var span = elem('span')
+                    var span = $(document.createElement('span'))
                         .text(sibling.nodeValue)
                         .addClass('cut under')
                         .get(0);
@@ -905,8 +342,114 @@ function post2html(post) {
             more_link.parent().nextAll().addClass('cut under')
         }
     });
+}
+
+function compile(post) {
     
-    return postelem;
+    // Fix date for timeago()
+    post.date = post.date.replace(' ', 'T').replace(' GMT', 'Z');
+    
+    // Initial context
+    context = {
+        post: post,
+        dashboard: 'http://www.tumblr.com/dashboard/10/' + (post.id + 1),
+        mine: Washboard.blogs.indexOf(post.blog_name) >= 0,
+        hide_url: post.reblogged_root_url || post.post_url
+    };
+
+    // Assemble photoset
+    if (post.type == 'photo') {
+
+        // Get photoset layout, or a pseudo-layout for a single image
+        if (post.photoset_layout) {
+            layout = post.photoset_layout;
+        }
+        else {
+            layout = '1';
+        }
+
+        var rows = [];
+        var row = {height: 700, count: layout[0], photos: []};
+        var last_row = 0;
+
+        // Get the widest photo's width: when showing HR photos, don't make the
+        // post any wider than it needs to be
+        var largest_width = 0;
+        $.each(post.photos, function(ph, photo) {
+            largest_width = Math.max(largest_width, best_fit(photo.alt_sizes, 1280).width);
+        });
+        hr_widths[post.id] = largest_width;
+
+        // Insert each photo
+        $.each(post.photos, function(ph, photo) {
+
+            // Determine which row this photo belongs to
+            var running_total = 0;
+            var running_row = 0;
+            while (running_total <= ph) {
+                running_total += parseInt(layout[running_row]);
+                running_row++;
+            }
+            running_row--;
+
+            // If it's the first photo of a new row, push the previous row and
+            // start a new one
+            if (running_row > last_row) {
+                rows.push(row);
+                // TODO: duplicated default row
+                row = {height: 700, count: layout[running_row], photos: []};
+            }
+            last_row = running_row;
+
+            // Determine optimal photo sizes to load
+            var target_size = optimal_sizes[layout[running_row]];
+            var best_photo = best_fit(photo.alt_sizes, target_size);
+            var hr_photo = best_fit(photo.alt_sizes, window.innerWidth);
+            
+            // Recalculate row height
+            row.height = Math.min(row.height,
+                optimal_sizes[layout[running_row]] / best_photo.width * best_photo.height)
+            row.photos.push({url: best_photo.url, hr_url: hr_photo.url})
+        });
+        rows.push(row);
+        context.rows = rows;
+    }
+
+    // If the quote is plain text, wrap it in a paragraph tag
+    if (post.type == 'quote') {
+        if (post.text.indexOf('<') == -1) {
+            post.text = '<p>' + post.text + '</p>';
+        }
+    }
+
+    // Determine asker's avatar for answer posts
+    if (post.type == 'answer') {
+        context.asking_avatar = (post.asking_name == 'Anonymous') ?
+            'http://assets.tumblr.com/images/anonymous_avatar_24.gif' :
+            ('http://api.tumblr.com/v2/blog/' + post.asking_name + '.tumblr.com/avatar/24');
+    }
+
+    // Assemble tags with URL-safe counterparts
+    context.tags = []
+    $.each(post.tags, function(t, tag) {
+        context.tags.push({
+            tag: tag,
+            safe_tag: encodeURIComponent(tag),
+        });
+    });
+
+    // Insert info menu
+    var info_template = Handlebars.compile($('#info-template').html());
+    var info_html = info_template(context);
+    $('#dropdowns').append(info_html);
+    $('#info_' + post.id).find('.timeago').timeago();
+    
+    // Render post to HTML
+    var inner_template = Handlebars.compile($('#' + post.type + '-template').html());
+    var inner_html = inner_template(context);
+    var post_template = Handlebars.compile($('#post-template').html());
+    context.inner_html = inner_html;
+    return post_template(context);
 }
 
 function dash(data, textStatus, jqXHR) {
@@ -925,13 +468,41 @@ function dash(data, textStatus, jqXHR) {
 
         // Build posts
         $.each(post_list, function(p, post) {
-            var post_elem = post2html(post);
-            if (post_elem == true) {
+            
+            var blacklisted = is_blacklisted(post);
+            
+            // Blacklisted with no notification: skip immediately
+            if (blacklisted == true) {
                 return true;
             }
-            else if (post_elem != false) {
-                $('#middle > div > #posts').append(post_elem);
+
+            // Compile the post's HTML
+            var post_elem = $($.parseHTML(compile(post)));
+            
+            // Add notification if necessary
+            if (blacklisted) {
+                var notification_template = Handlebars.compile(
+                    $('#notification-template').html()
+                );
+                post_elem.append(notification_template(blacklisted));
+                post_elem.addClass('blacklisted');
+                
+                // Add listeners for touchscreens
+                if (touchscreen) {
+                    post_elem.on('touchstart', touchstart);
+                    post_elem.on('touchend', touchend);
+                }
+                // Default to a simple click listener
+                else {
+                    post_elem.on('click', unhide);
+                }
             }
+
+            // Parse read-more breaks
+            read_more(post_elem);
+            
+            // Add to the page
+            $('#posts').append(post_elem);
         });
 
         // Reset "Load more" footer
@@ -1056,14 +627,18 @@ function dashboard(data) {
     apicall(Washboard.endpoint, _data, dash);
 }
 
-function like(data) {
-    var cb = 'liked_' + data.id;
-    var id = data.id;
-    
+function like(id) {
     // Determine whether to like or unlike the post
     endpoint = $('#post_' + id).find('.like').hasClass('liked') ? 'unlike' : 'like';
 
-    apicall(endpoint, data, function(data) {
+    // Assemble parameters
+    parameters = {
+        id: id,
+        reblog_key: $('#post_' + id).data('reblog-key'),
+    }
+    
+    // Send the API request
+    apicall(endpoint, parameters, function(data) {
         if (data.meta.status == 200) {
             $('#post_' + id).find('.like').toggleClass('liked');
         }
@@ -1074,17 +649,110 @@ function like(data) {
     });
 }
 
-function reply(post, reply_text) {
+function reblog(id) {
+    // Create reblog box if it doesn't exist yet
+    if (!$('#reblog_' + id).length) {
+        var this_post = $('#post_' + id);
+        
+        var reblog_source = $('#reblog-template').html();
+        var reblog_template = Handlebars.compile(reblog_source);
+        var reblog_html = reblog_template({
+            id: id,
+            username: Washboard.username,
+        });
+        this_post.after(reblog_html);
+        
+        // Insert blog menu
+        var chooseblog_template = Handlebars.compile($('#chooseblog-template').html());
+        var chooseblog_html = chooseblog_template({
+            id: id,
+            blogs: Washboard.blogs,
+        });
+        $('#dropdowns').append(chooseblog_html);
+    }
+
+    // Locate reblog box
+    var reblog_box = $('#reblog_' + id);
+    
+    // Open if closed
+    if (reblog_box.hasClass('closed')) {
+        // Close any other action boxes that are open
+        $('.action-box').addClass('closed');
+
+        // Calculate box's height for animations
+        if (!reblog_box.attr('style')) {
+            reblog_box.addClass('get-height').removeClass('closed');
+            reblog_box.css('height', reblog_box.height());
+            reblog_box.addClass('closed').removeClass('get-height');
+        }
+        reblog_box.removeClass('closed');
+    }
+    // Close if opened
+    else {
+        reblog_box.addClass('closed');
+    }
+}
+
+function reply(id) {
+    // Create reply box if it doesn't exist yet
+    if (!$('#reply_' + id).length) {
+        var this_post = $('#post_' + id);
+        
+        var reply_source = $('#reply-template').html();
+        var reply_template = Handlebars.compile(reply_source);
+        var reply_html = reply_template({id: id});
+        this_post.after(reply_html);
+    }
+
+    // Locate reply box
+    var reply_box = $('#reply_' + id);
+    
+    // Open if closed
+    if (reply_box.hasClass('closed')) {
+        // Close any other action boxes that are open
+        $('.action-box').addClass('closed');
+
+        // Calculate box's height for animations
+        if (!reply_box.attr('style')) {
+            reply_box.addClass('get-height').removeClass('closed');
+            reply_box.css('height', reply_box.height());
+            reply_box.addClass('closed').removeClass('get-height');
+        }
+        reply_box.removeClass('closed');
+        setTimeout(function() { 
+            reply_box.find('.reply').click().focus();
+        }, 200);
+    }
+    // Close if opened
+    else {
+        reply_box.addClass('closed');
+    }
+}
+
+function reply_keypress(id, e) {
+    if ((e.which || e.keyCode || e.charCode) == 13) {
+        if (e.target.value.length) {
+            submit_reply(id, e.target.value);
+        }
+    }
+}
+
+// also: 'mine' context variable, dropdowns, info button, blacklisting, oh god there's so much left to do
+
+function submit_reply(id, reply_text) {
+    var this_post = $('#post_' + id);
+
     data = {
-        post_id: post.id,
-        reblog_key: post.reblog_key,
-        reply_text: reply_text
+        post_id: id,
+        reblog_key: $('#post_' + id).data('reblog-key'),
+        reply_text: $('#reply_' + id).find('.reply').prop('value'),
     };
     apicall('reply', data, function(data) {
         if (data.meta.status == 200) {
-            var this_post = $('#post_' + post.id);
-            this_post.find('.buttons .reply').click();
-            this_post.find('.reply-box input').prop('value', '');
+            $('#reply_' + id)
+                .addClass('closed')
+                .find('.reply')
+                .prop('value', '');
         }
         else {
             console.log('Reply error');
@@ -1150,15 +818,22 @@ $(function() {
     
     // Initial variables
     posts = [];
+    hr_widths = {};
     behind_by = 0;
     allow_selection = -1;
     unhiding = -1;
     featured_tag = false;
+    scan_attributes = ['reblogged_from_name', 'title', 'body', 'caption',
+        'text', 'source', 'url', 'description', 'label', 'phrase',
+        'asking_name', 'question', 'answer'];
     
     query = URI(location.search).query(true);
     hash = URI('?' + location.hash.slice(1)).query(true);
     session = hash.session || query.session;
-    
+
+    $('#load_more').text('Loading...');
+    dashboard();
+    /*
     // Load session, if present
     if (session) {
         session_data = JSON.parse(localStorage.getItem('session_' + session));
@@ -1209,4 +884,17 @@ $(function() {
     }
         
     save_session_interval = setInterval(save_session, 5000);
+    */
+});
+
+Handlebars.registerHelper("debug", function(optionalValue) {
+  console.log("Current Context");
+  console.log("====================");
+  console.log(this);
+ 
+  if (optionalValue) {
+    console.log("Value");
+    console.log("====================");
+    console.log(optionalValue);
+  }
 });

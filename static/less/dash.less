@@ -212,14 +212,43 @@ noscript p {
 /* reply / reblog boxes */
 
 .action-box {
-    position: absolute;
-    margin: 0;
+    position: relative;
+    max-width: 500px;
+    margin: 0 auto;
     left: 0;
     right: 0;
     background-color: darken(@primary, 36%);
     border: 1px solid darken(@primary, 12%);
     border-radius: 2px;
     box-shadow: inset 0 2px 10px fade(black, 40%);
+    transition: all .5s ease;
+}
+
+.action-box.get-height {
+    position: absolute;
+    height: auto;
+    visibility: hidden;
+    transition: none;
+}
+
+.action-box.closed {
+    height: 0 !important;
+    opacity: 0;
+}
+
+.action-box > * {
+    overflow: hidden;
+}
+
+.action-box .section {
+    border-bottom: 1px solid darken(@primary, 40%);
+    border-top: 1px solid darken(@primary, 25%);
+}
+.action-box .section:first-child {
+    border-top: none;
+}
+.action-box .section:last-child {
+    border-bottom: none;
 }
 
 .action-box input,
@@ -233,6 +262,20 @@ noscript p {
     border: none;
     outline: none;
     .box-sizing-border-box;
+}
+
+.action-box button,
+.action-box input[type=submit] {
+    display: block;
+    width: auto;
+    margin: 5px;
+    padding: 6px;
+    font-size: 14px;
+    color: lighten(@primary, 40%);
+    border: 1px solid darken(@primary, 12%);
+    border-radius: 2px;
+    box-shadow: 0 1px 3px black;
+    .shinybg(darken(@primary, 22%); darken(@primary, 26%); darken(@primary, 30%); darken(@primary, 34%));
 }
 
 .action-box:before,
@@ -256,44 +299,61 @@ noscript p {
     border-right: 6px solid transparent;
 }
 
-.reply-box {
-    bottom: -51px;
+/* These four rules fix the margins when there are one or two closed action boxes.
+   I don't really know how it works. */
+
+.action-box.closed + .action-box {
+    margin-top: 22px;
 }
+
+.post + .action-box.closed {
+    margin-bottom: -24px;
+}
+
+.post + .action-box.closed + .post {
+    margin-top: 22px;
+}
+
+.action-box.closed + .action-box.closed {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+/* Pointers */
 
 .reply-box:before {
     margin-left: -4px;
-    right: 96px;
+    right: 75px;
 }
 
 .reply-box:after {
     margin-left: -2px;
-    right: 98px;
-}
-
-.reblog-box {
-    bottom: -169px;
+    right: 77px;
 }
 
 .reblog-box:before {
     margin-left: -4px;
-    right: 64px;
+    right: 43px;
 }
 
 .reblog-box:after {
     margin-left: -2px;
-    right: 66px;
+    right: 45px;
 }
 
-.reblog-box .section {
-    border-bottom: 1px solid darken(@primary, 40%);
-    border-top: 1px solid darken(@primary, 25%);
+/* reply box */
+
+.reply-box .reply {
+    float: left;
+    padding-right: 60px;
 }
-.reblog-box .section:first-child {
-    border-top: none;
+
+.reply-box input[type=submit] {
+    position: absolute;
+    right: 0;
 }
-.reblog-box .section:last-child {
-    border-bottom: none;
-}
+
+/* reblog box */
 
 .reblog-box .caption {
     display: block;
@@ -302,30 +362,18 @@ noscript p {
     font-family: inherit;
 }
 
-.reblox-box .tags {
-    padding-right: 75px;
-}
-
-.reblog-box .controls .choose-blog,
-.reblog-box .controls input[type=submit] {
-    display: block;
-    width: auto;
-    margin: 5px;
-    padding: 6px;
-    font-size: 14px;
-    border: 1px solid darken(@primary, 12%);
-    border-radius: 2px;
-    box-shadow: 0 1px 3px black;
-    .shinybg(darken(@primary, 22%); darken(@primary, 26%); darken(@primary, 30%); darken(@primary, 34%));
-}
-
-.reblog-box .controls .choose-blog {
-    color: lighten(@primary, 40%);
+.reblog-box .controls .chooseblog {
     float: left;
 }
 
 .reblog-box .controls input[type=submit] {
     float: right;
+}
+
+.reblog-box .controls:after {
+    content: "";
+    display: block;
+    clear: both;
 }
 
 /* Stop long words at the padding, not the edge of the post box */
@@ -350,6 +398,7 @@ noscript p {
 
 .post.photo .photos {
     margin: 10px 0;
+    font-size: 0; // Fixes annoying whitespace layout error
 }
 
 .post.photo .row {
@@ -369,6 +418,14 @@ noscript p {
 
 .post.photo .row a:first-child {
     margin-left: 0;
+}
+
+.row-1:only-child {
+    height: auto !important;
+}
+
+.row-1:only-child img {
+    width: auto;
 }
 
 .row-1 a,
