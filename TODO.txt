@@ -1,0 +1,11 @@
+Fix photoset row heights on small devices
+Fix all dropdown positioning bugs
+Notifications for specifically hidden posts
+Error messages upon failed AJAX requests
+Error handling in views (minimize chances of 500 errors)
+Settings page
+Infinite scrolling
+Title, description, and follow link on blog pages
+Link to open the current page on Tumblr
+Open permalinks within Washboard, not on [blog].tumblr.com
+Separation of logic from presentation for notes
