@@ -59,6 +59,7 @@
             <div id="blogs" class="dropdown dropdown-tip">
                 <ul class="dropdown-menu">
                     <li><a href="/dash">Dashboard</a></li>
+                    <li class="dropdown-divider"></li>
                     {% for blog in request.session.blogs %}
                     <li><a href="/blog/{{ blog }}">{{ blog }}</a></li>
                     {% endfor %}
