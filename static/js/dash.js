@@ -701,6 +701,11 @@ function compile(post) {
         }
     }
 
+    // Find best video size
+    if (post.type == 'video') {
+        context.best_player = best_fit(post.player, Math.min(500, window.innerWidth)).embed_code;
+    }
+
     // Determine asker's avatar for answer posts
     if (post.type == 'answer') {
         context.asking_avatar = (post.asking_name == 'Anonymous') ?
