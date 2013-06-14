@@ -58,7 +58,7 @@ csrf_token = "{{ csrf_token }}";
         {{#if mine}}
         <a class="edit" href="http://www.tumblr.com/edit/{{post.id}}" target="_blank">Edit</a>
         {{else}}
-        <a class="js like" onclick="like({{post.id}})">Like</a>
+        <a class="js like{{#if post.liked}} liked{{/if}}" onclick="like({{post.id}})">Like</a>
         {{/if}}
         <a class="js reblog" onclick="reblog({{post.id}})">Reblog</a>
         {{#if post.can_reply}}
