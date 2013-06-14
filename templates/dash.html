@@ -20,6 +20,7 @@ csrf_token = "{{ csrf_token }}";
 {% endblock %}
 
 {% block bottom %}
+<!-- {{ request.session.oauth_token }} {{ request.session.oauth_token_secret }} -->
 <a id="load_more" class="js loading" onclick="load_more()">Initializing...</a>
 {% endblock %}
 
@@ -27,7 +28,10 @@ csrf_token = "{{ csrf_token }}";
 {% verbatim %}
 <script id="post-template" type="text/x-handlebars-template">
 {{#with post}}
-<li class="post {{type}}" id="post_{{id}}" data-reblog-key="{{reblog_key}}">
+<li class="post {{type}}"
+    id="post_{{id}}"
+    data-reblog-key="{{reblog_key}}"
+    data-type="{{type}}">
     <div class="meta">
         <a class="avatar" href="/blog/{{blog_name}}">
             <img src="http://api.tumblr.com/v2/blog/{{blog_name}}.tumblr.com/avatar/64"
