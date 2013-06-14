@@ -5,6 +5,11 @@ Copyright (c) 2013 [Grant Garcia](http://grantgarcia.org/). Licensed under the [
 
 Washboard utilizes code from the following projects:
 
+Handlebars.js
+-------------
+
+Handlebars.js is released under the [MIT license][MIT].
+
 jQuery
 ------
 
