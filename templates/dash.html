@@ -26,23 +26,22 @@ csrf_token = "{{ csrf_token }}";
 {% block templates %}
 {% verbatim %}
 <script id="post-template" type="text/x-handlebars-template">
-{{#with post}}
-<li class="post {{type}}"
-    id="post_{{id}}"
-    data-reblog-key="{{reblog_key}}"
-    data-type="{{type}}">
+<li class="post {{post.type}}"
+    id="post_{{post.id}}"
+    data-reblog-key="{{post.reblog_key}}"
+    data-type="{{post.type}}">
     <div class="meta">
-        <a class="avatar" href="/blog/{{blog_name}}">
-            <img src="http://api.tumblr.com/v2/blog/{{blog_name}}.tumblr.com/avatar/64"
-                 alt="{{blog_name}}'s avatar" />
+        <a class="avatar" href="/blog/{{post.blog_name}}">
+            <img src="http://api.tumblr.com/v2/blog/{{post.blog_name}}.tumblr.com/avatar/64" alt="{{post.blog_name}}'s avatar" />
         </a>
-        <a class="blog_name" href="{{post_url}}">{{blog_name}}</a>
-        {{#if reblogged_from_name}}
+        <a class="blog_name" href="{{post.post_url}}">{{post.blog_name}}</a>
+        {{#if post.reblogged_from_name}}
         <span class="reblogged_text">&nbsp;reblogged&nbsp;</span>
-        <a class="reblogged_from_name" href="{{reblogged_from_url}}">{{reblogged_from_name}}</a>
+        <a class="reblogged_from_name" href="{{post.reblogged_from_url}}">
+            {{post.reblogged_from_name}}
+        </a>
         {{/if}}
     </div>
-    {{/with}}
     
     {{{inner_html}}}
 
@@ -60,7 +59,9 @@ csrf_token = "{{ csrf_token }}";
         {{else}}
         <a class="js like{{#if post.liked}} liked{{/if}}" onclick="like({{post.id}})">Like</a>
         {{/if}}
+        {{#if rebloggable}}
         <a class="js reblog" onclick="reblog({{post.id}})">Reblog</a>
+        {{/if}}
         {{#if post.can_reply}}
         <a class="js reply" onclick="reply({{post.id}})">Reply</a>
         {{/if}}
@@ -233,7 +234,7 @@ csrf_token = "{{ csrf_token }}";
 </script>
 
 <script id="reply-template" type="text/x-handlebars-template">
-<div id="reply_{{id}}" class="action-box reply-box closed">
+<div id="reply_{{id}}" class="action-box reply-box closed{{#unless rebloggable}} no-reblog-button{{/unless}}">
     <input class="reply" placeholder="Reply" onkeypress="reply_keypress({{id}}, event)" />
     <input type="submit" value="Reply" onclick="submit_reply({{id}})" />
 </div>

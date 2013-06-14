@@ -304,7 +304,10 @@ function reply(id) {
         
         var reply_source = $('#reply-template').html();
         var reply_template = Handlebars.compile(reply_source);
-        var reply_html = reply_template({id: id});
+        var reply_html = reply_template({
+            id: id,
+            rebloggable: !$('#post_' + id).hasClass('answer'),
+        });
         this_post.after(reply_html);
     }
 
@@ -686,7 +689,8 @@ function compile(post) {
         post: post,
         dashboard: 'http://www.tumblr.com/dashboard/10/' + (post.id + 1),
         mine: Washboard.blogs.indexOf(post.blog_name) >= 0,
-        hide_url: post.reblogged_root_url || post.post_url
+        hide_url: post.reblogged_root_url || post.post_url,
+        rebloggable: true,
     };
 
     // Create photoset layout
@@ -706,11 +710,13 @@ function compile(post) {
         context.best_player = best_fit(post.player, Math.min(500, window.innerWidth)).embed_code;
     }
 
-    // Determine asker's avatar for answer posts
     if (post.type == 'answer') {
+        // Determine asker's avatar for answer posts
         context.asking_avatar = (post.asking_name == 'Anonymous') ?
             'http://assets.tumblr.com/images/anonymous_avatar_24.gif' :
             ('http://api.tumblr.com/v2/blog/' + post.asking_name + '.tumblr.com/avatar/24');
+        // Don't show reblog button
+        context.rebloggable = false;
     }
 
     // Assemble tags with URL-safe counterparts
