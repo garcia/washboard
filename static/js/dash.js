@@ -653,7 +653,8 @@ function photoset(post, context) {
             
             // Recalculate row height
             row.height = Math.min(row.height,
-                optimal_sizes[layout[running_row]] / best_photo.width * best_photo.height)
+                optimal_sizes[layout[running_row]] / best_photo.width * best_photo.height,
+                (window.innerWidth - 40) / best_photo.width * best_photo.height)
             row.photos.push({url: best_photo.url, hr_url: hr_photo.url})
         });
         rows.push(row);
