@@ -33,7 +33,7 @@ models.signals.post_save.connect(create_user_profile, sender=User)
 
 class Rule(models.Model):
     user = models.ForeignKey(User)
-    keyword = LowerCaseCharField(max_length=256)
+    keyword = LowerCaseCharField(max_length=128)
     blacklist = models.BooleanField(default=True)
     show_notification = models.BooleanField(default=True)
     whole_word = models.BooleanField(default=False)
