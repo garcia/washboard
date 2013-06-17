@@ -266,5 +266,9 @@ csrf_token = "{{ csrf_token }}";
 </div>
 </script>
 
+<script id="message-template" type="text/x-handlebars-template">
+<li class="message {{type}}" onclick="dismiss(this)">{{{message}}}</li>
+</script>
+
 {% endverbatim %}
 {% endblock %}

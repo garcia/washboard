@@ -78,11 +78,13 @@ endpoints = {
     },
 }
 
-def api_error(status, msg):
+def api_error(status, msg, http_status=None):
+    if not http_status: http_status = status
     return HttpResponse(json.dumps({'meta': {
         'status': str(status),
         'msg': msg,
-    }}), content_type='application/json')
+    }}), content_type='application/json', status=http_status)
+
 
 def main(request, data_=None):
     if not request.user.is_authenticated():
@@ -94,7 +96,7 @@ def main(request, data_=None):
     # Temporary hack
     if request.method != 'POST':
         request.POST = request.GET
-        
+
     req = Tumblr(
         settings.OAUTH_CONSUMER_KEY,
         settings.OAUTH_SECRET_KEY,
@@ -110,6 +112,17 @@ def main(request, data_=None):
     else:
         return api_error(500, 'Invalid endpoint')
 
+    # Raise an error; useful for debugging
+    if request.POST.get('endpoint') == request.POST.get('throw_error'):
+        if request.POST.get('error_type') == 'json':
+            return api_error(400, 'Invalid request')
+        elif request.POST.get('error_type') == 'tumblr':
+            return api_error(400, 'Invalid request', 200)
+        elif request.POST.get('error_type') == 'js':
+            return api_error(999, 'JavaScript error', 200)
+        else:
+            raise ValueError('throw_error')
+        
     # Get required parameters from POST form
     data = {}
     for parameter in endpoint['parameters']:

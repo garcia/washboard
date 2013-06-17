@@ -1,4 +1,26 @@
 /******************
+ * Notifications  *
+ ******************/
+
+function notify(message, type) {
+    if (!$('#messages').length) {
+        $('body').append('<ul id="messages" class="ajax-messages"></ul>');
+    }
+    if (!type) {
+        type = 'error';
+    }
+    var message_source = $('#message-template').html();
+    var message_template = Handlebars.compile(message_source);
+    var message_html = message_template({message: message, type: type});
+    $('#messages').append(message_html);
+    // TODO: fade in
+}
+
+function dismiss(elem) {
+    $(elem).fadeOut();
+}
+
+/******************
  * Blacklisting   *
  ******************/
 
@@ -165,14 +187,21 @@ function like(id) {
     }
     
     // Send the API request
-    apicall(endpoint, parameters, function(data) {
-        if (data.meta.status == 200) {
-            $('#post_' + id).find('.like').toggleClass('liked');
-        }
-        else {
-            console.log('Like error');
-            console.log(data);
-        }
+    apicall(endpoint, parameters, {
+        success: function(data) {
+            if (data.meta.status == 200) {
+                $('#post_' + id).find('.like').toggleClass('liked');
+            }
+            else {
+                console.log('Like error');
+                console.log(data);
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
+        },
     });
 }
 
@@ -284,17 +313,24 @@ function submit_reblog(id, reblog_text) {
         blog: reblog_box.find('.chooseblog').text(),
     };
 
-    apicall('reblog', data, function(data) {
-        if (data.meta.status == 201) {
-            var reblog_elem = $('#reblog_' + id);
-            reblog_elem.addClass('closed');
-            reblog_elem.find('input[type!=submit]').val('');
-            reblog_elem.find('textarea').val('');
-        }
-        else {
-            console.log('Reblog error');
-            console.log(data);
-        }
+    apicall('reblog', data, {
+        success: function(data) {
+            if (data.meta.status == 201) {
+                var reblog_elem = $('#reblog_' + id);
+                reblog_elem.addClass('closed');
+                reblog_elem.find('input[type!=submit]').val('');
+                reblog_elem.find('textarea').val('');
+            }
+            else {
+                console.log('Reblog error');
+                console.log(data);
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
+        },
     });
 }
 
@@ -355,17 +391,24 @@ function submit_reply(id, reply_text) {
         reblog_key: $('#post_' + id).data('reblog-key'),
         reply_text: $('#reply_' + id).find('.reply').val(),
     };
-    apicall('reply', data, function(data) {
-        if (data.meta.status == 200) {
-            $('#reply_' + id)
-                .addClass('closed')
-                .find('.reply')
-                .val('');
-        }
-        else {
-            console.log('Reply error');
-            console.log(data);
-        }
+    apicall('reply', data, {
+        success: function(data) {
+            if (data.meta.status == 200) {
+                $('#reply_' + id)
+                    .addClass('closed')
+                    .find('.reply')
+                    .val('');
+            }
+            else {
+                console.log('Reply error');
+                console.log(data);
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
+        },
     });
 }
 
@@ -743,110 +786,128 @@ function compile(post) {
 }
 
 function dash(data, textStatus, jqXHR) {
-    try {
-        // Global variable for debugging purposes
-        d = data;
+    // Global variable for debugging purposes
+    d = data;
+    
+    // Some methods return posts in data.response.posts,
+    // others in data.response
+    if ('posts' in data.response) {
+        post_list = data.response.posts;
+    }
+    else {
+        post_list = data.response;
+    }
+
+    // Build posts
+    $.each(post_list, function(p, post) {
         
-        // Some methods return posts in data.response.posts,
-        // others in data.response
-        if ('posts' in data.response) {
-            post_list = data.response.posts;
-        }
-        else {
-            post_list = data.response;
+        var blacklisted = is_blacklisted(post);
+        
+        // Blacklisted with no notification: skip immediately
+        if (blacklisted == true) {
+            return true;
         }
 
-        // Build posts
-        $.each(post_list, function(p, post) {
+        // Compile the post's HTML
+        var post_elem = $($.parseHTML(compile(post)));
+        
+        // Add notification if necessary
+        if (blacklisted) {
+            var notification_template = Handlebars.compile(
+                $('#notification-template').html()
+            );
+            post_elem.append(notification_template(blacklisted));
+            post_elem.addClass('blacklisted');
             
-            var blacklisted = is_blacklisted(post);
-            
-            // Blacklisted with no notification: skip immediately
-            if (blacklisted == true) {
-                return true;
+            // Add listeners for touchscreens
+            if (touchscreen) {
+                post_elem.on('touchstart', touchstart);
+                post_elem.on('touchend', touchend);
             }
-
-            // Compile the post's HTML
-            var post_elem = $($.parseHTML(compile(post)));
-            
-            // Add notification if necessary
-            if (blacklisted) {
-                var notification_template = Handlebars.compile(
-                    $('#notification-template').html()
-                );
-                post_elem.append(notification_template(blacklisted));
-                post_elem.addClass('blacklisted');
-                
-                // Add listeners for touchscreens
-                if (touchscreen) {
-                    post_elem.on('touchstart', touchstart);
-                    post_elem.on('touchend', touchend);
-                }
-                // Default to a simple click listener
-                else {
-                    post_elem.on('click', unhide);
-                }
+            // Default to a simple click listener
+            else {
+                post_elem.on('click', unhide);
             }
-
-            // Parse read-more breaks
-            read_more(post_elem);
-            
-            // Add to the page
-            $('#posts').append(post_elem);
-            
-            // Insert info menu
-            var info_template = Handlebars.compile($('#info-template').html());
-            var info_html = info_template(context);
-            $('#dropdowns').append(info_html);
-            $('#info_' + post.id).find('.timeago').timeago();
-        });
-
-        // Reset "Load more" footer
-        if ($('#load_more').hasClass('loading')) {
-            $('#load_more').text('Load more');
-            $('#load_more').removeClass('loading');
         }
 
-        // Convert new audio elements to MediaElement players
-        // This has to be done after they've been inserted into the document
-        $('audio.new').mediaelementplayer({
-            audioWidth: '100%',
-            audioHeight: 30,
-            startVolume: 0.8,
-            loop: false,
-            enableAutosize: true,
-            features: ['playpause', 'progress', 'current', 'duration', 'tracks', 'volume'],
-            iPadUseNativeControls: false,
-            iPhoneUseNativeControls: true,
-            AndroidUseNativeControls: false
-        });
-        $('audio.new').removeClass('new');
+        // Parse read-more breaks
+        read_more(post_elem);
+        
+        // Add to the page
+        $('#posts').append(post_elem);
+        
+        // Insert info menu
+        var info_template = Handlebars.compile($('#info-template').html());
+        var info_html = info_template(context);
+        $('#dropdowns').append(info_html);
+        $('#info_' + post.id).find('.timeago').timeago();
+    });
+
+    // Reset "Load more" footer
+    if ($('#load_more').hasClass('loading')) {
+        $('#load_more').text('Load more');
+        $('#load_more').removeClass('loading');
     }
-    catch (e) {
-        load_more_error();
-        console.log(e.stack);
-    }
+
+    // Convert new audio elements to MediaElement players
+    // This has to be done after they've been inserted into the document
+    $('audio.new').mediaelementplayer({
+        audioWidth: '100%',
+        audioHeight: 30,
+        startVolume: 0.8,
+        loop: false,
+        enableAutosize: true,
+        features: ['playpause', 'progress', 'current', 'duration', 'tracks', 'volume'],
+        iPadUseNativeControls: false,
+        iPhoneUseNativeControls: true,
+        AndroidUseNativeControls: false
+    });
+    $('audio.new').removeClass('new');
 }
 
 /******************
  * API AJAX calls *
  ******************/
 
-function apicall(endpoint, data, callback) {
+function apicall(endpoint, data, ajaxdata) {
     var _data = $.extend(data, {
         csrfmiddlewaretoken: csrf_token,
         endpoint: endpoint,
     });
     _data = $.extend(Washboard.parameters, _data);
-    console.log(_data);
-    $.ajax({
+    var _ajaxdata = $.extend(ajaxdata, {
         type: 'POST',
         url: '/api',
         data: _data,
-        success: callback,
-        error: load_more_error,
         dataType: 'json',
     });
+    console.log(_ajaxdata);
+    
+    /* Convert Tumblr errors (which look successful) to HTTP errors */
+    var success = ajaxdata.success || function() {};
+    _ajaxdata.success = function(data, textStatus, jqXHR) {
+        try {
+            if (data.meta.status == 999) {
+                raise.an.error;
+            }
+            if (data.meta.status >= 400) {
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(data);
+                jqXHR.real_status = data.meta.status;
+                return ajaxdata.error(jqXHR, textStatus);
+            }
+            else {
+                return success(data, textStatus, jqXHR);
+            }
+        }
+        catch (e) {
+            console.log(e.stack);
+            notify('Whoops! Washboard just broke. Please <a href="mailto:admin@washboard.ws">contact us</a> if this keeps happening.', 'error');
+            // TODO: easy user access to the stack trace, perhaps?
+        }
+    }
+    $.ajax(_ajaxdata);
 }
 
 function dashboard(data) {
@@ -854,15 +915,25 @@ function dashboard(data) {
         reblog_info: 'true',
         notes_info: 'true'
     }, data);
-    apicall(Washboard.endpoint, _data, dash);
+    apicall(Washboard.endpoint, _data, {success: dash, error: load_more_error});
 }
 
 /******************
  * Load more      *
  ******************/
 
-function load_more_error() {
-    $('#load_more').text('There was an error while loading your posts. Try again?');
+function load_more_error(jqXHR, textStatus, errorThrown) {
+    var error_class = ~~(jqXHR.status / 100);
+    var who = 'Tumblr';
+    var status_code = jqXHR.real_status;
+
+    if (error_class > 2) {
+        who = 'Washboard';
+        status_code = jqXHR.status;
+    }
+
+    $('#load_more').text(who + ' encountered an error (' + status_code +
+        ') while loading your posts. Click to retry.');
     $('#load_more').removeClass('loading');
 }
 
@@ -921,6 +992,12 @@ $(function() {
     scan_attributes = ['reblogged_from_name', 'title', 'body', 'caption',
         'text', 'source', 'url', 'description', 'label', 'phrase',
         'asking_name', 'question', 'answer', 'source_url'];
+
+    hash = URI('?' + location.hash.slice(1)).query(true);
+    if (hash.throw_error) {
+        Washboard.parameters.throw_error = hash.throw_error;
+        Washboard.parameters.error_type = hash.error_type;
+    }
     
     $('#load_more').text('Loading...');
     dashboard();
