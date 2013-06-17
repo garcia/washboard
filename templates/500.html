@@ -1,6 +1,12 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/less" href="{% static "less/error.less" %}" />
+{% endblock %}
 
 {% block content %}
 <h1>500</h1>
 <p>The server messed up while processing your request. Sorry about that.</p>
+<p>You should probably <a href="mailto:admin@washboard.ws">contact us</a> if this keeps happening.</p>
 {% endblock %}
