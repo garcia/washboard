@@ -20,6 +20,19 @@ function dismiss(elem) {
     $(elem).fadeOut();
 }
 
+function error_message(jqXHR, doing) {
+    var error_class = ~~(jqXHR.status / 100);
+    var who = 'Tumblr';
+    var status_code = jqXHR.real_status;
+
+    if (error_class > 2) {
+        who = 'Washboard';
+        status_code = jqXHR.status;
+    }
+
+    return (who + ' encountered an error (' + status_code + ') while ' + doing + '.');
+}
+
 /******************
  * Blacklisting   *
  ******************/
@@ -198,9 +211,7 @@ function like(id) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR);
-            console.log(textStatus);
-            console.log(errorThrown);
+            notify(error_message(jqXHR, 'liking the post'), 'warning');
         },
     });
 }
@@ -327,9 +338,7 @@ function submit_reblog(id, reblog_text) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR);
-            console.log(textStatus);
-            console.log(errorThrown);
+            notify(error_message(jqXHR, 'reblogging the post'), 'warning');
         },
     });
 }
@@ -405,9 +414,7 @@ function submit_reply(id, reply_text) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR);
-            console.log(textStatus);
-            console.log(errorThrown);
+            notify(error_message(jqXHR, 'replying to the post'), 'warning');
         },
     });
 }
@@ -915,27 +922,18 @@ function dashboard(data) {
         reblog_info: 'true',
         notes_info: 'true'
     }, data);
-    apicall(Washboard.endpoint, _data, {success: dash, error: load_more_error});
+    apicall(Washboard.endpoint, _data, {
+        success: dash,
+        error: function(jqXHR, textStatus, errorThrown) {
+            $('#load_more').text(error_message(jqXHR, 'loading your posts') + ' Click to retry.');
+            $('#load_more').removeClass('loading');
+        },
+    });
 }
 
 /******************
  * Load more      *
  ******************/
-
-function load_more_error(jqXHR, textStatus, errorThrown) {
-    var error_class = ~~(jqXHR.status / 100);
-    var who = 'Tumblr';
-    var status_code = jqXHR.real_status;
-
-    if (error_class > 2) {
-        who = 'Washboard';
-        status_code = jqXHR.status;
-    }
-
-    $('#load_more').text(who + ' encountered an error (' + status_code +
-        ') while loading your posts. Click to retry.');
-    $('#load_more').removeClass('loading');
-}
 
 function load_more() {
     if (Washboard.well_ordered || !featured_tag) {
