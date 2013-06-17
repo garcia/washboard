@@ -1,4 +1,3 @@
-Fix all dropdown positioning bugs
 Notifications for specifically hidden posts
 Error messages upon failed AJAX requests
 Error handling in views (minimize chances of 500 errors)

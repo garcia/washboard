@@ -1,4 +1,5 @@
 @import "washboard.less";
+@contentwidth: 540px;
 
 .transition(@prop; @duration; @timing-function) {
     -webkit-transition: @arguments;
@@ -52,7 +53,7 @@ noscript p {
 /* nav */
 
 #top #nav {
-    width: 500px !important;
+    width: 540px !important;
 }
 
 /* posts */
@@ -869,9 +870,13 @@ noscript p {
         width: 100% !important;
     }
     
-    #menu {
+    #top .dropdown {
         right: 0 !important;
-        top: 32px !important;
+        font-size: 14px;
+    }
+
+    #top .dropdown-menu {
+        margin-left: -20px;
     }
     
     .post,
