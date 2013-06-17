@@ -7,3 +7,5 @@ Title, description, and follow link on blog pages
 Link to open the current page on Tumblr
 Open permalinks within Washboard, not on [blog].tumblr.com
 Separation of logic from presentation for notes
+Fix footer + content borders on /rules, /settings, and error pages
+Fade in AJAX notifications
