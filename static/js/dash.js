@@ -34,11 +34,18 @@ function plural(array) {
 }
 
 function is_blacklisted(post) {
+    notification = {touchscreen: touchscreen};
 
     // Check if this post was specifically hidden
     for (var hp = 0; hp < Washboard.hidden_posts.length; hp++) {
         if ((post.reblogged_root_url || post.post_url) == Washboard.hidden_posts[hp].post) {
-            return true;
+            if (Washboard.hidden_posts[hp].show_notification) {
+                notification.text = 'You chose to hide this post.';
+                return notification;
+            }
+            else {
+                return true;
+            }
         }
     }
     
@@ -126,8 +133,6 @@ function is_blacklisted(post) {
 
     // Hide the post under a notification
     if (blacklist_level == 1) {
-        
-        notification = {touchscreen: touchscreen};
 
         // Construct notification text
         notification.text = 'This post contains the keyword' +
