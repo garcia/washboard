@@ -90,12 +90,8 @@ def main(request, data_=None):
     if not request.user.is_authenticated():
         return api_error(401, 'Not authorized')
 
-    #if request.method != 'POST':
-    #    return api_error(500, 'Invalid request method')
-
-    # Temporary hack
     if request.method != 'POST':
-        request.POST = request.GET
+        return api_error(401, 'Invalid request method')
 
     req = Tumblr(
         settings.OAUTH_CONSUMER_KEY,
@@ -105,10 +101,8 @@ def main(request, data_=None):
     )
     
     # Get endpoint information
-    if 'endpoint' not in request.POST:
-        return api_error(500, 'No endpoint')
-    if request.POST['endpoint'] in endpoints:
-        endpoint = endpoints[request.POST['endpoint']]
+    if request.POST.get('endpoint') in endpoints:
+        endpoint = endpoints[request.POST.get('endpoint')]
     else:
         return api_error(500, 'Invalid endpoint')
 
@@ -142,7 +136,6 @@ def main(request, data_=None):
     # Add API key if required
     if endpoint['api_key']:
         data['api_key'] = settings.OAUTH_CONSUMER_KEY
-        #data['api_key'] = "w9rn1oBFMV1Fv1xD0hFAkkZ9FJQA1LTfynnmNiQxGDoXRALRmC"
 
     qs = '&'.join('='.join(urllib.quote(str(p)) for p in pair) for pair in data.items())
     
@@ -150,11 +143,5 @@ def main(request, data_=None):
         response = req.request_json('%s?%s' % (url, qs), endpoint['method'])
     else:
         response = req.request_json(url, endpoint['method'], qs)
-
-    response['washboard'] = {
-        'endpoint': endpoint,
-        'url': url,
-        'data': data,
-    }
     
     return HttpResponse(json.dumps(response), content_type='application/json')
