@@ -202,13 +202,7 @@ function like(id) {
     // Send the API request
     apicall(endpoint, parameters, {
         success: function(data) {
-            if (data.meta.status == 200) {
-                $('#post_' + id).find('.like').toggleClass('liked');
-            }
-            else {
-                console.log('Like error');
-                console.log(data);
-            }
+            $('#post_' + id).find('.like').toggleClass('liked');
         },
         error: function(jqXHR, textStatus, errorThrown) {
             notify(error_message(jqXHR, 'liking the post'), 'warning');
@@ -326,16 +320,11 @@ function submit_reblog(id, reblog_text) {
 
     apicall('reblog', data, {
         success: function(data) {
-            if (data.meta.status == 201) {
-                var reblog_elem = $('#reblog_' + id);
-                reblog_elem.addClass('closed');
-                reblog_elem.find('input[type!=submit]').val('');
-                reblog_elem.find('textarea').val('');
-            }
-            else {
-                console.log('Reblog error');
-                console.log(data);
-            }
+            var reblog_elem = $('#reblog_' + id);
+            reblog_elem.addClass('closed');
+            reblog_elem.find('input[type!=submit]').val('');
+            reblog_elem.find('textarea').val('');
+            $('#post_' + id).find('.buttons .reblog').addClass('done');
         },
         error: function(jqXHR, textStatus, errorThrown) {
             notify(error_message(jqXHR, 'reblogging the post'), 'warning');
@@ -402,16 +391,11 @@ function submit_reply(id, reply_text) {
     };
     apicall('reply', data, {
         success: function(data) {
-            if (data.meta.status == 200) {
-                $('#reply_' + id)
-                    .addClass('closed')
-                    .find('.reply')
-                    .val('');
-            }
-            else {
-                console.log('Reply error');
-                console.log(data);
-            }
+            $('#reply_' + id)
+                .addClass('closed')
+                .find('.reply')
+                .val('');
+            $('#post_' + id).find('.buttons .reply').addClass('done');
         },
         error: function(jqXHR, textStatus, errorThrown) {
             notify(error_message(jqXHR, 'replying to the post'), 'warning');
