@@ -878,9 +878,11 @@ function apicall(endpoint, data, ajaxdata) {
     var success = ajaxdata.success || function() {};
     _ajaxdata.success = function(data, textStatus, jqXHR) {
         try {
+            // Returned if error_type = js
             if (data.meta.status == 999) {
                 raise.an.error;
             }
+            // Tumblr error, or error_type = tumblr
             if (data.meta.status >= 400) {
                 console.log(jqXHR);
                 console.log(textStatus);
@@ -888,14 +890,15 @@ function apicall(endpoint, data, ajaxdata) {
                 jqXHR.real_status = data.meta.status;
                 return ajaxdata.error(jqXHR, textStatus);
             }
+            // Success
             else {
                 return success(data, textStatus, jqXHR);
             }
         }
+        // Print the whole stack before calling window.onerror
         catch (e) {
             console.log(e.stack);
-            notify('Whoops! Washboard just broke. Please <a href="mailto:admin@washboard.ws">contact us</a> if this keeps happening.', 'error');
-            // TODO: easy user access to the stack trace, perhaps?
+            throw e;
         }
     }
     $.ajax(_ajaxdata);
@@ -960,8 +963,19 @@ function save_session() {
  * Initialization *
  ******************/
 
-$(function() {
+function error_handler(msg, url, line) {
+    try {
+        console.log({msg: msg, url: url, line: line});
+        notify('Whoops! Washboard just broke. Please <a href="mailto:admin@washboard.ws">contact us</a> if this keeps happening.', 'error');
+    }
+    // Prevent infinite looping
+    catch (e) {
+        alert('Whoops! Washboard just broke. Please contact us at admin@washboard.ws if this keeps happening.');
+    }
+}
 
+$(function() {
+    window.onerror = error_handler;
     scale = Math.min(500, window.innerWidth) / 500;
     optimal_sizes = {'1': 500 * scale, '2': 245 * scale, '3': 160 * scale};
     touchscreen = 'ontouchstart' in window;
