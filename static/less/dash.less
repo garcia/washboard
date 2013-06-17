@@ -158,8 +158,9 @@ noscript p {
     cursor: pointer;
 }
 
-.buttons .note_count {
-    margin-top: 0;
+.buttons .note_count,
+.buttons .source {
+    margin: 0;
     width: auto;
     float: left;
     text-indent: 0;
@@ -168,6 +169,18 @@ noscript p {
 
 .buttons .note_count:after {
     content: " notes";
+}
+
+.buttons .source {
+    font-weight: normal;
+    text-decoration: none;
+}
+
+.note_count + .source:before {
+    content: "\00a0\b7\00a0";
+}
+.note_count + .source:hover:before {
+    opacity: .625; // counteracts increased opacity on hover
 }
 
 .buttons a:hover {
@@ -307,7 +320,7 @@ noscript p {
 }
 
 /* These four rules fix the margins when there are one or two closed action boxes.
-   I don't really know how it works. */
+   I don"t really know how it works. */
 
 .action-box.closed + .action-box {
     margin-top: 22px;
@@ -638,7 +651,7 @@ noscript p {
 }
 
 .question:after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: -10px;
     left: 25px;

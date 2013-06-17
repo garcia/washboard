@@ -69,6 +69,9 @@ csrf_token = "{{ csrf_token }}";
         {{#if post.note_count}}
         <a class="js note_count" onclick="notes({{post.id}})">{{post.note_count}}</a>
         {{/if}}
+        {{#if post.source_url}}
+        <a class="source" href="{{post.source_url}}" target="_blank">{{post.source_title}}</a>
+        {{/if}}
     </div>
 
     {{#if post.notes}}

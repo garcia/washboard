@@ -920,7 +920,7 @@ $(function() {
     featured_tag = false;
     scan_attributes = ['reblogged_from_name', 'title', 'body', 'caption',
         'text', 'source', 'url', 'description', 'label', 'phrase',
-        'asking_name', 'question', 'answer'];
+        'asking_name', 'question', 'answer', 'source_url'];
     
     $('#load_more').text('Loading...');
     dashboard();
