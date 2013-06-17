@@ -161,8 +161,13 @@ noscript p {
 .buttons .note_count {
     margin-top: 0;
     width: auto;
+    float: left;
     text-indent: 0;
     font-weight: bold;
+}
+
+.buttons .note_count:after {
+    content: " notes";
 }
 
 .buttons a:hover {
