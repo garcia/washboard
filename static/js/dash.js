@@ -850,7 +850,7 @@ function dash(data, textStatus, jqXHR) {
         enableAutosize: true,
         features: ['playpause', 'progress', 'current', 'duration', 'tracks', 'volume'],
         iPadUseNativeControls: false,
-        iPhoneUseNativeControls: true,
+        iPhoneUseNativeControls: false,
         AndroidUseNativeControls: false
     });
     $('audio.new').removeClass('new');
