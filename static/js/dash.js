@@ -11,7 +11,11 @@ function notify(message, type) {
     }
     var message_source = $('#message-template').html();
     var message_template = Handlebars.compile(message_source);
-    var message_html = message_template({message: message, type: type});
+    var message_html = message_template({
+        message: message,
+        type: type,
+        touchscreen: touchscreen,
+    });
     $('#messages').append(message_html);
     // TODO: fade in
 }
@@ -30,7 +34,12 @@ function error_message(jqXHR, doing) {
         status_code = jqXHR.status;
     }
 
-    return (who + ' encountered an error (' + status_code + ') while ' + doing + '.');
+    what_happened = 'encountered an error (' + status_code + ') while ' + doing;
+    if (status_code == 404) {
+        what_happened = 'couldn\'t find the page you requested';
+    }
+
+    return who + ' ' + what_happened + '.';
 }
 
 /******************
@@ -845,10 +854,7 @@ function dash(data, textStatus, jqXHR) {
     });
 
     // Reset "Load more" footer
-    if ($('#load_more').hasClass('loading')) {
-        $('#load_more').text('Load more');
-        $('#load_more').removeClass('loading');
-    }
+    done_loading('Load more');
 
     // Convert new audio elements to MediaElement players
     // This has to be done after they've been inserted into the document
@@ -871,6 +877,8 @@ function dash(data, textStatus, jqXHR) {
  ******************/
 
 function apicall(endpoint, data, ajaxdata) {
+    parse_hash();
+
     var _data = $.extend(data, {
         csrfmiddlewaretoken: csrf_token,
         endpoint: endpoint,
@@ -908,7 +916,7 @@ function apicall(endpoint, data, ajaxdata) {
         // Print the whole stack before calling window.onerror
         catch (e) {
             console.log(e.stack);
-            if (debug) {
+            if (hash.debug) {
                 notify(e.stack.replace(/\n/g, '<br />'));
             }
             throw e;
@@ -925,8 +933,11 @@ function dashboard(data) {
     apicall(Washboard.endpoint, _data, {
         success: dash,
         error: function(jqXHR, textStatus, errorThrown) {
-            $('#load_more').text(error_message(jqXHR, 'loading your posts') + ' Click to retry.');
-            $('#load_more').removeClass('loading');
+            var empty_source = $('#empty-template').html();
+            var empty_template = Handlebars.compile(empty_source);
+            var empty_html = empty_template({message: error_message(jqXHR, 'loading your posts')});
+            $('#posts').append(empty_html);
+            done_loading((touchscreen ? 'Tap' : 'Click') + ' to retry.');
         },
     });
 }
@@ -951,6 +962,12 @@ function load_more() {
     $('#load_more').addClass('loading');
 }
 
+function done_loading(message) {
+    var load_more = $('#load_more');
+    load_more.text(message);
+    load_more.removeClass('loading');
+}
+
 /******************
  * Sessions       *
  ******************/
@@ -973,16 +990,19 @@ function save_session() {
 }
 
 /******************
- * Initialization *
+ * Debugging      *
  ******************/
 
 function error_handler(msg, url, line) {
     try {
         console.log({msg: msg, url: url, line: line});
-        notify('Whoops! Washboard just broke. Please <a href="mailto:admin@washboard.ws">contact us</a> if this keeps happening.', 'error');
-        if (debug) {
+        if ($('#load_more').hasClass('loading')) {
+            done_loading((touchscreen ? 'Tap' : 'Click') + ' to retry.');
+        }
+        if (hash.debug) {
             notify('Debug info:<br/>' + msg + '<br/>' + url + '<br/>' + line);
         }
+        notify('Whoops! Washboard just broke. Please <a href="mailto:admin@washboard.ws">contact us</a> if this keeps happening.', 'error');
     }
     // Prevent infinite looping
     catch (e) {
@@ -990,33 +1010,40 @@ function error_handler(msg, url, line) {
     }
 }
 
+function parse_hash() {
+    hash = URI('?' + location.hash.slice(1)).query(true);
+    if (hash.throw_error) {
+        Washboard.parameters.throw_error = hash.throw_error;
+        Washboard.parameters.error_type = hash.error_type;
+    }
+    else {
+        delete Washboard.parameters.throw_error;
+        delete Washboard.parameters.error_type;
+    }
+}
+
+/******************
+ * Initialization *
+ ******************/
+
 $(function() {
-    window.onerror = error_handler;
-    scale = Math.min(500, window.innerWidth) / 500;
-    optimal_sizes = {'1': 500 * scale, '2': 245 * scale, '3': 160 * scale};
-    touchscreen = 'ontouchstart' in window;
     posts = [];
     hr_widths = {};
     behind_by = 0;
     allow_selection = -1;
     unhiding = -1;
     featured_tag = false;
-    debug = false;
+    hash = {};
     scan_attributes = ['reblogged_from_name', 'title', 'body', 'caption',
         'text', 'source', 'url', 'description', 'label', 'phrase',
         'asking_name', 'question', 'answer', 'source_url'];
-
-    hash = URI('?' + location.hash.slice(1)).query(true);
-    if (hash.throw_error) {
-        Washboard.parameters.throw_error = hash.throw_error;
-        Washboard.parameters.error_type = hash.error_type;
-    }
-    if (hash.debug) {
-        debug = true;
-    }
     
-    $('#load_more').text('Loading...');
-    dashboard();
+    window.onerror = error_handler;
+    scale = Math.min(500, window.innerWidth) / 500;
+    optimal_sizes = {'1': 500 * scale, '2': 245 * scale, '3': 160 * scale};
+    touchscreen = 'ontouchstart' in window;
+
+    load_more();
 
     //if (!Washboard.profile.sessions) {
         return;

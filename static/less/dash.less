@@ -64,6 +64,19 @@ noscript p {
     overflow-x: hidden;
 }
 
+#posts > .empty {
+    display: block;
+    width: 500px;
+    margin: 10px auto;
+    padding: 80px 40px;
+    text-align: center;
+    color: lighten(@primary, 8%);
+    font-family: "Signika";
+    font-size: 24px;
+    border: 6px dashed darken(@primary, 12%);
+    border-radius: 6px;
+}
+
 .post {
     position: relative;
     width: 500px;
@@ -889,9 +902,7 @@ noscript p {
     color: inherit;
 }
 
-#messages.ajax-messages li:after {
-    content: " Click to dismiss";
-    display: inline-block;
+#messages.ajax-messages li span {
     margin-left: 10px;
     font-size: 75%;
     opacity: .5;

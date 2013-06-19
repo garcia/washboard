@@ -275,7 +275,14 @@ csrf_token = "{{ csrf_token }}";
 </script>
 
 <script id="message-template" type="text/x-handlebars-template">
-<li class="message {{type}}" onclick="dismiss(this)">{{{message}}}</li>
+<li class="message {{type}}" onclick="dismiss(this)">
+    {{{message}}}
+    <span>{{#if touchscreen}}Tap{{else}}Click{{/if}} to dismiss</span>
+</li>
+</script>
+
+<script id="empty-template" type="text/x-handlebars-template">
+<li class="empty">{{ message }}</li>
 </script>
 
 {% endverbatim %}
