@@ -6,16 +6,19 @@
 <link rel="stylesheet" type="text/css" href="{% static "mediaelement/mediaelementplayer.css" %}" />
 {% endblock %}
 
+{% block vars %}
+<script type="text/javascript">
+Washboard = {{ wb|safe }};
+csrf_token = "{{ csrf_token }}";
+</script>
+{% endblock %}
+
 {% block js %}
 <script type="text/javascript" src="{% static "js/handlebars.js" %}"></script>
 <script type="text/javascript" src="{% static "js/json2.js" %}"></script>
 <script type="text/javascript" src="{% static "js/jquery.timeago.js" %}"></script>
 <script type="text/javascript" src="{% static "js/URI.min.js" %}"></script>
 <script type="text/javascript" src="{% static "mediaelement/mediaelement-and-player.min.js" %}"></script>
-<script type="text/javascript">
-Washboard = {{ wb|safe }};
-csrf_token = "{{ csrf_token }}";
-</script>
 <script type="text/javascript" src="{% static "js/dash.js" %}"></script>
 {% endblock %}
 
