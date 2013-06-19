@@ -761,10 +761,20 @@ function compile(post) {
 
     // Assemble tags with URL-safe counterparts
     context.tags = []
+    if (post.featured_in_tag) {
+        $.each(post.featured_in_tag, function(t, tag) {
+            context.tags.push({
+                tag: tag,
+                safe_tag: encodeURIComponent(tag),
+                featured: true,
+            });
+        });
+    }
     $.each(post.tags, function(t, tag) {
         context.tags.push({
             tag: tag,
             safe_tag: encodeURIComponent(tag),
+            featured: false,
         });
     });
 

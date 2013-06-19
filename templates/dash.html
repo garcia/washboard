@@ -48,7 +48,7 @@ csrf_token = "{{ csrf_token }}";
     {{#if tags}}
     <div class="tags">
         {{#each tags}}
-        <a href="/tagged/{{safe_tag}}">#{{tag}}</a>
+        <a {{#if featured}}class="featured" {{/if}}href="/tagged/{{safe_tag}}">#{{tag}}</a>
         {{/each}}
     </div>
     {{/if}}
