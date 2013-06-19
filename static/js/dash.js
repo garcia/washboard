@@ -808,6 +808,9 @@ function dash(data, textStatus, jqXHR) {
         post_list = data.response;
     }
 
+    // Remove 'empty' box if present
+    $('#posts .empty').remove();
+
     // Build posts
     $.each(post_list, function(p, post) {
         
@@ -933,11 +936,18 @@ function dashboard(data) {
     apicall(Washboard.endpoint, _data, {
         success: dash,
         error: function(jqXHR, textStatus, errorThrown) {
-            var empty_source = $('#empty-template').html();
-            var empty_template = Handlebars.compile(empty_source);
-            var empty_html = empty_template({message: error_message(jqXHR, 'loading your posts')});
-            $('#posts').append(empty_html);
-            done_loading((touchscreen ? 'Tap' : 'Click') + ' to retry.');
+            var message = error_message(jqXHR, 'loading your posts')
+            var retry_message = (touchscreen ? 'Tap' : 'Click') + ' to retry.';
+            if ($('#posts').is(':empty')) {
+                var empty_source = $('#empty-template').html();
+                var empty_template = Handlebars.compile(empty_source);
+                var empty_html = empty_template({message: message});
+                $('#posts').append(empty_html);
+                done_loading(retry_message);
+            }
+            else {
+                done_loading(message + ' ' + retry_message);
+            }
         },
     });
 }
