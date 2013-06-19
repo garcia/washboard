@@ -11,13 +11,15 @@ function notify(message, type) {
     }
     var message_source = $('#message-template').html();
     var message_template = Handlebars.compile(message_source);
+    var message_id = (new Date()).getTime().toString();
     var message_html = message_template({
         message: message,
         type: type,
         touchscreen: touchscreen,
+        id: message_id,
     });
     $('#messages').append(message_html);
-    // TODO: fade in
+    $('#message_' + message_id).hide().fadeIn();
 }
 
 function dismiss(elem) {
@@ -1016,6 +1018,7 @@ function error_handler(msg, url, line) {
     }
     // Prevent infinite looping
     catch (e) {
+        console.log(e.stack);
         alert('Whoops! Washboard just broke. Please contact us at admin@washboard.ws if this keeps happening.');
     }
 }
