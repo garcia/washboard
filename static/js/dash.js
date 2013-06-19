@@ -898,6 +898,9 @@ function apicall(endpoint, data, ajaxdata) {
         // Print the whole stack before calling window.onerror
         catch (e) {
             console.log(e.stack);
+            if (debug) {
+                notify(e.stack.replace(/\n/g, '<br />'));
+            }
             throw e;
         }
     }
@@ -967,6 +970,9 @@ function error_handler(msg, url, line) {
     try {
         console.log({msg: msg, url: url, line: line});
         notify('Whoops! Washboard just broke. Please <a href="mailto:admin@washboard.ws">contact us</a> if this keeps happening.', 'error');
+        if (debug) {
+            notify('Debug info:<br/>' + msg + '<br/>' + url + '<br/>' + line);
+        }
     }
     // Prevent infinite looping
     catch (e) {
@@ -985,6 +991,7 @@ $(function() {
     allow_selection = -1;
     unhiding = -1;
     featured_tag = false;
+    debug = false;
     scan_attributes = ['reblogged_from_name', 'title', 'body', 'caption',
         'text', 'source', 'url', 'description', 'label', 'phrase',
         'asking_name', 'question', 'answer', 'source_url'];
@@ -993,6 +1000,9 @@ $(function() {
     if (hash.throw_error) {
         Washboard.parameters.throw_error = hash.throw_error;
         Washboard.parameters.error_type = hash.error_type;
+    }
+    if (hash.debug) {
+        debug = true;
     }
     
     $('#load_more').text('Loading...');
