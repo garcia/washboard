@@ -1,12 +1,67 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block css %}
-<link rel="stylesheet" type="text/less" href="{% static "less/error.less" %}" />
-{% endblock %}
-
-{% block content %}
-<h1>500</h1>
-<p>The server messed up while processing your request. Sorry about that.</p>
-<p>You should probably <a href="mailto:admin@washboard.ws">contact us</a> if this keeps happening.</p>
-{% endblock %}
+<!DOCTYPE html> 
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<meta name="viewport" content="initial-scale=1, minimum-scale=1" />
+<title>Server Error &mdash; Washboard</title>
+<style type="text/css">
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+body {
+  display: table;
+  font-family: "Helvetica", "Arial", sans-serif;
+}
+#middle {
+  display: table-row;
+  width: 100%;
+  height: 100%;
+}
+/* middle / content */
+#middle > div {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-top: 2px solid #4f7fb0;
+  border-bottom: 2px solid #4f7fb0;
+  background: #395c7f;
+  background: -moz-radial-gradient(center, ellipse cover, #395c7f 0%, #2c4763 100%);
+  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, #395c7f), color-stop(100%, #2c4763));
+  background: -webkit-radial-gradient(center, ellipse cover, #395c7f 0%, #2c4763 100%);
+  background: -o-radial-gradient(center, ellipse cover, #395c7f 0%, #2c4763 100%);
+  background: -ms-radial-gradient(center, ellipse cover, #395c7f 0%, #2c4763 100%);
+  background: radial-gradient(ellipse at center, #395c7f 0%, #2c4763 100%);
+}
+#content {
+  margin: 10% auto 5% auto;
+  padding: 40px;
+  color: #dce6ef;
+  text-align: center;
+}
+a {
+  color: inherit;
+}
+a:hover {
+  color: white;
+}
+h1 {
+  margin: 0 auto;
+  padding: 20px 40px;
+  font-size: 72px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+p {
+  font-size: 20px;
+}
+</style>
+<div id="middle" class="wrapper">
+    <div>
+        <div id="content"> 
+            <h1>500</h1>
+            <p>The server messed up while processing your request. Sorry about that.</p>
+            <p>You should probably <a href="mailto:admin@washboard.ws">contact us</a> if this keeps happening.</p>
+        </div>
+    </div>
+</div>
