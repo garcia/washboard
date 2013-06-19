@@ -136,7 +136,9 @@ noscript p {
     background-position: center;
 }
 
-.buttons {
+/* controls / buttons */
+
+.controls {
     display: block;
     height: 10px;
     margin-top: 15px;
@@ -144,43 +146,21 @@ noscript p {
     border-top: 1px solid #f0f0f0;
 }
 
-.buttons a {
+.controls .buttons,
+.controls .buttons a {
     display: block;
     float: right;
+}
+
+.controls .buttons a {
     width: 24px;
     height: 24px;
     margin: -4px 5px 0 5px;
     text-indent: -65536em;
-    color: black;
     background-repeat: no-repeat;
     background-position: center;
     opacity: 0.25;
     cursor: pointer;
-}
-
-.buttons .note_count,
-.buttons .source {
-    margin: 0;
-    width: auto;
-    float: left;
-    text-indent: 0;
-    font-weight: bold;
-}
-
-.buttons .note_count:after {
-    content: " notes";
-}
-
-.buttons .source {
-    font-weight: normal;
-    text-decoration: none;
-}
-
-.note_count + .source:before {
-    content: "\00a0\b7\00a0";
-}
-.note_count + .source:hover:before {
-    opacity: .625; // counteracts increased opacity on hover
 }
 
 .buttons a:hover {
@@ -215,6 +195,41 @@ noscript p {
 .buttons .done {
     opacity: .75 !important;
     background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90GERQPEfOWV5oAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAq0lEQVQ4y2NgaGBgoCoetgZqAfFWIH4OxM+AOIMSA8uA+D8Q/4PiJ5S4cCbUMJiB34GYh1wDJ6EZBqJVyA3DbCyGuZIbKaZoBoFwCbGxHAbEe4E4D8pnB+KfaIatIDbZtCK55AdU7AiSYSD6GinpsBfNJcexxCgHKQbGIhnwH0sk6JCaU3hwGAjCheRmvaNo3v4HFSM7L3ti8SovpYUDCO4H4pVAbDhaHhLEAAo3EnbyvoqDAAAAAElFTkSuQmCC");
+}
+
+.controls .not-buttons {
+    height: 1.2em;
+    overflow: hidden;
+    word-break: break-all;
+}
+
+.controls .not-buttons a {
+    display: block;
+    float: left;
+    margin: 0;
+    width: auto;
+    text-indent: 0;
+    text-decoration: none;
+    color: #c0c0c0;
+}
+
+.controls .not-buttons a:hover {
+    color: #999999;
+}
+
+.controls .note_count {
+    font-weight: bold;
+}
+
+.controls .note_count:after {
+    content: " notes";
+}
+
+.note_count + .source:before {
+    content: "\00a0\b7\00a0";
+}
+.note_count + .source:hover:before {
+    color: #c0c0c0;
 }
 
 /* Clear meta, just in case */

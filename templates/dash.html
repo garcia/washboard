@@ -53,25 +53,29 @@ csrf_token = "{{ csrf_token }}";
     </div>
     {{/if}}
 
-    <div class="buttons">
-        {{#if mine}}
-        <a class="edit" href="http://www.tumblr.com/edit/{{post.id}}" target="_blank">Edit</a>
-        {{else}}
-        <a class="js like{{#if post.liked}} liked{{/if}}" onclick="like({{post.id}})">Like</a>
-        {{/if}}
-        {{#if rebloggable}}
-        <a class="js reblog" onclick="reblog({{post.id}})">Reblog</a>
-        {{/if}}
-        {{#if post.can_reply}}
-        <a class="js reply" onclick="reply({{post.id}})">Reply</a>
-        {{/if}}
-        <a class="js info" data-dropdown="#info_{{post.id}}">Info</a>
-        {{#if post.note_count}}
-        <a class="js note_count" onclick="notes({{post.id}})">{{post.note_count}}</a>
-        {{/if}}
-        {{#if post.source_url}}
-        <a class="source" href="{{post.source_url}}" target="_blank">{{post.source_title}}</a>
-        {{/if}}
+    <div class="controls">
+        <div class="buttons">
+            {{#if mine}}
+            <a class="edit" href="http://www.tumblr.com/edit/{{post.id}}" target="_blank">Edit</a>
+            {{else}}
+            <a class="js like{{#if post.liked}} liked{{/if}}" onclick="like({{post.id}})">Like</a>
+            {{/if}}
+            {{#if rebloggable}}
+            <a class="js reblog" onclick="reblog({{post.id}})">Reblog</a>
+            {{/if}}
+            {{#if post.can_reply}}
+            <a class="js reply" onclick="reply({{post.id}})">Reply</a>
+            {{/if}}
+            <a class="js info" data-dropdown="#info_{{post.id}}">Info</a>
+        </div>
+        <div class="not-buttons">
+            {{#if post.note_count}}
+            <a class="js note_count" onclick="notes({{post.id}})">{{post.note_count}}</a>
+            {{/if}}
+            {{#if post.source_url}}
+            <a class="source" href="{{post.source_url}}" target="_blank">{{post.source_title}}</a>
+            {{/if}}
+        </div>
     </div>
 
     {{#if post.notes}}
