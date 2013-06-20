@@ -1056,6 +1056,15 @@ $(function() {
     optimal_sizes = {'1': 500 * scale, '2': 245 * scale, '3': 160 * scale};
     touchscreen = 'ontouchstart' in window;
 
+    Handlebars.registerHelper('pluralize', function(number, single, plural) {
+        if (number === 1) {
+            return single;
+        }
+        else {
+            return plural;
+        }
+    });
+
     load_more();
 
     //if (!Washboard.profile.sessions) {

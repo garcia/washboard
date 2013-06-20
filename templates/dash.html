@@ -73,7 +73,7 @@ csrf_token = "{{ csrf_token }}";
         </div>
         <div class="not-buttons">
             {{#if post.note_count}}
-            <a class="js note_count" onclick="notes({{post.id}})">{{post.note_count}}</a>
+            <a class="js note_count" onclick="notes({{post.id}})">{{post.note_count}} {{pluralize post.note_count "note" "notes"}}</a>
             {{/if}}
             {{#if post.source_url}}
             <a class="source" href="{{post.source_url}}" target="_blank">{{post.source_title}}</a>
