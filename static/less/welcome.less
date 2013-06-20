@@ -18,7 +18,7 @@
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='@bg1', endColorstr='@bg2',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
-#content, #links, #messages {
+#content, #messages {
     text-align: center;
 }
 
@@ -105,25 +105,6 @@ input[type=submit]:hover {
 
 input[type=submit]:active {
     .shinybg(darken(@primary, 36%); darken(@primary, 30%); darken(@primary, 24%); darken(@primary, 18%));
-}
-
-#links {
-    margin: 0 auto;
-    padding-left: 0;
-    list-style-type: none;
-}
-
-#links li {
-    display: inline;
-}
-
-#links li:after {
-    content: ".\00a0";
-}
-
-#links li a {
-    text-decoration: none;
-    border-bottom: 1px dotted fade(lighten(@primary, 40%), 40%);
 }
 
 @media screen and (max-width: 500px) {

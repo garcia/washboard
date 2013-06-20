@@ -10,4 +10,3 @@ Link to open the current page on Tumblr
 Import blacklist from Tumblr Savior
 waitForImages when restoring scroll position
 Separation of logic from presentation for notes
-Fix footer + content borders on /rules, /settings, and error pages
