@@ -23,6 +23,9 @@ add_introspection_rules([], ['^wb\.models\.LowerCaseCharField'])
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
+    infinite_scrolling = models.BooleanField(default=True)
+    sessions = models.BooleanField(default=False)
+    safe_mode = models.BooleanField(default=False)
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
