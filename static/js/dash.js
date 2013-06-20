@@ -1157,10 +1157,10 @@ $(function() {
         },
         'posts': {
             'get': function() {
-                return $('#posts')[0].innerHTML.replace(/[\s\n\r]+/g, ' ');
+                return $('#middle > div')[0].innerHTML.replace(/[\s\n\r]+/g, ' ');
             },
             'set': function(data) {
-                $('#posts')[0].innerHTML = data;
+                $('#middle > div')[0].innerHTML = data;
                 done_loading('Load more');
             },
         },
