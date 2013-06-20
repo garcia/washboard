@@ -214,6 +214,7 @@ function like(id) {
     apicall(endpoint, parameters, {
         success: function(data) {
             $('#post_' + id).find('.like').toggleClass('liked');
+            save_session_attr('posts');
         },
         error: function(jqXHR, textStatus, errorThrown) {
             notify(error_message(jqXHR, 'liking the post'), 'warning');
@@ -252,9 +253,14 @@ function notes(id) {
             'display': 'block',
         });
         notes.animate({
-            'height': height,
-            'margin-bottom': 0,
-        });
+                'height': height,
+                'margin-bottom': 0,
+            },
+            600,
+            function() {
+                save_session_attr('posts');
+            }
+        );
     }
     // Close notes
     else {
@@ -264,6 +270,7 @@ function notes(id) {
             'margin-bottom': '-20px',
         }, {complete: function() {
             notes.css('display', 'none');
+            save_session_attr('posts');
         }});
     }
 }
@@ -315,6 +322,7 @@ function reblog(id) {
     else {
         reblog_box.addClass('closed');
     }
+    save_session_attr('posts');
 }
 
 function submit_reblog(id, reblog_text) {
@@ -336,6 +344,7 @@ function submit_reblog(id, reblog_text) {
             reblog_elem.find('input[type!=submit]').val('');
             reblog_elem.find('textarea').val('');
             $('#post_' + id).find('.buttons .reblog').addClass('done');
+            save_session_attr('posts');
         },
         error: function(jqXHR, textStatus, errorThrown) {
             notify(error_message(jqXHR, 'reblogging the post'), 'warning');
@@ -384,6 +393,7 @@ function reply(id) {
     else {
         reply_box.addClass('closed');
     }
+    save_session_attr('posts');
 }
 
 function reply_keypress(id, e) {
@@ -407,6 +417,7 @@ function submit_reply(id, reply_text) {
                 .find('.reply')
                 .val('');
             $('#post_' + id).find('.buttons .reply').addClass('done');
+            save_session_attr('posts');
         },
         error: function(jqXHR, textStatus, errorThrown) {
             notify(error_message(jqXHR, 'replying to the post'), 'warning');
@@ -436,6 +447,7 @@ function hide(id, hide_url) {
         $('#post_' + id).animate({opacity: 0}, 600, function() {
             setTimeout(function() {
                 $('#post_' + id).css('display', 'none');
+                save_session_attr('posts');
             }, 300);
         });
     });
@@ -510,6 +522,7 @@ function unhide(a) {
                     post.children().each(function(c, child) {
                         $(child).attr('style') || $(child).removeAttr('style')
                     });
+                    save_session_attr('posts');
                 });
         }
     );
@@ -522,6 +535,7 @@ function unhide(a) {
 function toggle_album_art(id) {
     var this_post = $('#post_' + id);
     this_post.find('.album_art').toggleClass('expanded');
+    save_session_attr('posts');
 }
 
 function chooseblog(id, blog) {
@@ -581,7 +595,8 @@ function read_more(postelem) {
             // Hide everything else
             more_link.parent().nextAll().addClass('cut under')
         }
-    });
+    }); 
+    save_session_attr('posts');
 }
 
 /******************
@@ -616,7 +631,13 @@ function expand(id) {
                 .find('.hr_photos')
                 .css('display', 'block')
                 .css('opacity', 0)
-                .animate({opacity: 1}, 600)
+                .animate(
+                    {opacity: 1},
+                    600,
+                    function() {
+                        save_session_attr('posts');
+                    }
+                )
                 .find('img')
                 .each(function(i, img) {
                     $(img).attr('src', $(img).attr('hr-src'));
@@ -642,7 +663,13 @@ function collapse(id) {
                 .find('.photos')
                 .css('display', 'block')
                 .css('opacity', 0)
-                .animate({opacity: 1}, 600);
+                .animate(
+                    {opacity: 1},
+                    600,
+                    function() {
+                        save_session_attr('posts');
+                    }
+                );
             $('body').animate(
                 {scrollTop: this_post.offset().top - 5},
                 200
@@ -879,10 +906,8 @@ function dash(data, textStatus, jqXHR) {
     $('audio.new').removeClass('new');
 
     // Save posts and Session
-    if (Washboard.profile.sessions) {
-        save_session_attr('posts');
-        save_session_attr('Session');
-    }
+    save_session_attr('posts');
+    save_session_attr('Session');
 }
 
 /******************
@@ -1056,6 +1081,9 @@ function init_session() {
 }
 
 function save_session_attr(attr) {
+    if (!Washboard.profile.sessions) {
+        return;
+    }
     console.log('Saving ' + attr);
     try {
         localStorage.setItem(hash.session + '_' + attr, session_attributes[attr].get());
