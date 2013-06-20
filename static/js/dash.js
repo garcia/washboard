@@ -1011,6 +1011,19 @@ function done_loading(message) {
 }
 
 /******************
+ * Inf. scrolling *
+ ******************/
+
+function scroll_handler(e) {
+    if (document.body.scrollTop + window.innerHeight * 2 > document.height) {
+        if (!$('#load_more').hasClass('loading')) {
+            console.log("Infinite scrolling invoked");
+            load_more();
+        }
+    }
+}
+
+/******************
  * Sessions       *
  ******************/
 
@@ -1081,7 +1094,6 @@ function save_session_attr(attr) {
     if (!Washboard.profile.sessions) {
         return;
     }
-    console.log('Saving ' + attr);
     try {
         localStorage.setItem(hash.session + '_' + attr, session_attributes[attr].get());
     }
@@ -1178,6 +1190,9 @@ $(function() {
     unhiding = -1;
     hash = {};
     window.onerror = error_handler;
+    if (Washboard.profile.infinite_scrolling) {
+        window.onscroll = scroll_handler;
+    }
     scale = Math.min(500, window.innerWidth) / 500;
     optimal_sizes = {'1': 500 * scale, '2': 245 * scale, '3': 160 * scale};
     touchscreen = 'ontouchstart' in window;
