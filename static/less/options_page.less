@@ -1,0 +1,44 @@
+#content {
+    margin: 20px auto;
+    background-color: white;
+    border-radius: 6px;
+    color: black;
+}
+
+.submit-button {
+    padding: 5px 20px;
+    color: white;
+    font-weight: bold;
+    text-shadow: 0 1px 0 fade(black, 25%);
+    .shinybg(lighten(@primary, 12%); lighten(@primary, 8%); lighten(@primary, 4%); @primary);
+    border: 1px solid @primary;
+    border-radius: 2px;
+    cursor: pointer;
+    -webkit-appearance: none;
+}
+
+.submit-button:hover {
+    .shinybg(lighten(@primary, 18%); lighten(@primary, 12%); lighten(@primary, 6%); @primary);
+}
+
+.submit-button:active {
+    .shinybg(@primary; lighten(@primary, 6%); lighten(@primary, 12%); lighten(@primary, 18%));
+}
+
+
+@media screen and (max-width: 1000px) {
+
+    #content {
+        border-radius: 0;
+    }
+
+    #top .dropdown {
+        right: 0 !important;
+        font-size: 14px;
+    }
+
+    #top .dropdown-menu {
+        margin-left: -20px;
+    }
+
+}

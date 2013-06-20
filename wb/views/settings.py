@@ -21,7 +21,6 @@ class SettingsForm(forms.ModelForm):
         exclude = ('user',)
         widgets = {'keyword': forms.TextInput()}
 
-@transaction.commit_on_success
 def main(request):
     if not request.user.is_authenticated():
         return redirect('/')
@@ -33,13 +32,17 @@ def main(request):
 def get(request):
     data = {
         'title': 'Settings',
-        'settings': SettingsForm(),
+        'settings': SettingsForm(instance=request.user.get_profile()),
     }
     return render(request, 'settings.html', data)
 
 def post(request):
-    UserProfile.objects.get(user__exact=request.user)
-    if not RegistrationForm(request.POST).is_valid():
-        messages.error(request, 'Please fill in all of the fields.')
+    form = SettingsForm(request.POST, instance=request.user.get_profile())
+    if not form.is_valid():
+        messages.error(request, 'Invalid form data.')
         return redirect('/settings')
+
+    form.save()
+
+    messages.success(request, 'Your settings have been saved.') 
     return redirect('/settings')

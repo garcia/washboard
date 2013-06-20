@@ -1,12 +1,26 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/less" href="{% static "less/settings.less" %}" />
+{% endblock %}
 
 {% block content %}
 <form method="post">
     <fieldset>
         {% csrf_token %}
-        <div id="settings">
-            <!-- TODO -->
-        </div>
+        <table id="settings">
+            {% for field in settings %}
+            <tr>
+                <td class="label">{{ field.label }}</td>
+                <td class="input-box">{{ field }}</td>
+                <td class="help-text">{{ field.help_text }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td><input class="submit-button" type="submit" value="Save" /></td>
+            </tr>
+        </table>
     </fieldset>
 </form>
 {% endblock %}

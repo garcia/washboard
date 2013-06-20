@@ -1,11 +1,5 @@
 @import "washboard.less";
-
-#content {
-    margin: 20px auto;
-    background-color: white;
-    border-radius: 6px;
-    color: black;
-}
+@import "options_page.less";
 
 .ruleset,
 #submit {
@@ -67,26 +61,6 @@
     margin-top: 20px;
 }
 
-.row.submit input {
-    padding: 5px 20px;
-    color: white;
-    font-weight: bold;
-    text-shadow: 0 1px 0 fade(black, 25%);
-    .shinybg(lighten(@primary, 12%); lighten(@primary, 8%); lighten(@primary, 4%); @primary);
-    border: 1px solid @primary;
-    border-radius: 2px;
-    cursor: pointer;
-    -webkit-appearance: none;
-}
-
-.row.submit input:hover {
-    .shinybg(lighten(@primary, 18%); lighten(@primary, 12%); lighten(@primary, 6%); @primary);
-}
-
-.row.submit input:active {
-    .shinybg(@primary; lighten(@primary, 6%); lighten(@primary, 12%); lighten(@primary, 18%));
-}
-
 input[type="text"] {
     font-family: inherit;
     font-size: inherit;
@@ -122,23 +96,6 @@ input[type=text]:focus {
     background-repeat: no-repeat;
     background-position: center;
     cursor: pointer;
-}
-
-@media screen and (max-width: 1000px) {
-
-    #content {
-        border-radius: 0;
-    }
-
-    #top .dropdown {
-        right: 0 !important;
-        font-size: 14px;
-    }
-
-    #top .dropdown-menu {
-        margin-left: -20px;
-    }
-
 }
 
 @media screen and (max-width: 540px) {

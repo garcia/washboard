@@ -23,9 +23,19 @@ add_introspection_rules([], ['^wb\.models\.LowerCaseCharField'])
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    infinite_scrolling = models.BooleanField(default=True)
-    sessions = models.BooleanField(default=False)
-    safe_mode = models.BooleanField(default=False)
+    infinite_scrolling = models.BooleanField(
+        default=True,
+        help_text='Automatically load posts while you scroll.',
+    )
+    sessions = models.BooleanField(
+        default=False,
+        help_text='Sessions enable tabs to restore their contents '
+                  'even when refreshed or closed.',
+    )
+    safe_mode = models.BooleanField(
+        default=False,
+        help_text='Hide images and videos until you tap or hover over them.',
+    )
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
