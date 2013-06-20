@@ -886,7 +886,7 @@ function dash(data, textStatus, jqXHR) {
     });
 
     // Reset "Load more" footer
-    done_loading('Load more');
+    done_loading(load_more_string);
 
     // Convert new audio elements to MediaElement players
     // This has to be done after they've been inserted into the document
@@ -990,18 +990,14 @@ function dashboard(data) {
  ******************/
 
 function load_more() {
-    // Dashboard uses 'before_id'
-    if (Washboard.endpoint == 'dashboard') {
-        dashboard({before_id: Session.last_post});
+    var data = {};
+    if (Washboard.pagination_key == 'offset') {
+        data['offset'] = $('#posts .post').length + Session.offset;
     }
-    // Blogs use 'offset'
-    else if (Washboard.endpoint == 'blog') {
-        dashboard({offset: $('#posts .post').length + Session.offset});
-    }
-    // Other pages just use 'before'
     else {
-        dashboard({before: Session.last_post});
+        data[Washboard.pagination_key] = Session.last_post;
     }
+    dashboard(data);
     $('#load_more').text('Loading...');
     $('#load_more').addClass('loading');
 }
@@ -1010,6 +1006,11 @@ function done_loading(message) {
     var load_more = $('#load_more');
     load_more.text(message);
     load_more.removeClass('loading');
+    if (!Washboard.profile.infinite_scrolling) {
+        load_more.removeAttr('onclick');
+        var page = (Washboard.pagination_key == 'offset' ? (Session.offset + 20) : Session.last_post);
+        load_more.attr('href', location.pathname + '?' + Washboard.pagination_key + '=' + page);
+    }
 }
 
 /******************
@@ -1180,7 +1181,7 @@ $(function() {
             },
             'set': function(data) {
                 $('#middle > div')[0].innerHTML = data;
-                done_loading('Load more');
+                done_loading(load_more_string);
             },
         },
         'position': {
@@ -1196,9 +1197,11 @@ $(function() {
     allow_selection = -1;
     unhiding = -1;
     hash = {};
+    load_more_string = 'Next page';
     window.onerror = error_handler;
     if (Washboard.profile.infinite_scrolling) {
         window.onscroll = scroll_handler;
+        load_more_string = 'Load more';
     }
     scale = Math.min(500, window.innerWidth) / 500;
     optimal_sizes = {'1': 500 * scale, '2': 245 * scale, '3': 160 * scale};
@@ -1217,8 +1220,8 @@ $(function() {
     if (query.offset) {
         Session.offset = query.offset;
     }
-    if (query.before) {
-        Session.last_post = query.before;
+    if (query[Washboard.pagination_key]) {
+        Session.last_post = query[Washboard.pagination_key];
     }
 
     if (Washboard.profile.sessions) {

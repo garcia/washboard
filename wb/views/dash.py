@@ -38,6 +38,7 @@ def main(request, data_=None):
             'base_url': settings.BASE_URL,
             'endpoint': 'dashboard',
             'well_ordered': True,
+            'pagination_key': 'before_id',
             'rules': [
                 {field: rule[field] for field in rule
                     if field not in ('user_id', 'id', 'index')}
@@ -62,6 +63,7 @@ def blog(request, name):
         'wb': {
             'endpoint': 'blog',
             'parameters': {'blog': name},
+            'pagination_key': 'offset',
         },
     })
 
@@ -72,5 +74,6 @@ def tagged(request, tag):
             'endpoint': 'tagged',
             'well_ordered': False,
             'parameters': {'tag': tag},
+            'pagination_key': 'before',
         },
     })
