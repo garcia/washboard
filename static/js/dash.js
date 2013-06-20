@@ -444,11 +444,8 @@ function hide(id, hide_url) {
     }).fail(function() {
         alert('The server was unable to hide the post permanently, sorry.');
     }).always(function() {
-        $('#post_' + id).animate({opacity: 0}, 600, function() {
-            setTimeout(function() {
-                $('#post_' + id).css('display', 'none');
-                save_session_attr('posts');
-            }, 300);
+        $('#post_' + id).fadeOut(400, function() {
+            save_session_attr('posts');
         });
     });
 }
