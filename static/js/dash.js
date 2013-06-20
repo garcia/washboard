@@ -612,7 +612,7 @@ function expand(id) {
         function() {
             this_post.find('.photos').css('display', 'none');
             this_post.addClass('hr')
-                .css('max-width', Math.max(540, hr_widths[id]))
+                .css('max-width', Math.max(540, Session.hr_widths[id]))
                 .find('.hr_photos')
                 .css('display', 'block')
                 .css('opacity', 0)
@@ -673,7 +673,7 @@ function photoset(post, context) {
         $.each(post.photos, function(ph, photo) {
             largest_width = Math.max(largest_width, best_fit(photo.alt_sizes, 1280).width);
         });
-        hr_widths[post.id] = largest_width;
+        Session.hr_widths[post.id] = largest_width;
 
         // Insert each photo
         $.each(post.photos, function(ph, photo) {
@@ -716,17 +716,20 @@ function photoset(post, context) {
  * Post compiling *
  ******************/
 
+// TODO: figure out how iOS correctly paginates
 function check_id(post) {
     // Check post's ID against currently loaded posts
-    if (Washboard.well_ordered && post.id >= $(posts).last().prop('id')) {
+    // TODO: only compute last_post_id once per page load!
+    var last_post_id = $('#posts .post').last().attr('id').slice(5);
+    if (Washboard.well_ordered && post.id >= last_post_id) {
         // If it wasn't posted before the last post, ignore it
         // and note that we're now one more post behind
-        console.log(post.id + ' >= ' + $(posts).last().prop('id'));
-        behind_by++;
+        console.log(post.id + ' >= ' + last_post_id);
+        Session.behind_by++;
         return true;
     }
-    else if (!featured_tag && 'featured_timestamp' in post) {
-        featured_tag = true;
+    else if (!Session.featured_tag && 'featured_timestamp' in post) {
+        Session.featured_tag = true;
     }
 }
 
@@ -815,7 +818,6 @@ function dash(data, textStatus, jqXHR) {
 
     // Build posts
     $.each(post_list, function(p, post) {
-        
         var blacklisted = is_blacklisted(post);
         
         // Blacklisted with no notification: skip immediately
@@ -875,6 +877,12 @@ function dash(data, textStatus, jqXHR) {
         AndroidUseNativeControls: false
     });
     $('audio.new').removeClass('new');
+
+    // Save posts and Session
+    if (Washboard.profile.sessions) {
+        save_session_attr('posts');
+        save_session_attr('Session');
+    }
 }
 
 /******************
@@ -959,10 +967,10 @@ function dashboard(data) {
  ******************/
 
 function load_more() {
-    if (Washboard.well_ordered || !featured_tag) {
+    if (Washboard.well_ordered || !Session.featured_tag) {
         // Set the offset, accounting for posts that have been made since initial load
         dashboard({
-            offset: $('#posts').children().length + behind_by * 2
+            offset: $('#posts').children().length + Session.behind_by * 2
         });
     }
     else {
@@ -984,13 +992,73 @@ function done_loading(message) {
  * Sessions       *
  ******************/
 
-function save_session() {
+function init_session() {
+    parse_hash();
+
+    // Load session, if present
+    if (hash.session) {
+        var session_data = {};
+        for (attr in session_attributes) {
+            session_data[attr] = localStorage.getItem(hash.session + '_' + attr);
+            if (!session_data[attr]) {
+                hash.session = null;
+                break;
+            }
+        }
+    }
+
+    // If everything was successfully loaded from localStorage, set the values
+    if (hash.session) {
+        for (attr in session_attributes) {
+            session_attributes[attr].set(session_data[attr]);
+        }
+    }
+    // Otherwise, start a new session and load the first page of the dashboard
+    else {
+        session = (new Date()).getTime().toString();
+        hash.session = session;
+        save_hash();
+
+        // Record this session
+        var sessions = [];
+        if (localStorage.getItem('sessions')) {
+            sessions = JSON.parse(localStorage.getItem('sessions'));
+        }
+        sessions.push(session);
+        localStorage.setItem('sessions', JSON.stringify(sessions));
+        
+        load_more();
+    }
+
+    // Clean up outdated sessions
+    if (localStorage.getItem('sessions')) {
+        var sessions = JSON.parse(localStorage.getItem('sessions'));
+        var time = new Date().getTime();
+        for (var s in sessions) {
+            // Expire sessions after 1 hour
+            if (time - sessions[s] > 3600000) {
+                console.log('Removing outdated session ' + sessions[s]);
+                for (attr in session_attributes) {
+                    localStorage.removeItem(hash.session + '_' + attr);
+                }
+                sessions.splice(s, 1);
+            }
+        }
+        localStorage.setItem('sessions', JSON.stringify(sessions));
+    }
+    
+    save_position = setInterval(
+        function() {
+            save_session_attr('position');
+        },
+        5 * 1000
+    );
+}
+
+function save_session_attr(attr) {
+    console.log('Saving ' + attr);
     try {
-        localStorage.setItem('session_' + session, JSON.stringify({
-            'behind_by': behind_by,
-            'posts': posts,
-            'position': $('body').scrollTop(),
-        }));
+        localStorage.setItem(hash.session + '_' + attr, session_attributes[attr].get());
     }
     catch (err) {
         console.log('Ran out of localStorage quota. Clearing...');
@@ -1035,22 +1103,55 @@ function parse_hash() {
     }
 }
 
+function save_hash() {
+    location.hash = URI.buildQuery(hash);
+}
+
 /******************
  * Initialization *
  ******************/
 
 $(function() {
-    posts = [];
-    hr_widths = {};
-    behind_by = 0;
-    allow_selection = -1;
-    unhiding = -1;
-    featured_tag = false;
-    hash = {};
+    Session = {
+        hr_widths: {},
+        behind_by: 0,
+        featured_tag: false,
+    };
+    
     scan_attributes = ['reblogged_from_name', 'title', 'body', 'caption',
         'text', 'source', 'url', 'description', 'label', 'phrase',
         'asking_name', 'question', 'answer', 'source_url'];
-    
+    session_attributes = {
+        'Session': {
+            'get': function() {
+                return JSON.stringify(Session);
+            },
+            'set': function(data) {
+                Session = JSON.parse(data);
+            },
+        },
+        'posts': {
+            'get': function() {
+                return $('#posts')[0].innerHTML.replace(/[\s\n\r]+/g, ' ');
+            },
+            'set': function(data) {
+                $('#posts')[0].innerHTML = data;
+                done_loading('Load more');
+            },
+        },
+        'position': {
+            'get': function() {
+                return $('body').scrollTop();
+            },
+            'set': function(data) {
+                $('body').scrollTop(data);
+            },
+        },
+    };
+
+    allow_selection = -1;
+    unhiding = -1;
+    hash = {};
     window.onerror = error_handler;
     scale = Math.min(500, window.innerWidth) / 500;
     optimal_sizes = {'1': 500 * scale, '2': 245 * scale, '3': 160 * scale};
@@ -1065,63 +1166,10 @@ $(function() {
         }
     });
 
-    load_more();
-
-    //if (!Washboard.profile.sessions) {
-        return;
-    //}
-
-    query = URI(location.search).query(true);
-    hash = URI('?' + location.hash.slice(1)).query(true);
-    session = hash.session || query.session;
-
-    // Load session, if present
-    if (session) {
-        session_data = JSON.parse(localStorage.getItem('session_' + session));
-        if (session_data) {
-            behind_by = session_data.behind_by;
-            dash({
-                'meta': {'status': 304, 'msg': 'Not Modified'},
-                'response': {'posts': session_data.posts}
-            });
-            $('body').scrollTop(session_data.position);
-        }
-        else {
-            session = null;
-        }
+    if (Washboard.profile.sessions) {
+        init_session();
     }
-
-    // Otherwise, start a new session and load the first page of the dashboard
-    if (!session) {
-        session = (new Date()).getTime().toString();
-        location.hash = 'session=' + session;
-
-        // Record this session
-        var sessions = [];
-        if (localStorage.getItem('sessions')) {
-            sessions = JSON.parse(localStorage.getItem('sessions'));
-        }
-        sessions.push(session);
-        localStorage.setItem('sessions', JSON.stringify(sessions));
-        
-        dashboard();
+    else {
+        load_more();
     }
-
-    // Clean up outdated sessions
-    if (localStorage.getItem('sessions')) {
-        var sessions = JSON.parse(localStorage.getItem('sessions'));
-        var time = new Date().getTime();
-        for (var s in sessions) {
-            // Expire sessions after 1 hour
-            if (time - sessions[s] > 3600000) {
-                console.log('Removing outdated session ' + sessions[s]);
-                localStorage.removeItem('session_' + sessions[s]);
-                sessions.splice(s, 1);
-            }
-        }
-        localStorage.setItem('sessions', JSON.stringify(sessions));
-    }
-        
-    save_session_interval = setInterval(save_session, 5000);
-
 });
