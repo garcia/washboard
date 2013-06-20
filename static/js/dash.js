@@ -740,24 +740,20 @@ function photoset(post, context) {
  * Post compiling *
  ******************/
 
-// TODO: figure out how iOS correctly paginates
-function check_id(post) {
-    // Check post's ID against currently loaded posts
-    // TODO: only compute last_post_id once per page load!
-    var last_post_id = $('#posts .post').last().attr('id').slice(5);
-    if (Washboard.well_ordered && post.id >= last_post_id) {
-        // If it wasn't posted before the last post, ignore it
-        // and note that we're now one more post behind
-        console.log(post.id + ' >= ' + last_post_id);
-        Session.behind_by++;
-        return true;
-    }
-    else if (!Session.featured_tag && 'featured_timestamp' in post) {
+function compile(post) {
+    // Save the current last post ID or timestamp
+    if (!Session.featured_tag && 'featured_timestamp' in post) {
         Session.featured_tag = true;
     }
-}
-
-function compile(post) {
+    if (Washboard.well_ordered) {
+        Session.last_post = post.id;
+    }
+    else if (Session.featured_tag) {
+        Session.last_post = post.featured_timestamp;
+    }
+    else {
+        Session.last_post = post.timestamp;
+    }
     
     // Fix date for timeago()
     post.date = post.date.replace(' ', 'T').replace(' GMT', 'Z');
@@ -847,6 +843,11 @@ function dash(data, textStatus, jqXHR) {
         // Blacklisted with no notification: skip immediately
         if (blacklisted == true) {
             return true;
+        }
+
+        // Make sure this post isn't a duplicate
+        if ($('#post_' + post.id).length) {
+            return;
         }
 
         // Compile the post's HTML
@@ -989,16 +990,17 @@ function dashboard(data) {
  ******************/
 
 function load_more() {
-    if (Washboard.well_ordered || !Session.featured_tag) {
-        // Set the offset, accounting for posts that have been made since initial load
-        dashboard({
-            offset: $('#posts').children().length + Session.behind_by * 2
-        });
+    // Dashboard uses 'before_id'
+    if (Washboard.endpoint == 'dashboard') {
+        dashboard({before_id: Session.last_post});
     }
+    // Blogs use 'offset'
+    else if (Washboard.endpoint == 'blog') {
+        dashboard({offset: $('#posts .post').length + Session.offset});
+    }
+    // Other pages just use 'before'
     else {
-        dashboard({
-            before: d.response[d.response.length - 1].featured_timestamp
-        });
+        dashboard({before: Session.last_post});
     }
     $('#load_more').text('Loading...');
     $('#load_more').addClass('loading');
@@ -1107,6 +1109,26 @@ function save_session_attr(attr) {
 }
 
 /******************
+ * URL parsing    *
+ ******************/
+
+function parse_hash() {
+    hash = URI('?' + location.hash.slice(1)).query(true);
+    if (hash.throw_error) {
+        Washboard.parameters.throw_error = hash.throw_error;
+        Washboard.parameters.error_type = hash.error_type;
+    }
+    else {
+        delete Washboard.parameters.throw_error;
+        delete Washboard.parameters.error_type;
+    }
+}
+
+function save_hash() {
+    location.hash = URI.buildQuery(hash);
+}
+
+/******************
  * Debugging      *
  ******************/
 
@@ -1128,22 +1150,6 @@ function error_handler(msg, url, line) {
     }
 }
 
-function parse_hash() {
-    hash = URI('?' + location.hash.slice(1)).query(true);
-    if (hash.throw_error) {
-        Washboard.parameters.throw_error = hash.throw_error;
-        Washboard.parameters.error_type = hash.error_type;
-    }
-    else {
-        delete Washboard.parameters.throw_error;
-        delete Washboard.parameters.error_type;
-    }
-}
-
-function save_hash() {
-    location.hash = URI.buildQuery(hash);
-}
-
 /******************
  * Initialization *
  ******************/
@@ -1151,8 +1157,9 @@ function save_hash() {
 $(function() {
     Session = {
         hr_widths: {},
-        behind_by: 0,
+        last_post: null,
         featured_tag: false,
+        offset: 0,
     };
     
     scan_attributes = ['reblogged_from_name', 'title', 'body', 'caption',
@@ -1205,6 +1212,14 @@ $(function() {
             return plural;
         }
     });
+    
+    query = URI(location.search).query(true);
+    if (query.offset) {
+        Session.offset = query.offset;
+    }
+    if (query.before) {
+        Session.last_post = query.before;
+    }
 
     if (Washboard.profile.sessions) {
         init_session();

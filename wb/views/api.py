@@ -19,7 +19,7 @@ endpoints = {
         'method': 'GET',
         'api_key': False,
         'parameters': [
-            'offset', 'since_id', 'reblog_info', 'notes_info',
+            'offset', 'since_id', 'reblog_info', 'notes_info', 'before_id',
         ],
     },
     'blog': {
