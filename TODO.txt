@@ -1,10 +1,13 @@
-Error handling in views (minimize chances of 500 errors)
-Settings page
 Infinite scrolling
+Fix visual oddities with reply / reblog boxes
+Explain how to refresh with sessions enabled
 -- RELEASE --
+Safe mode
 Title, description, and follow link on blog pages
-Link to open the current page on Tumblr
+Publish / queue / draft / private when reblogging
 Open permalinks within Washboard, not on [blog].tumblr.com
+Link to open the current page on Tumblr
 Import blacklist from Tumblr Savior
+waitForImages when restoring scroll position
 Separation of logic from presentation for notes
 Fix footer + content borders on /rules, /settings, and error pages
