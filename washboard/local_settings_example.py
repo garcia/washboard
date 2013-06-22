@@ -1,6 +1,8 @@
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+ENVIRONMENT = 'production'
+
 TIME_ZONE = 'America/Chicago'
 USE_TZ = True
 
