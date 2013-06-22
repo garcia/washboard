@@ -1,0 +1,71 @@
+<li class="post {{post.type}}"
+    id="post_{{post.id}}"
+    data-reblog-key="{{post.reblog_key}}"
+    data-type="{{post.type}}">
+    <div class="meta">
+        <a class="avatar" href="/blog/{{post.blog_name}}">
+            <img src="http://api.tumblr.com/v2/blog/{{post.blog_name}}.tumblr.com/avatar/64" alt="{{post.blog_name}}'s avatar" />
+        </a>
+        <a class="blog_name" href="{{post.post_url}}">{{post.blog_name}}</a>
+        {{#if post.reblogged_from_name}}
+        <span class="reblogged_text">&nbsp;reblogged&nbsp;</span>
+        <a class="reblogged_from_name" href="{{post.reblogged_from_url}}">
+            {{post.reblogged_from_name}}
+        </a>
+        {{/if}}
+    </div>
+    
+    {{{inner_html}}}
+
+    {{#if tags}}
+    <div class="tags">
+        {{#each tags}}
+        <a {{#if featured}}class="featured" {{/if}}href="/tagged/{{safe_tag}}">#{{tag}}</a>
+        {{/each}}
+    </div>
+    {{/if}}
+
+    <div class="actions">
+        <div class="buttons">
+            {{#if mine}}
+            <a class="edit" href="http://www.tumblr.com/edit/{{post.id}}" target="_blank">Edit</a>
+            {{else}}
+            <a class="js like{{#if post.liked}} liked{{/if}}" onclick="like({{post.id}})">Like</a>
+            {{/if}}
+            {{#if rebloggable}}
+            <a class="js reblog" onclick="reblog({{post.id}})">Reblog</a>
+            {{/if}}
+            {{#if post.can_reply}}
+            <a class="js reply" onclick="reply({{post.id}})">Reply</a>
+            {{/if}}
+            <a class="js info" data-dropdown="#info_{{post.id}}">Info</a>
+        </div>
+        <div class="not-buttons">
+            {{#if post.note_count}}
+            <a class="js note_count" onclick="notes({{post.id}})">{{post.note_count}} {{pluralize post.note_count "note" "notes"}}</a>
+            {{/if}}
+            {{#if post.source_url}}
+            <a class="source" href="{{post.source_url}}" target="_blank">{{post.source_title}}</a>
+            {{/if}}
+        </div>
+    </div>
+
+    {{#if post.notes}}
+    <ol class="notes">
+        {{#each post.notes}}
+        <li class="{{type}}">
+            <a href="/blog/{{blog_name}}">{{blog_name}}</a>
+            {{#if photo_url}}
+            <span class="reply-text"></span>
+            <img src="{{photo_url}}" />
+            {{else}}
+            {{#if reply_text}}
+            <span class="reply-text">{{reply_text}}</span>
+            {{/if}}
+            {{/if}}
+        </li>
+        {{/each}}
+    </ol>
+    {{/if}}
+</li>
+

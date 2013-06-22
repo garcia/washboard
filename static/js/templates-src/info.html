@@ -1,0 +1,19 @@
+{{#with post}}
+<div id="info_{{id}}" class="info-menu dropdown dropdown-tip">
+    <ul class="dropdown-menu">
+        <li><a href="{{post_url}}">
+            Posted <abbr class="timeago" title="{{date}}">{{date}}</abbr>
+        </a></li>
+        {{#if link_url}}
+        <li><a href="{{link_url}}" target="_blank">Clickthrough</a></li>
+        {{/if}}
+        {{#if audio_url}}
+        <li><a href="{{audio_url}}?plead=please-dont-download-this-or-our-lawyers-wont-let-us-host-audio"
+               target="_blank">Download audio</a></li>
+        {{/if}}
+        <li><a href="{{../dashboard}}" target="_blank">View on Dashboard</a></li>
+        <li><a class="js" onclick="hide({{id}}, '{{../hide_url}}')">Hide this post</a></li>
+    </ul>
+</div>
+{{/with}}
+

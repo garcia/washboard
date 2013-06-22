@@ -111,6 +111,7 @@ INSTALLED_APPS = (
 
     'south',
     'compressor',
+    'django_handlebars',
     
     'wb',
 )
@@ -153,6 +154,12 @@ COMPRESS_OUTPUT_DIR = 'cache'
 COMPRESS_PRECOMPILERS = (
     ('text/less', 'lessc {infile} {outfile}'),
 )
+
+HANDLEBARS_COMPILED = 1
+HANDLEBARS_TPL_DIR = os.path.join(PROJECT_DIR, '../static/js/templates-src')
+HANDLEBARS_TPL_CMPDIR = os.path.join(PROJECT_DIR, '../static/js/templates')
+HANDLEBARS_SCRIPT_PATH = os.path.join(PROJECT_DIR, '../static/js/handlebars')
+HANDLEBARS_SCRIPT_EXTRAS = ['plural.js']
 
 # From http://djangosnippets.org/snippets/1873/
 try:

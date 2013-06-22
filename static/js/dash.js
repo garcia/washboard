@@ -9,16 +9,13 @@ function notify(message, type) {
     if (!type) {
         type = 'error';
     }
-    var message_source = $('#message-template').html();
-    var message_template = Handlebars.compile(message_source);
     var message_id = (new Date()).getTime().toString();
-    var message_html = message_template({
+    $('#messages').append(Handlebars.templates.message({
         message: message,
         type: type,
         touchscreen: touchscreen,
         id: message_id,
-    });
-    $('#messages').append(message_html);
+    }));
     $('#message_' + message_id).hide().fadeIn();
 }
 
@@ -285,21 +282,16 @@ function reblog(id) {
     if (!$('#reblog_' + id).length) {
         var this_post = $('#post_' + id);
         
-        var reblog_source = $('#reblog-template').html();
-        var reblog_template = Handlebars.compile(reblog_source);
-        var reblog_html = reblog_template({
+        this_post.after(Handlebars.templates.reblog({
             id: id,
             username: Washboard.username,
-        });
-        this_post.after(reblog_html);
+        }));
         
         // Insert blog menu
-        var chooseblog_template = Handlebars.compile($('#chooseblog-template').html());
-        var chooseblog_html = chooseblog_template({
+        $('#dropdowns').append(Handlebars.templates.chooseblog({
             id: id,
             blogs: Washboard.blogs,
-        });
-        $('#dropdowns').append(chooseblog_html);
+        }));
     }
 
     // Locate reblog box
@@ -361,13 +353,10 @@ function reply(id) {
     if (!$('#reply_' + id).length) {
         var this_post = $('#post_' + id);
         
-        var reply_source = $('#reply-template').html();
-        var reply_template = Handlebars.compile(reply_source);
-        var reply_html = reply_template({
+        this_post.after(Handlebars.templates.reply({
             id: id,
             rebloggable: !$('#post_' + id).hasClass('answer'),
-        });
-        this_post.after(reply_html);
+        }));
     }
 
     // Locate reply box
@@ -813,11 +802,8 @@ function compile(post) {
     });
 
     // Render post to HTML
-    var inner_template = Handlebars.compile($('#' + post.type + '-template').html());
-    var inner_html = inner_template(context);
-    var post_template = Handlebars.compile($('#post-template').html());
-    context.inner_html = inner_html;
-    return post_template(context);
+    context.inner_html = Handlebars.templates[post.type](context);
+    return Handlebars.templates.post(context);
 }
 
 function dash(data, textStatus, jqXHR) {
@@ -855,10 +841,7 @@ function dash(data, textStatus, jqXHR) {
         
         // Add notification if necessary
         if (blacklisted) {
-            var notification_template = Handlebars.compile(
-                $('#notification-template').html()
-            );
-            post_elem.append(notification_template(blacklisted));
+            post_elem.append(Handlebars.templates.notification(blacklisted));
             post_elem.addClass('blacklisted');
             
             // Add listeners for touchscreens
@@ -879,9 +862,7 @@ function dash(data, textStatus, jqXHR) {
         $('#posts').append(post_elem);
         
         // Insert info menu
-        var info_template = Handlebars.compile($('#info-template').html());
-        var info_html = info_template(context);
-        $('#dropdowns').append(info_html);
+        $('#dropdowns').append(Handlebars.templates.info(context));
         $('#info_' + post.id).find('.timeago').timeago();
     });
 
@@ -972,10 +953,7 @@ function dashboard(data) {
             var message = error_message(jqXHR, 'loading your posts')
             var retry_message = (touchscreen ? 'Tap' : 'Click') + ' to retry.';
             if ($('#posts').is(':empty')) {
-                var empty_source = $('#empty-template').html();
-                var empty_template = Handlebars.compile(empty_source);
-                var empty_html = empty_template({message: message});
-                $('#posts').append(empty_html);
+                $('#posts').append(Handlebars.templates.empty({message: message}));
                 done_loading(retry_message);
             }
             else {
@@ -1207,15 +1185,6 @@ $(function() {
     optimal_sizes = {'1': 500 * scale, '2': 245 * scale, '3': 160 * scale};
     touchscreen = 'ontouchstart' in window;
 
-    Handlebars.registerHelper('pluralize', function(number, single, plural) {
-        if (number === 1) {
-            return single;
-        }
-        else {
-            return plural;
-        }
-    });
-    
     query = URI(location.search).query(true);
     if (query.offset) {
         Session.offset = query.offset;

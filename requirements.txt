@@ -8,3 +8,5 @@ httplib2==0.8
 oauth2==1.5.211
 six==1.3.0
 wsgiref==0.1.2
+django-handlebars==0.1
+python-spidermonkey==0.0.10

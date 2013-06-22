@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load handlebars_tags %}
 
 {% block css %}
 <link rel="stylesheet" type="text/less" href="{% static "less/dash.less" %}" />
@@ -14,7 +15,24 @@ csrf_token = "{{ csrf_token }}";
 {% endblock %}
 
 {% block js %}
-<script type="text/javascript" src="{% static "js/handlebars.js" %}"></script>
+{% handlebars_scripts %}
+{% handlebars_template "post" %}
+{% handlebars_template "info" %}
+{% handlebars_template "text" %}
+{% handlebars_template "photo" %}
+{% handlebars_template "quote" %}
+{% handlebars_template "link" %}
+{% handlebars_template "chat" %}
+{% handlebars_template "audio" %}
+{% handlebars_template "video" %}
+{% handlebars_template "answer" %}
+{% handlebars_template "reblog" %}
+{% handlebars_template "reply" %}
+{% handlebars_template "chooseblog" %}
+{% handlebars_template "notification" %}
+{% handlebars_template "message" %}
+{% handlebars_template "empty" %}
+<script type="text/javascript" src="{% static "js/handlebars/plural.js" %}"></script>
 <script type="text/javascript" src="{% static "js/json2.js" %}"></script>
 <script type="text/javascript" src="{% static "js/jquery.timeago.js" %}"></script>
 <script type="text/javascript" src="{% static "js/URI.min.js" %}"></script>
@@ -24,269 +42,4 @@ csrf_token = "{{ csrf_token }}";
 
 {% block bottom %}
 <a id="load_more" class="js loading" onclick="load_more()">Initializing...</a>
-{% endblock %}
-
-{% block templates %}
-{% verbatim %}
-<script id="post-template" type="text/x-handlebars-template">
-<li class="post {{post.type}}"
-    id="post_{{post.id}}"
-    data-reblog-key="{{post.reblog_key}}"
-    data-type="{{post.type}}">
-    <div class="meta">
-        <a class="avatar" href="/blog/{{post.blog_name}}">
-            <img src="http://api.tumblr.com/v2/blog/{{post.blog_name}}.tumblr.com/avatar/64" alt="{{post.blog_name}}'s avatar" />
-        </a>
-        <a class="blog_name" href="{{post.post_url}}">{{post.blog_name}}</a>
-        {{#if post.reblogged_from_name}}
-        <span class="reblogged_text">&nbsp;reblogged&nbsp;</span>
-        <a class="reblogged_from_name" href="{{post.reblogged_from_url}}">
-            {{post.reblogged_from_name}}
-        </a>
-        {{/if}}
-    </div>
-    
-    {{{inner_html}}}
-
-    {{#if tags}}
-    <div class="tags">
-        {{#each tags}}
-        <a {{#if featured}}class="featured" {{/if}}href="/tagged/{{safe_tag}}">#{{tag}}</a>
-        {{/each}}
-    </div>
-    {{/if}}
-
-    <div class="actions">
-        <div class="buttons">
-            {{#if mine}}
-            <a class="edit" href="http://www.tumblr.com/edit/{{post.id}}" target="_blank">Edit</a>
-            {{else}}
-            <a class="js like{{#if post.liked}} liked{{/if}}" onclick="like({{post.id}})">Like</a>
-            {{/if}}
-            {{#if rebloggable}}
-            <a class="js reblog" onclick="reblog({{post.id}})">Reblog</a>
-            {{/if}}
-            {{#if post.can_reply}}
-            <a class="js reply" onclick="reply({{post.id}})">Reply</a>
-            {{/if}}
-            <a class="js info" data-dropdown="#info_{{post.id}}">Info</a>
-        </div>
-        <div class="not-buttons">
-            {{#if post.note_count}}
-            <a class="js note_count" onclick="notes({{post.id}})">{{post.note_count}} {{pluralize post.note_count "note" "notes"}}</a>
-            {{/if}}
-            {{#if post.source_url}}
-            <a class="source" href="{{post.source_url}}" target="_blank">{{post.source_title}}</a>
-            {{/if}}
-        </div>
-    </div>
-
-    {{#if post.notes}}
-    <ol class="notes">
-        {{#each post.notes}}
-        <li class="{{type}}">
-            <a href="/blog/{{blog_name}}">{{blog_name}}</a>
-            {{#if photo_url}}
-            <span class="reply-text"></span>
-            <img src="{{photo_url}}" />
-            {{else}}
-            {{#if reply_text}}
-            <span class="reply-text">{{reply_text}}</span>
-            {{/if}}
-            {{/if}}
-        </li>
-        {{/each}}
-    </ol>
-    {{/if}}
-</li>
-</script>
-
-<script id="info-template" type="text/x-handlebars-template">
-{{#with post}}
-<div id="info_{{id}}" class="info-menu dropdown dropdown-tip">
-    <ul class="dropdown-menu">
-        <li><a href="{{post_url}}">
-            Posted <abbr class="timeago" title="{{date}}">{{date}}</abbr>
-        </a></li>
-        {{#if link_url}}
-        <li><a href="{{link_url}}" target="_blank">Clickthrough</a></li>
-        {{/if}}
-        {{#if audio_url}}
-        <li><a href="{{audio_url}}?plead=please-dont-download-this-or-our-lawyers-wont-let-us-host-audio"
-               target="_blank">Download audio</a></li>
-        {{/if}}
-        <li><a href="{{../dashboard}}" target="_blank">View on Dashboard</a></li>
-        <li><a class="js" onclick="hide({{id}}, '{{../hide_url}}')">Hide this post</a></li>
-    </ul>
-</div>
-{{/with}}
-</script>
-
-<script id="text-template" type="text/x-handlebars-template">
-{{#with post}}
-{{#if title}}
-<h2>{{title}}</h2>
-{{/if}}
-<div class="body">{{{body}}}</div>
-{{/with}}
-</script>
-
-<script id="photo-template" type="text/x-handlebars-template">
-{{#with post}}
-<div class="photos">
-    {{#each ../rows}}
-    <div class="row row-{{count}}" style="height: {{height}}px">
-        {{#each photos}}
-        <a href="{{hr_url}}" target="_blank" onclick="expand({{../../id}}); return false">
-            <img class="js" src="{{url}}" />
-        </a>
-        {{/each}}
-    </div>
-    {{/each}}
-</div>
-<div class="hr_photos" style="display: none">
-    {{#each ../rows}}
-    {{#each photos}}
-    <img class="js" hr-src="{{hr_url}}" onclick="collapse({{../../id}})" />
-    {{/each}}
-    {{/each}}
-</div>
-{{#if caption}}
-<div class="caption">{{{caption}}}</div>
-{{/if}}
-{{/with}}
-</script>
-
-<script id="quote-template" type="text/x-handlebars-template">
-{{#with post}}
-<div class="quote">{{{text}}}</div>
-{{#if source}}
-<div class="source">{{{source}}}</div>
-{{/if}}
-{{/with}}
-</script>
-
-<script id="link-template" type="text/x-handlebars-template">
-{{#with post}}
-<a class="link" href="{{url}}">{{#if title}}{{title}}{{else}}{{url}}{{/if}}</a>
-{{#if description}}
-<div class="description">{{{description}}}</div>
-{{/if}}
-{{/with}}
-</script>
-
-<script id="chat-template" type="text/x-handlebars-template">
-{{#with post}}
-{{#if title}}
-<h2 class="title">{{title}}</h2>
-{{/if}}
-<ul class="dialogue">
-    {{#each dialogue}}
-    <li class="line"><b>{{label}}</b> <span>{{phrase}}</span></li>
-    {{/each}}
-</ul>
-{{/with}}
-</script>
-
-<script id="audio-template" type="text/x-handlebars-template">
-{{#with post}}
-<div class="audiobox">
-    {{#if audio_url}}
-    <audio src="{{audio_url}}?plead=please-dont-download-this-or-our-lawyers-wont-let-us-host-audio"
-           type="audio/mp3" preload="none" class="new" />
-    {{else}}
-    {{{player}}}
-    {{/if}}
-    {{#if album_art}}
-    <img class="js album_art" src="{{album_art}}" onclick="toggle_album_art({{../id}})" />
-    {{/if}}
-    {{#if track_name}}<p class="track_name">{{track_name}}</p>{{/if}}
-    {{#if artist}}<p class="artist">{{artist}}</p>{{/if}}
-    {{#if album}}<p class="album">{{album}}</p>{{/if}}
-</div>
-{{#if caption}}
-<div class="caption">{{{caption}}}</div>
-{{/if}}
-{{/with}}
-</script>
-
-<script id="video-template" type="text/x-handlebars-template">
-{{{best_player}}}
-{{#with post}}
-{{#if caption}}
-<div class="caption">{{{caption}}}</div>
-{{/if}}
-{{/with}}
-</script>
-
-<script id="answer-template" type="text/x-handlebars-template">
-{{#with post}}
-<div class="answerbox">
-    <p class="question">{{question}}</p>
-    <p class="asking">
-        <img class="asking_avatar" src="{{../asking_avatar}}" alt="{{asking_name}}'s avatar" />
-        {{#if asking_url}}
-        <a class="asking_name" href="{{asking_url}}">{{asking_name}}</a>
-        {{else}}
-        <a class="asking_name anonymous">{{asking_name}}</a>
-        {{/if}}
-    </p>
-</div>
-<div class="answer">{{{answer}}}</div>
-{{/with}}
-</script>
-
-<script id="reblog-template" type="text/x-handlebars-template">
-<div id="reblog_{{id}}" class="action-box reblog-box closed">
-    <textarea class="section caption" placeholder="Caption"></textarea>
-    <input class="section tags" placeholder="Tags" />
-    <div class="section controls">
-        <button class="chooseblog" data-dropdown="#chooseblog_{{id}}">{{username}}</button>
-        <input type="submit" value="Reblog" onclick="submit_reblog({{id}})" />
-    </div>
-</div>
-</script>
-
-<script id="reply-template" type="text/x-handlebars-template">
-<div id="reply_{{id}}" class="action-box reply-box closed{{#unless rebloggable}} no-reblog-button{{/unless}}">
-    <input class="reply" placeholder="Reply" onkeypress="reply_keypress({{id}}, event)" />
-    <input type="submit" value="Reply" onclick="submit_reply({{id}})" />
-</div>
-</script>
-
-<script id="chooseblog-template" type="text/x-handlebars-template">
-<div id="chooseblog_{{id}}" class="chooseblog-menu dropdown dropdown-tip">
-    <ul class="dropdown-menu">
-        {{#each blogs}}
-        <li>
-            <a class="js" onclick="chooseblog({{../id}}, '{{./this}}')">{{./this}}</a>
-        </li>
-        {{/each}}
-    </ul>
-</div>
-</script>
-
-<script id="notification-template" type="text/x-handlebars-template">
-<div class="notification"{{#unless touchscreen}} onclick="unhide(this)"{{/unless}}>
-    <h2>Post blacklisted</h2>
-    <p>{{{text}}}</p>
-    <a class="instructions">
-        {{#if touchscreen}}Press and hold{{else}}Click{{/if}} to unhide
-    </a>
-    <div class="progress"></div>
-</div>
-</script>
-
-<script id="message-template" type="text/x-handlebars-template">
-<li id="message_{{id}}" class="message {{type}}" onclick="dismiss(this)">
-    {{{message}}}
-    <span>{{#if touchscreen}}Tap{{else}}Click{{/if}} to dismiss</span>
-</li>
-</script>
-
-<script id="empty-template" type="text/x-handlebars-template">
-<li class="empty">{{ message }}</li>
-</script>
-
-{% endverbatim %}
 {% endblock %}

@@ -1,0 +1,9 @@
+<div class="notification"{{#unless touchscreen}} onclick="unhide(this)"{{/unless}}>
+    <h2>Post blacklisted</h2>
+    <p>{{{text}}}</p>
+    <a class="instructions">
+        {{#if touchscreen}}Press and hold{{else}}Click{{/if}} to unhide
+    </a>
+    <div class="progress"></div>
+</div>
+

@@ -1,0 +1,24 @@
+{{#with post}}
+<div class="photos">
+    {{#each ../rows}}
+    <div class="row row-{{count}}" style="height: {{height}}px">
+        {{#each photos}}
+        <a href="{{hr_url}}" target="_blank" onclick="expand({{../../id}}); return false">
+            <img class="js" src="{{url}}" />
+        </a>
+        {{/each}}
+    </div>
+    {{/each}}
+</div>
+<div class="hr_photos" style="display: none">
+    {{#each ../rows}}
+    {{#each photos}}
+    <img class="js" hr-src="{{hr_url}}" onclick="collapse({{../../id}})" />
+    {{/each}}
+    {{/each}}
+</div>
+{{#if caption}}
+<div class="caption">{{{caption}}}</div>
+{{/if}}
+{{/with}}
+

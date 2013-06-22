@@ -1,0 +1,20 @@
+{{#with post}}
+<div class="audiobox">
+    {{#if audio_url}}
+    <audio src="{{audio_url}}?plead=please-dont-download-this-or-our-lawyers-wont-let-us-host-audio"
+           type="audio/mp3" preload="none" class="new" />
+    {{else}}
+    {{{player}}}
+    {{/if}}
+    {{#if album_art}}
+    <img class="js album_art" src="{{album_art}}" onclick="toggle_album_art({{../id}})" />
+    {{/if}}
+    {{#if track_name}}<p class="track_name">{{track_name}}</p>{{/if}}
+    {{#if artist}}<p class="artist">{{artist}}</p>{{/if}}
+    {{#if album}}<p class="album">{{album}}</p>{{/if}}
+</div>
+{{#if caption}}
+<div class="caption">{{{caption}}}</div>
+{{/if}}
+{{/with}}
+

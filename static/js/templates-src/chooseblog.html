@@ -1,0 +1,10 @@
+<div id="chooseblog_{{id}}" class="chooseblog-menu dropdown dropdown-tip">
+    <ul class="dropdown-menu">
+        {{#each blogs}}
+        <li>
+            <a class="js" onclick="chooseblog({{../id}}, '{{./this}}')">{{./this}}</a>
+        </li>
+        {{/each}}
+    </ul>
+</div>
+

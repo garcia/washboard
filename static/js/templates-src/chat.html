@@ -1,0 +1,11 @@
+{{#with post}}
+{{#if title}}
+<h2 class="title">{{title}}</h2>
+{{/if}}
+<ul class="dialogue">
+    {{#each dialogue}}
+    <li class="line"><b>{{label}}</b> <span>{{phrase}}</span></li>
+    {{/each}}
+</ul>
+{{/with}}
+
