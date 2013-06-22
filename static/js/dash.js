@@ -549,6 +549,7 @@ function read_more(postelem) {
                     .on('click', function(e) {
                         $(this).closest('.post').find('.cut.under').removeClass('under').addClass('over');
                         $(this).remove();
+                        save_session_attr('posts');
                     });
             $(e).replaceWith(more_link);
 
@@ -582,7 +583,6 @@ function read_more(postelem) {
             more_link.parent().nextAll().addClass('cut under')
         }
     }); 
-    save_session_attr('posts');
 }
 
 /******************
