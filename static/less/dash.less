@@ -59,7 +59,7 @@ noscript p {
 /* posts */
 
 #posts {
-    padding: 0;
+    padding: 0 0 20px 0;
     list-style-type: none;
     overflow-x: hidden;
 }
@@ -81,7 +81,7 @@ noscript p {
     position: relative;
     width: 500px;
     padding: 20px;
-    margin: 20px auto;
+    margin: 20px auto 0 auto;
     background-color: white;
     list-style-type: none; /* IE9 fix */
     border-radius: 6px;
@@ -263,7 +263,7 @@ noscript p {
 .action-box {
     position: relative;
     max-width: 500px;
-    margin: 0 auto;
+    margin: 20px auto;
     left: 0;
     right: 0;
     background-color: darken(@primary, 36%);
@@ -282,7 +282,9 @@ noscript p {
 
 .action-box.closed {
     height: 0 !important;
+    margin: -1px auto; // compensate for top/bottom borders
     opacity: 0;
+    overflow: hidden;
 }
 
 .action-box > * {
@@ -348,26 +350,6 @@ noscript p {
     border-right: 6px solid transparent;
 }
 
-/* These four rules fix the margins when there are one or two closed action boxes.
-   I don"t really know how it works. */
-
-.action-box.closed + .action-box {
-    margin-top: 22px;
-}
-
-.post + .action-box.closed {
-    margin-bottom: -24px;
-}
-
-.post + .action-box.closed + .post {
-    margin-top: 22px;
-}
-
-.action-box.closed + .action-box.closed {
-    margin-top: 0;
-    margin-bottom: 20px;
-}
-
 /* Pointers */
 
 .reply-box:before {
@@ -426,6 +408,17 @@ noscript p {
     display: block;
     clear: both;
 }
+
+/* margin fixes for action boxes */
+
+.action-box:not(.closed) + .action-box.closed {
+    margin-top: -20px;
+}
+
+.action-box.closed + .reblog-box:not(.closed) {
+    padding-top: 20px;
+}
+
 
 /* Stop long words at the padding, not the edge of the post box */
 
@@ -958,7 +951,7 @@ img {
     .post,
     .post.hr {
         width: 100%;
-        margin: 10px 0;
+        margin: 10px 0 0 0;
         padding: 20px 10px;
         border-radius: 0;
         .box-sizing-border-box;
@@ -1010,6 +1003,16 @@ img {
 
     .row img {
         width: 100%;
+    }
+
+    /* margin fixes for action boxes */
+
+    .action-box:not(.closed) + .action-box.closed {
+        margin-top: -10px;
+    }
+
+    .action-box.closed + .reblog-box:not(.closed) {
+        padding-top: 10px;
     }
 
 }
