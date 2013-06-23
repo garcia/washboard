@@ -329,6 +329,16 @@ noscript p {
     .shinybg(darken(@primary, 22%); darken(@primary, 26%); darken(@primary, 30%); darken(@primary, 34%));
 }
 
+.action-box button:hover,
+.action-box input[type=submit]:hover {
+    .shinybg(darken(@primary, 18%); darken(@primary, 24%); darken(@primary, 30%); darken(@primary, 36%));
+}
+
+.action-box button:active,
+.action-box input[type=submit]:active {
+    .shinybg(darken(@primary, 36%); darken(@primary, 30%); darken(@primary, 24%); darken(@primary, 18%));
+}
+
 .action-box:before,
 .action-box:after {
     content: "";
