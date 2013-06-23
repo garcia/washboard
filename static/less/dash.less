@@ -405,8 +405,16 @@ noscript p {
     font-family: inherit;
 }
 
-.reblog-box .controls .chooseblog {
+.reblog-box .controls .chooseblog,
+.reblog-box .controls .choosestate {
     float: left;
+}
+
+.reblog-box .controls .on {
+    display: inline-block;
+    float: left;
+    padding: 12px 0;
+    color: lighten(@primary, 25%);
 }
 
 .reblog-box .controls input[type=submit] {

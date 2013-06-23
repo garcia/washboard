@@ -292,6 +292,11 @@ function reblog(id) {
             id: id,
             blogs: Washboard.blogs,
         }));
+        // Insert state menu
+        $('#dropdowns').append(Handlebars.templates.choosestate({
+            id: id,
+            states: states,
+        }));
     }
 
     // Locate reblog box
@@ -327,6 +332,7 @@ function submit_reblog(id, reblog_text) {
         comment: reblog_box.find('.caption').val(),
         tags: reblog_box.find('.tags').val(),
         blog: reblog_box.find('.chooseblog').text(),
+        state: name2state(reblog_box.find('.choosestate').text()),
     };
 
     apicall('reblog', data, {
@@ -526,6 +532,28 @@ function toggle_album_art(id) {
 
 function chooseblog(id, blog) {
     $('#reblog_' + id).find('.chooseblog').text(blog);
+}
+
+function state2name(state) {
+    for (s in states) {
+        if (states[s].state == state) {
+            return states[s].name;
+        }
+    }
+    return false;
+}
+
+function name2state(name) {
+    for (s in states) {
+        if (states[s].name == name) {
+            return states[s].state;
+        }
+    }
+    return false;
+}
+
+function choosestate(id, state) {
+    return $('#reblog_' + id).find('.choosestate').text(state2name(state));
 }
 
 
@@ -1171,6 +1199,12 @@ $(function() {
             },
         },
     };
+    states = [
+        {'state': 'published', 'name': 'Publish'},
+        {'state': 'draft', 'name': 'Save as draft'},
+        {'state': 'queue', 'name': 'Add to queue'},
+        // {'state': 'private', 'name': 'Private post'}, // doesn't seem to be working?
+    ];
 
     allow_selection = -1;
     unhiding = -1;

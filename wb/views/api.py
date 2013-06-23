@@ -65,7 +65,7 @@ endpoints = {
         'method': 'POST',
         'api_key': True,
         'parameters': [
-            'id', 'type', 'reblog_key', 'comment', 'tags',
+            'id', 'type', 'reblog_key', 'comment', 'tags', 'state',
         ],
     },
     'tagged': {

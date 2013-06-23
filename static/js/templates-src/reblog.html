@@ -2,6 +2,8 @@
     <textarea class="section caption" placeholder="Caption"></textarea>
     <input class="section tags" placeholder="Tags" />
     <div class="section controls">
+        <button class="choosestate" data-dropdown="#choosestate_{{id}}">Publish</button>
+        <span class="on">on</span>
         <button class="chooseblog" data-dropdown="#chooseblog_{{id}}">{{username}}</button>
         <input type="submit" value="Reblog" onclick="submit_reblog({{id}})" />
     </div>
