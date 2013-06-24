@@ -9,3 +9,4 @@ Import blacklist from Tumblr Savior
 waitForImages when restoring scroll position
 Separation of logic from presentation for notes
 Unit tests?
+SVG icons
