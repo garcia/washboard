@@ -29,8 +29,8 @@ class UserProfile(models.Model):
     )
     sessions = models.BooleanField(
         default=False,
-        help_text='Sessions enable tabs to restore their contents '
-                  'even when refreshed or closed.',
+        help_text='Sessions enable tabs to restore their contents even when '
+                  'refreshed or closed. Check the FAQ for more details.',
     )
     safe_mode = models.BooleanField(
         default=False,

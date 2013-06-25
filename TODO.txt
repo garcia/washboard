@@ -1,10 +1,9 @@
-Explain how to refresh with sessions enabled / misc. usability tweaks
+Import blacklist from Tumblr Savior
 -- RELEASE --
 Don't compress JS that's already compressed
 Title, description, and follow link on blog pages
 Open permalinks within Washboard, not on [blog].tumblr.com
 Link to open the current page on Tumblr
-Import blacklist from Tumblr Savior
 waitForImages when restoring scroll position
 Separation of logic from presentation for notes
 Unit tests?
