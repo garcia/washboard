@@ -1,6 +1,8 @@
 @import "washboard.less";
 @import "options_page.less";
 
+@links: #000080;
+
 .ruleset,
 #submit {
     display: table;
@@ -52,7 +54,7 @@
 
 .row.add .label {
     text-align: center;
-    color: #000080;
+    color: @links;
     border-bottom: none;
     cursor: pointer;
 }
@@ -61,7 +63,8 @@
     margin-top: 20px;
 }
 
-input[type="text"] {
+input[type="text"],
+textarea {
     font-family: inherit;
     font-size: inherit;
     border: 1px solid desaturate(lighten(@primary, 30%), 50%);
@@ -69,9 +72,22 @@ input[type="text"] {
     padding: 4px;
 }
 
-input[type=text]:focus {
+input[type=text]:focus,
+textarea:focus {
     outline: none;
     border: 1px solid lighten(@primary, 15%);
+}
+
+#importsaviorlink {
+    color: @links;
+}
+
+#importsaviorbox {
+    display: none;
+}
+
+textarea {
+    margin-bottom: 10px;
 }
 
 /* Showing / suppressing notifications is meaningless for whitelisted keywords,

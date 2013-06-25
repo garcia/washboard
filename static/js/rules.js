@@ -63,6 +63,11 @@ function delete_rule(e) {
     check_no_rules(ruleset);
 }
 
+function importsavior() {
+    $('#importsaviorlink').hide();
+    $('#importsaviorbox').slideDown();
+}
+
 $(function() {
     $('.keyword input').keypress(keyword_keypress);
     $('input[type=checkbox]').click(checkbox_click);
