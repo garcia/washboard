@@ -8,10 +8,12 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 from django.http import HttpResponse
+from django.http.request import QueryDict
 from django.shortcuts import redirect, render
 from django.template import RequestContext
 
 from wb.models import *
+import wb.views.api
 
 def update(d, u):
     """Recursively merge two mappings."""
@@ -52,6 +54,19 @@ def main(request, data_=None):
         },
     }
     if data_: update(data, data_)
+    
+    # Preload data if not using sessions
+    if not data['wb']['profile']['sessions']:
+        POST = {}
+        POST['endpoint'] = data['wb']['endpoint']
+        POST['reblog_info'] = POST['notes_info'] = 'true'
+        pk = data['wb']['pagination_key']
+        if pk in request.GET:
+            POST[pk] = request.GET[pk]
+        POST.update(data['wb']['parameters'])
+        request.POST = QueryDict('&'.join('='.join(pair) for pair in POST.items()))
+        request.method = 'POST'
+        data['wb']['initial_data'] = json.loads(wb.views.api.main(request).content)
 
     data['wb'] = json.dumps(data['wb'])
 

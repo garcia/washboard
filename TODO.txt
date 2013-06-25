@@ -1,7 +1,6 @@
 Explain how to refresh with sessions enabled / misc. usability tweaks
 -- RELEASE --
 Don't compress JS that's already compressed
-Safe mode
 Title, description, and follow link on blog pages
 Open permalinks within Washboard, not on [blog].tumblr.com
 Link to open the current page on Tumblr

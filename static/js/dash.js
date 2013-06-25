@@ -1246,6 +1246,10 @@ $(function() {
     if (Washboard.profile.sessions) {
         init_session();
     }
+    else if (Washboard.initial_data) {
+        parse_hash();
+        dash(Washboard.initial_data);
+    }
     else {
         load_more();
     }
