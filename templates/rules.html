@@ -77,6 +77,20 @@
         </div>
     </fieldset>
 </form>
+
+<form action="/importsavior" method="post" onsubmit="return false">
+    <fieldset>
+        <h2>Import from Tumblr Savior</h2>
+        <p>Paste your Tumblr Savior save data into the box below to import your blacklist and whitelist.</p>
+        {% csrf_token %}
+        <div>
+            {{ importsavior.json }}
+        </div>
+        <div class="submit">
+            <input class="submit-button" type="submit" value="Import" onclick="form.submit()" />
+        </div>
+    </fieldset>
+</form>
 {% endblock %}
 
 {% block bottom %}

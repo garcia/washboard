@@ -1,4 +1,3 @@
-Import blacklist from Tumblr Savior
 -- RELEASE --
 Don't compress JS that's already compressed
 Title, description, and follow link on blog pages
