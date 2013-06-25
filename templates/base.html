@@ -21,8 +21,9 @@
 {# Used to insert dynamic JS variables without attempting to cache them #}
 {% block vars %}{% endblock %}
 
-{% compress js %}
+{# jQuery is already compressed, no need to recompress #}
 <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
+{% compress js %}
 <script type="text/javascript" src="{% static "js/jquery.fix.clone.js" %}"></script>
 <script type="text/javascript" src="{% static "jquery.dropdown/jquery.dropdown.js" %}"></script>
 <script type="text/javascript" src="{% static "js/washboard.js" %}"></script>
