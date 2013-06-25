@@ -316,7 +316,8 @@ noscript p {
 }
 
 .action-box button,
-.action-box input[type=submit] {
+.action-box input[type=submit],
+#safe_mode_toggle {
     display: block;
     width: auto;
     margin: 5px;
@@ -330,12 +331,14 @@ noscript p {
 }
 
 .action-box button:hover,
-.action-box input[type=submit]:hover {
+.action-box input[type=submit]:hover,
+#safe_mode_toggle:hover {
     .shinybg(darken(@primary, 18%); darken(@primary, 24%); darken(@primary, 30%); darken(@primary, 36%));
 }
 
 .action-box button:active,
-.action-box input[type=submit]:active {
+.action-box input[type=submit]:active,
+.safe_mode #safe_mode_toggle {
     .shinybg(darken(@primary, 36%); darken(@primary, 30%); darken(@primary, 24%); darken(@primary, 18%));
 }
 
@@ -821,6 +824,20 @@ img {
     opacity: 0;
     border-right: 1px solid @primary;
     border-radius: 6px 0 0 6px;
+}
+
+/* safe mode */
+
+.safe_mode .post > *:not(.meta) img,
+.safe_mode iframe {
+    visibility: hidden;
+    opacity: 0;
+}
+
+#safe_mode_toggle {
+    position: fixed;
+    right: -2px;
+    bottom: -2px;
 }
 
 /* tags */

@@ -19,10 +19,20 @@ class RuleForm(forms.ModelForm):
         model = Rule
         widgets = {'keyword': forms.TextInput()}
 
+# Used on Rules page
 class HiddenPostForm(forms.ModelForm):
     class Meta:
         model = HiddenPost
         widgets = {'post': forms.TextInput()}
+
+# Used by "Hide this post" link in post context menus
+class HidePostForm(forms.ModelForm):
+    class Meta:
+        model = HiddenPost
+        exclude = ('user',)
+
+class ImportSaviorForm(forms.Form):
+    json = forms.CharField(widget=forms.Textarea)
 
 @transaction.commit_on_success
 def main(request):
@@ -55,6 +65,7 @@ def get(request):
             ('whitelist', whitelist),
         ]),
         'hiddenposts': hiddenposts,
+        'importsavior': ImportSaviorForm(),
     }
     return render(request, 'rules.html', data)
 
@@ -128,11 +139,6 @@ def post(request):
 
     return redirect('/rules')
 
-class HidePostForm(forms.ModelForm):
-    class Meta:
-        model = HiddenPost
-        exclude = ('user',)
-
 def hide(request):
     form = HidePostForm(request.POST)
     if not form.is_valid():
@@ -146,3 +152,35 @@ def hide(request):
         'meta': {'status': 200, 'msg': 'OK'},
         'response': {},
     }), content_type='application/json')
+
+def importsavior(request):
+    form = ImportSaviorForm(request.POST)
+    if not form.is_valid():
+        messages.error(request, 'Invalid form data.')
+        return redirect('/rules')
+    try:
+        savior_data = json.loads(form.cleaned_data['json'])
+    except ValueError:
+        messages.error(request, 'Invalid save data. Are you sure you '
+            'copy-pasted it directly from Tumblr Savior\'s Save/Load box?')
+        return redirect('/rules')
+
+    i = max(r.index for r in Rule.objects.filter(user__exact=request.user)) + 1
+    imported = 0
+
+    for savior_list in ('listBlack', 'listWhite'):
+        if savior_list not in savior_data:
+            continue
+        for keyword in savior_data[savior_list]:
+            # Check for keyword's existence first
+            try:
+                Rule.objects.get(user=request.user, keyword=keyword)
+            # If it doesn't exist, add it
+            except Rule.DoesNotExist:
+                Rule(user=request.user, keyword=keyword, index=i,
+                     blacklist=('Black' in savior_list)).save()
+                i += 1
+                imported += 1
+
+    messages.success(request, 'Imported %s rules successfully.' % imported)
+    return redirect('/rules')

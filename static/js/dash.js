@@ -521,6 +521,13 @@ function unhide(a) {
 }
 
 /******************
+ * Safe mode      *
+ ******************/
+
+function safe_mode_toggle(e) {
+}
+
+/******************
  * Miscellaneous  *
  ******************/
 
@@ -885,7 +892,7 @@ function dash(data, textStatus, jqXHR) {
 
         // Parse read-more breaks
         read_more(post_elem);
-        
+
         // Add to the page
         $('#posts').append(post_elem);
         
@@ -1218,7 +1225,16 @@ $(function() {
     scale = Math.min(500, window.innerWidth) / 500;
     optimal_sizes = {'1': 500 * scale, '2': 245 * scale, '3': 160 * scale};
     touchscreen = 'ontouchstart' in window;
-
+        
+    // Add safe mode handlers
+    if (Washboard.profile.safe_mode) {
+        $(document.body).addClass('safe_mode');
+        $(document.body).append('<button id="safe_mode_toggle">Safe Mode</button>');
+        $('#safe_mode_toggle').click(function(e) {
+            $(document.body).toggleClass('safe_mode');
+        });
+    }
+    
     query = URI(location.search).query(true);
     if (query.offset) {
         Session.offset = query.offset;
@@ -1229,6 +1245,10 @@ $(function() {
 
     if (Washboard.profile.sessions) {
         init_session();
+    }
+    else if (Washboard.initial_data) {
+        parse_hash();
+        dash(Washboard.initial_data);
     }
     else {
         load_more();
