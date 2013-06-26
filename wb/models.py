@@ -35,7 +35,7 @@ class UserProfile(models.Model):
     )
     safe_mode = models.BooleanField(
         default=False,
-        help_text='Hide images and videos until you tap or hover over them.',
+        help_text='Hide images and videos with the tap of a button.',
     )
 
 def create_user_profile(sender, instance, created, **kwargs):

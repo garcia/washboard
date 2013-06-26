@@ -1031,7 +1031,7 @@ function done_loading(message) {
  ******************/
 
 function scroll_handler(e) {
-    if (document.body.scrollTop + window.innerHeight * 2 > document.height) {
+    if (document.body.scrollTop + window.innerHeight * 3 > document.height) {
         if (!$('#load_more').hasClass('loading')) {
             console.log("Infinite scrolling invoked");
             load_more();
