@@ -23,6 +23,7 @@ add_introspection_rules([], ['^wb\.models\.LowerCaseCharField'])
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
+    started = models.BooleanField(default=False)
     infinite_scrolling = models.BooleanField(
         default=True,
         help_text='Automatically load posts while you scroll.',

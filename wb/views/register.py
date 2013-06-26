@@ -166,7 +166,7 @@ def setpassword(request):
     if form.is_valid():
         request.user.set_password(form.cleaned_data['password'])
         request.user.save()
-        return redirect('/')
+        return redirect('/getstarted')
 
 def changename(request):
     if not request.user.is_authenticated():
@@ -192,3 +192,15 @@ def changename(request):
             login(request, user)
 
         return redirect('/')
+
+def getstarted(request):
+    if not request.user.is_authenticated():
+        return redirect('/')
+
+    profile = request.user.get_profile()
+    if profile.started:
+        return redirect('/dash')
+    else:
+        profile.started = True
+        profile.save()
+        return render(request, 'getstarted.html')

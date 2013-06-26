@@ -18,7 +18,7 @@ from wb.models import *
 class SettingsForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        exclude = ('user',)
+        exclude = ('user', 'started')
         widgets = {'keyword': forms.TextInput()}
 
 def main(request):

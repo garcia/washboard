@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/less" href="{% static "less/getstarted.less" %}" />
+{% endblock %}
+
+{% block content %}
+<div id="logo">
+    <h1><a href="/">Washboard</a></h1>
+    <h2>Get started</h2>
+</div>
+
+<p>Now that you're registered on Washboard,</p>
+
+<ol>
+    <li>Import your blacklist and whitelist from Tumblr Savior using the <a href="/rules" target="_blank">Rules</a> page, or add your keywords manually.</li>
+    <li>If you're using Mobile Safari, you can add Washboard to your home screen using the Share button next to the Back / Forward buttons.</li>
+    <li>Follow our <a href="http://status.washboard.ws/" target="_blank">status blog</a> for important updates.</li>
+    <li>Start browsing your washed <a href="/dash">Dashboard</a>!</li>
+</ol>
+{% endblock %}
+
+{% block bottom %}
+{% include "links.html" %}
+{% endblock %}
