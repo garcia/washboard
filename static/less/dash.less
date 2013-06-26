@@ -50,6 +50,11 @@ noscript p {
     color: white;
 }
 
+pre,
+code {
+    white-space: pre-wrap;
+}
+
 /* nav */
 
 #top #nav {
@@ -75,6 +80,7 @@ noscript p {
     font-size: 24px;
     border: 6px dashed darken(@primary, 12%);
     border-radius: 6px;
+    box-sizing: border-box;
 }
 
 .post {
@@ -964,6 +970,7 @@ img {
     }
 
     #posts,
+    #posts > .empty,
     #top #nav,
     .post.video > iframe,
     .audiobox > iframe,
@@ -987,7 +994,8 @@ img {
     .post.hr {
         width: 100%;
         margin: 10px 0 0 0;
-        padding: 20px 10px;
+        padding: 10px;
+        padding-bottom: 20px;
         border-radius: 0;
         .box-sizing-border-box;
     }
@@ -1038,6 +1046,18 @@ img {
 
     .row img {
         width: 100%;
+    }
+
+    .quote .quote {
+        font-size: 16px;
+    }
+    
+    .blacklisted .meta {
+        position: absolute;
+    }
+
+    .notification {
+        margin-top: 10px;
     }
 
     /* margin fixes for action boxes */
