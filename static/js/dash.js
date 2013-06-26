@@ -1176,8 +1176,8 @@ $(function() {
         offset: 0,
     };
     
-    scan_attributes = ['reblogged_from_name', 'title', 'body', 'caption',
-        'text', 'source', 'url', 'description', 'label', 'phrase',
+    scan_attributes = ['blog_name', 'reblogged_from_name', 'title', 'body',
+        'caption', 'text', 'source', 'url', 'description', 'label', 'phrase',
         'asking_name', 'question', 'answer', 'source_url'];
     session_attributes = {
         'Session': {
