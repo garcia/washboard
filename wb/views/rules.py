@@ -165,7 +165,10 @@ def importsavior(request):
             'copy-pasted it directly from Tumblr Savior\'s Save/Load box?')
         return redirect('/rules')
 
-    i = max(r.index for r in Rule.objects.filter(user__exact=request.user)) + 1
+    i = 0
+    existing_rules = Rule.objects.filter(user__exact=request.user)
+    if len(existing_rules):
+        i = max(r.index for r in existing_rules) + 1
     imported = 0
 
     for savior_list in ('listBlack', 'listWhite'):
