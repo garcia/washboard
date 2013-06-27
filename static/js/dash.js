@@ -198,23 +198,35 @@ function is_blacklisted(post) {
  ******************/
 
 function like(id) {
+    var this_post = $('#post_' + id);
+    var like_button = this_post.find('.like');
     // Determine whether to like or unlike the post
-    endpoint = $('#post_' + id).find('.like').hasClass('liked') ? 'unlike' : 'like';
+    endpoint = like_button.hasClass('liked') ? 'unlike' : 'like';
 
     // Assemble parameters
     parameters = {
         id: id,
-        reblog_key: $('#post_' + id).data('reblog-key'),
+        reblog_key: this_post.data('reblog-key'),
     }
+
+    like_button.addClass('pending');
     
     // Send the API request
     apicall(endpoint, parameters, {
         success: function(data) {
-            $('#post_' + id).find('.like').toggleClass('liked');
-            save_session_attr('posts');
+            if (endpoint == 'like') {
+                like_button.addClass('liked');
+            }
+            else {
+                like_button.removeClass('liked');
+            }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             notify(error_message(jqXHR, 'liking the post'), 'warning');
+        },
+        complete: function(jqXHR, textStatus) {
+            like_button.removeClass('pending');
+            save_session_attr('posts');
         },
     });
 }
@@ -335,6 +347,8 @@ function submit_reblog(id, reblog_text) {
         state: name2state(reblog_box.find('.choosestate').text()),
     };
 
+    this_post.find('.buttons .reblog').addClass('pending');
+
     apicall('reblog', data, {
         success: function(data) {
             var reblog_elem = $('#reblog_' + id);
@@ -346,6 +360,9 @@ function submit_reblog(id, reblog_text) {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             notify(error_message(jqXHR, 'reblogging the post'), 'warning');
+        },
+        complete: function(jqXHR, textStatus) {
+            this_post.find('.buttons .reblog').removeClass('pending');
         },
     });
 }
@@ -400,23 +417,32 @@ function reply_keypress(id, e) {
 }
 
 function submit_reply(id, reply_text) {
+    var this_post = $('#post_' + id);
+    var reply_box = $('#reply_' + id);
+
     data = {
         post_id: id,
-        reblog_key: $('#post_' + id).data('reblog-key'),
-        reply_text: $('#reply_' + id).find('.reply').val(),
+        reblog_key: this_post.data('reblog-key'),
+        reply_text: reply_box.find('.reply').val(),
     };
+
+    this_post.find('.buttons .reply').addClass('pending');
+
     apicall('reply', data, {
         success: function(data) {
-            $('#reply_' + id)
+            reply_box
                 .addClass('closed')
                 .find('.reply')
                 .val('');
-            $('#post_' + id).find('.buttons .reply').addClass('done');
+            this_post.find('.buttons .reply').addClass('done');
             save_session_attr('posts');
         },
         error: function(jqXHR, textStatus, errorThrown) {
             notify(error_message(jqXHR, 'replying to the post'), 'warning');
         },
+        complete: function(jqXHR, textStatus) {
+            this_post.find('.buttons .reply').removeClass('pending');
+        }
     });
 }
 
