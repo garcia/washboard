@@ -81,13 +81,19 @@ def callback(request):
         return redirect('/')
 
     # Get the access token for the user
-    req_access = Tumblr(
-        settings.OAUTH_CONSUMER_KEY,
-        settings.OAUTH_SECRET_KEY,
-        request.session['token_key'],
-        request.session['token_secret'],
-        request.GET['oauth_verifier'],
-    )
+    try:
+        req_access = Tumblr(
+            settings.OAUTH_CONSUMER_KEY,
+            settings.OAUTH_SECRET_KEY,
+            request.session['token_key'],
+            request.session['token_secret'],
+            request.GET['oauth_verifier'],
+        )
+    except KeyError:
+        messages.error(request, tryagain(
+            "Sorry, your session already expired."
+        ))
+        return redirect('/')
     access_token = req_access.request_qsl(Tumblr.ACCESS_TOKEN, 'POST')
     if not ('oauth_token' in access_token and
             'oauth_token_secret' in access_token):
