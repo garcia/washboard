@@ -2,12 +2,13 @@ import json
 import random
 import sys
 import urlparse
+import warnings
 
 from django import forms
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.datastructures import SortedDict
@@ -154,6 +155,8 @@ def hide(request):
     }), content_type='application/json')
 
 def importsavior(request):
+    max_len = filter(lambda f: f.name == 'keyword',
+                     Rule._meta.fields)[0].max_length
     form = ImportSaviorForm(request.POST)
     if not form.is_valid():
         messages.error(request, 'Invalid form data.')
@@ -170,20 +173,31 @@ def importsavior(request):
     if len(existing_rules):
         i = max(r.index for r in existing_rules) + 1
     imported = 0
+    truncated = False
 
     for savior_list in ('listBlack', 'listWhite'):
         if savior_list not in savior_data:
             continue
         for keyword in savior_data[savior_list]:
+            # Truncate keyword if necessary
+            if len(keyword) > max_len:
+                keyword = keyword[:max_len]
+                truncated = True
             # Check for keyword's existence first
             try:
                 Rule.objects.get(user=request.user, keyword=keyword)
             # If it doesn't exist, add it
             except Rule.DoesNotExist:
-                Rule(user=request.user, keyword=keyword, index=i,
-                     blacklist=('Black' in savior_list)).save()
-                i += 1
-                imported += 1
+                try:
+                    Rule(user=request.user, keyword=keyword, index=i,
+                         blacklist=('Black' in savior_list)).save()
+                    i += 1
+                    imported += 1
+                except IntegrityError:
+                    pass
 
     messages.success(request, 'Imported %s rules successfully.' % imported)
+    if truncated:
+        messages.warning(request, 'Some of your keywords may have been cut '
+                                  'off because they were too long.')
     return redirect('/rules')
