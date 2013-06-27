@@ -50,6 +50,9 @@ Author: [Rodney Rehm](https://github.com/rodneyrehm)
 
 URI.js is published under the [MIT license][MIT] and [GPL v3][GPLv3].
 
+---
+
+[supported.png](/static/images/supported.png) uses icons designed by [Loris Grillet](http://www.loriskumo.com/), licensed under [Creative Commons Attribution-ShareAlike 3.0 Unported][CC], and by [Sebastian Markbåge](http://blog.calyptus.eu/seb/2011/09/simple-browser-icons/).
 
 [MIT]: http://opensource.org/licenses/MIT
 
@@ -60,3 +63,5 @@ URI.js is published under the [MIT license][MIT] and [GPL v3][GPLv3].
 [BSD]: http://opensource.org/licenses/BSD-3-Clause
 
 [OFL]: http://opensource.org/licenses/OFL-1.1
+
+[CC]: http://creativecommons.org/licenses/by-sa/3.0/
