@@ -107,7 +107,12 @@ def post(request):
             postname = '%s-%s' % (prefix, field.name)
             form[field.name] = request.POST.get(postname, False)
         r = Rule(user=request.user, index=i, **form)
-        r.save()
+        try:
+            r.save()
+        except IntegrityError:
+            # I don't know why dupes are making it to this point, but there's
+            # no point in trying to add it if it's already there...
+            pass
         i += 1
 
     # XXX duplicated code follows; maybe merge HiddenPost into Blacklist?
