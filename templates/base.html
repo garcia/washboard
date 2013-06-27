@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 <meta name="viewport" content="initial-scale=1, minimum-scale=1" />
 
-<title>{% if title %}{{title}} &mdash; {% endif %}Washboard</title>
+<title>{% if title %}{% if not dash %}{{title}} &mdash; {% endif %}{% endif %}Washboard</title>
 
 <link rel="apple-touch-icon" href="{% static "images/apple-touch-icon-57x57.png" %}" />
 <link rel="apple-touch-icon" sizes="72x72" href="{% static "images/apple-touch-icon-72x72.png" %}" />
