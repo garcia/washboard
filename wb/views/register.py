@@ -167,6 +167,9 @@ def setpassword(request):
         request.user.set_password(form.cleaned_data['password'])
         request.user.save()
         return redirect('/getstarted')
+    else:
+        messages.error(request, 'Invalid form data. (Did you choose a password?)')
+        return redirect('/setpassword')
 
 def changename(request):
     if not request.user.is_authenticated():
