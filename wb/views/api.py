@@ -139,9 +139,12 @@ def main(request, data_=None):
 
     qs = '&'.join('='.join(urllib.quote(str(p)) for p in pair) for pair in data.items())
     
-    if endpoint['method'] == 'GET':
-        response = req.request_json('%s?%s' % (url, qs), endpoint['method'])
-    else:
-        response = req.request_json(url, endpoint['method'], qs)
+    try:
+        if endpoint['method'] == 'GET':
+            response = req.request_json('%s?%s' % (url, qs), endpoint['method'])
+        else:
+            response = req.request_json(url, endpoint['method'], qs)
+    except ValueError:
+        return api_error(500, 'Tumblr returned a malformed reponse.', 200)
     
     return HttpResponse(json.dumps(response), content_type='application/json')
