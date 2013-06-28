@@ -1,5 +1,3 @@
--- RELEASE --
-Don't compress JS that's already compressed
 Title, description, and follow link on blog pages
 Open permalinks within Washboard, not on [blog].tumblr.com
 Link to open the current page on Tumblr
@@ -7,3 +5,4 @@ waitForImages when restoring scroll position
 Separation of logic from presentation for notes
 Unit tests?
 SVG icons
+Option to open separate reblog page
