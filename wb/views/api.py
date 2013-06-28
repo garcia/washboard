@@ -137,7 +137,7 @@ def main(request, data_=None):
     if endpoint['api_key']:
         data['api_key'] = settings.OAUTH_CONSUMER_KEY
 
-    qs = '&'.join('='.join(urllib.quote(str(p)) for p in pair) for pair in data.items())
+    qs = '&'.join('='.join(urllib.quote(p.encode('utf8')) for p in pair) for pair in data.items())
     
     try:
         if endpoint['method'] == 'GET':
