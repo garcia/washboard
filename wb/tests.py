@@ -1,12 +1,10 @@
-"""
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
-
-Replace this with more appropriate tests for your application.
-"""
-
+from django.core.urlresolvers import reverse
 from django.test import TestCase
 
+class TestRegistration(TestCase):
+    def test_welcome(self):
+        response = self.client.get('/')
+        self.assertIn('environment', response.context)
 
 class SimpleTest(TestCase):
     def test_basic_addition(self):
