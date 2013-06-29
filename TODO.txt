@@ -6,3 +6,4 @@ Separation of logic from presentation for notes
 Unit tests?
 SVG icons
 Option to open separate reblog page
+Social media sharing buttons (optional?)
