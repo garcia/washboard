@@ -482,6 +482,11 @@ function touchstart(e) {
     // Disallow selection
     $('body').attr('style', '-webkit-user-select: none; -webkit-touch-callout: none');
 
+    // Stop if the user scrolls
+    $(window).on('scroll', function() {
+        touchend(e);
+    })
+
     // Unhide after 1 second
     unhiding = setTimeout(function() {
         var prog = $(e.currentTarget).find('.progress');
@@ -507,6 +512,8 @@ function touchend(e) {
     allow_selection = setTimeout(function() {
         $('body').removeAttr('style');
     }, 300);
+
+    $(window).off('scroll');
 
     // Stop unhiding the post
     clearTimeout(unhiding);
