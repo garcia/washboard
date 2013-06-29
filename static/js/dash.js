@@ -345,6 +345,8 @@ function submit_reblog(id, reblog_text) {
         tags: reblog_box.find('.tags').val(),
         blog: reblog_box.find('.chooseblog').text(),
         state: name2state(reblog_box.find('.choosestate').text()),
+        send_to_facebook: reblog_box.find('.facebook').hasClass('on') ? 'yes' : 'no',
+        tweet: reblog_box.find('.twitter').hasClass('on') ? '' : 'off',
     };
 
     this_post.find('.buttons .reblog').addClass('pending');
@@ -365,6 +367,11 @@ function submit_reblog(id, reblog_text) {
             this_post.find('.buttons .reblog').removeClass('pending');
         },
     });
+}
+
+function toggle_media(media, id) {
+    var reblog_box = $('#reblog_' + id);
+    reblog_box.find('.controls .' + media).toggleClass('on');
 }
 
 /******************

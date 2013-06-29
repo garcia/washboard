@@ -66,6 +66,7 @@ endpoints = {
         'api_key': True,
         'parameters': [
             'id', 'type', 'reblog_key', 'comment', 'tags', 'state',
+            'send_to_facebook', 'tweet',
         ],
     },
     'tagged': {
