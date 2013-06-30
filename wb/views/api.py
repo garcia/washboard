@@ -66,6 +66,7 @@ endpoints = {
         'api_key': True,
         'parameters': [
             'id', 'type', 'reblog_key', 'comment', 'tags', 'state',
+            'send_to_facebook', 'tweet',
         ],
     },
     'tagged': {
@@ -93,12 +94,15 @@ def main(request, data_=None):
     if request.method != 'POST':
         return api_error(401, 'Invalid request method')
 
-    req = Tumblr(
-        settings.OAUTH_CONSUMER_KEY,
-        settings.OAUTH_SECRET_KEY,
-        request.session['oauth_token'],
-        request.session['oauth_token_secret'],
-    )
+    try:
+        req = Tumblr(
+            settings.OAUTH_CONSUMER_KEY,
+            settings.OAUTH_SECRET_KEY,
+            request.session['oauth_token'],
+            request.session['oauth_token_secret'],
+        )
+    except KeyError:
+        return api_error(500, 'Missing authentication tokens')
     
     # Get endpoint information
     if request.POST.get('endpoint') in endpoints:

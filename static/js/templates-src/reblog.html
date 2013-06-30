@@ -5,7 +5,9 @@
         <button class="choosestate" data-dropdown="#choosestate_{{id}}">Publish</button>
         <span class="on">on</span>
         <button class="chooseblog" data-dropdown="#chooseblog_{{id}}">{{username}}</button>
-        <input type="submit" value="Reblog" onclick="submit_reblog({{id}})" />
+        <button class="media twitter {{twitter}}" onclick="Washboard.toggle_media('twitter', {{id}})"><a></a></button>
+        <button class="media facebook {{facebook}}" onclick="Washboard.toggle_media('facebook', {{id}})"><a></a></button>
+        <input type="submit" value="Reblog" onclick="Washboard.submit_reblog({{id}})" />
     </div>
 </div>
 

@@ -6,7 +6,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data,depth1) {
   
   var buffer = "", stack1, stack2;
-  buffer += "\n        <li><a class=\"js\" onclick=\"choosestate("
+  buffer += "\n        <li><a class=\"js\" onclick=\"Washboard.choosestate("
     + escapeExpression(((stack1 = depth1.id),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + ", '";
   if (stack2 = helpers.state) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
