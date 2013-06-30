@@ -1,4 +1,6 @@
-<div class="notification"{{#unless touchscreen}} onclick="Washboard.unhide(this)"{{/unless}}>
+<div class="notification"
+    {{#if touchscreen}}ontouchstart="Washboard.touchstart(this)" ontouchend="Washboard.touchend(this)"
+    {{else}}onclick="Washboard.unhide(this)"{{/if}}>
     <h2>Post blacklisted</h2>
     <p>{{{text}}}</p>
     <a class="instructions">

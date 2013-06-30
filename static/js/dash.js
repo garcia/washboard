@@ -536,7 +536,7 @@
      * Unhiding posts *
      ******************/
 
-    Washboard.touchstart = function(e) {
+    Washboard.touchstart = function(elem) {
         // Don't re-allow selection if we've already received another tap
         clearTimeout(Washboard.allow_selection);
         
@@ -545,29 +545,29 @@
 
         // Stop if the user scrolls
         $(window).on('scroll', function() {
-            Washboard.touchend(e);
+            Washboard.touchend(elem);
         })
 
         // Unhide after 1 second
         Washboard.unhiding = setTimeout(function() {
-            var prog = $(e.currentTarget).find('.progress');
+            var prog = $(elem).find('.progress');
             prog.stop()
                 .css('opacity', .25)
                 .animate(
                     {width: '100%'},
                     1000,
                     function() {
-                        Washboard.unhide(e.currentTarget);
+                        Washboard.unhide(elem);
                         // Re-allow selection
                         $('body').removeAttr('style');
                         // Remove touch handlers
-                        $(e.currentTarget).off('touchstart').off('touchend');
+                        $(elem).off('touchstart').off('touchend');
                     }
                 );
         }, 50);
     }
 
-    Washboard.touchend = function(e) {
+    Washboard.touchend = function(elem) {
         // Re-allow selection after 300ms; without the delay,
         // iOS will try to select the progress slider immediately upon touchend
         Washboard.allow_selection = setTimeout(function() {
@@ -578,7 +578,7 @@
 
         // Stop unhiding the post
         clearTimeout(Washboard.unhiding);
-        var prog = $(e.currentTarget).find('.progress');
+        var prog = $(elem).find('.progress');
         prog.stop()
             .animate(
                 {opacity: 0},
@@ -589,8 +589,8 @@
             );
     }
 
-    Washboard.unhide = function(a) {
-        var post = $(a).closest('.post');
+    Washboard.unhide = function(elem) {
+        var post = $(elem).closest('.post');
 
         // Fade out notification to white
         post.children().animate(
@@ -656,7 +656,7 @@
      * Read-mores     *
      ******************/
 
-    Washboard.read_more = function(postelem) {
+    Washboard.parse_read_mores = function(postelem) {
         postelem.find('p').contents().filter(function() {
             // Select comment nodes
             return this.nodeType == 8;
@@ -669,11 +669,7 @@
                 var more_link = $(document.createElement('a'))
                         .html('Read more &rarr;')
                         .addClass('read_more js')
-                        .on('click', function(e) {
-                            $(this).closest('.post').find('.cut.under').removeClass('under').addClass('over');
-                            $(this).remove();
-                            Washboard.save_session_attr('posts');
-                        });
+                        .attr('onclick', 'Washboard.read_more(this)');
                 $(e).replaceWith(more_link);
 
                 // Hide anything that appears after the comment but within
@@ -706,6 +702,13 @@
                 more_link.parent().nextAll().addClass('cut under')
             }
         }); 
+    }
+
+    Washboard.read_more = function(elem) {
+        console.log(elem);
+        $(elem).closest('.post').find('.cut.under').removeClass('under').addClass('over');
+        $(elem).remove();
+        Washboard.save_session_attr('posts');
     }
 
     /******************
@@ -966,20 +969,10 @@
             if (blacklisted) {
                 post_elem.append(Handlebars.templates.notification(blacklisted));
                 post_elem.addClass('blacklisted');
-                
-                // Add listeners for touchscreens
-                if (Washboard.touchscreen) {
-                    post_elem.on('touchstart', Washboard.touchstart);
-                    post_elem.on('touchend', Washboard.touchend);
-                }
-                // Default to a simple click listener
-                else {
-                    post_elem.on('click', Washboard.unhide);
-                }
             }
 
             // Parse read-more breaks
-            Washboard.read_more(post_elem);
+            Washboard.parse_read_mores(post_elem);
 
             // Add to the page
             $('#posts').append(post_elem);
