@@ -81,8 +81,14 @@
 
     function error_message(jqXHR, doing) {
         var error_class = Math.floor(jqXHR.status / 100);
-        var status_code = jqXHR.real_status;
+        var status_code = jqXHR.real_status || jqXHR.status;
         var who = 'Tumblr';
+
+        try {
+            status_code += ': ' + JSON.parse(jqXHR.responseText).meta.msg;
+        }
+        catch (e) {}
+
         var what_happened = 'encountered an error (' + status_code + ') while ' + doing;
 
         if (error_class > 2) {
@@ -138,16 +144,17 @@
         /* Convert Tumblr errors (which look successful) to HTTP errors */
         ajaxdata.success = function(data, textStatus, jqXHR) {
             try {
+                var ajax_status = parseInt(data.meta.status);
                 // Returned if error_type = js
-                if (data.meta.status === 999) {
+                if (ajax_status === 999) {
                     throw "User-invoked error";
                 }
                 // Tumblr error, or error_type = tumblr
-                if (data.meta.status >= 400) {
+                if (ajax_status >= 400) {
                     console.log(jqXHR);
                     console.log(textStatus);
                     console.log(data);
-                    jqXHR.real_status = data.meta.status;
+                    jqXHR.real_status = ajax_status;
                     return ajaxdata.error(jqXHR, textStatus);
                 }
                 if (success) {
