@@ -30,7 +30,7 @@ function program1(depth0,data,depth1) {
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n        <li><a href=\""
     + escapeExpression(((stack1 = depth1.dashboard),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\" target=\"_blank\">View on Dashboard</a></li>\n        <li><a class=\"js\" onclick=\"hide(";
+    + "\" target=\"_blank\">View on Dashboard</a></li>\n        <li><a class=\"js\" onclick=\"Washboard.hide(";
   if (stack2 = helpers.id) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
   else { stack2 = depth0.id; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
   buffer += escapeExpression(stack2)

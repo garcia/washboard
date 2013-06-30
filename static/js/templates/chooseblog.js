@@ -6,7 +6,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data,depth1) {
   
   var buffer = "", stack1;
-  buffer += "\n        <li>\n            <a class=\"js\" onclick=\"chooseblog("
+  buffer += "\n        <li>\n            <a class=\"js\" onclick=\"Washboard.chooseblog("
     + escapeExpression(((stack1 = depth1.id),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + ", '"
     + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))

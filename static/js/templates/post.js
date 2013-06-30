@@ -61,7 +61,7 @@ function program9(depth0,data) {
   buffer += "\n            <a class=\"js like";
   stack2 = helpers['if'].call(depth0, ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.liked), {hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\" onclick=\"like("
+  buffer += "\" onclick=\"Washboard.like("
     + escapeExpression(((stack1 = ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + ")\">Like</a>\n            ";
   return buffer;
@@ -75,7 +75,7 @@ function program10(depth0,data) {
 function program12(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n            <a class=\"js reblog\" onclick=\"reblog("
+  buffer += "\n            <a class=\"js reblog\" onclick=\"Washboard.reblog("
     + escapeExpression(((stack1 = ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + ")\">Reblog</a>\n            ";
   return buffer;
@@ -84,7 +84,7 @@ function program12(depth0,data) {
 function program14(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n            <a class=\"js reply\" onclick=\"reply("
+  buffer += "\n            <a class=\"js reply\" onclick=\"Washboard.reply("
     + escapeExpression(((stack1 = ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + ")\">Reply</a>\n            ";
   return buffer;
@@ -93,7 +93,7 @@ function program14(depth0,data) {
 function program16(depth0,data) {
   
   var buffer = "", stack1, options;
-  buffer += "\n            <a class=\"js note_count\" onclick=\"notes("
+  buffer += "\n            <a class=\"js note_count\" onclick=\"Washboard.notes("
     + escapeExpression(((stack1 = ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + ")\">"
     + escapeExpression(((stack1 = ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.note_count)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
