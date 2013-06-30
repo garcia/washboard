@@ -30,19 +30,19 @@
             {{#if mine}}
             <a class="edit" href="http://www.tumblr.com/edit/{{post.id}}" target="_blank">Edit</a>
             {{else}}
-            <a class="js like{{#if post.liked}} liked{{/if}}" onclick="like({{post.id}})">Like</a>
+            <a class="js like{{#if post.liked}} liked{{/if}}" onclick="Washboard.like({{post.id}})">Like</a>
             {{/if}}
             {{#if rebloggable}}
-            <a class="js reblog" onclick="reblog({{post.id}})">Reblog</a>
+            <a class="js reblog" onclick="Washboard.reblog({{post.id}})">Reblog</a>
             {{/if}}
             {{#if post.can_reply}}
-            <a class="js reply" onclick="reply({{post.id}})">Reply</a>
+            <a class="js reply" onclick="Washboard.reply({{post.id}})">Reply</a>
             {{/if}}
             <a class="js info" data-dropdown="#info_{{post.id}}">Info</a>
         </div>
         <div class="not-buttons">
             {{#if post.note_count}}
-            <a class="js note_count" onclick="notes({{post.id}})">{{post.note_count}} {{pluralize post.note_count "note" "notes"}}</a>
+            <a class="js note_count" onclick="Washboard.notes({{post.id}})">{{post.note_count}} {{pluralize post.note_count "note" "notes"}}</a>
             {{/if}}
             {{#if post.source_url}}
             <a class="source" href="{{post.source_url}}" target="_blank">{{post.source_title}}</a>

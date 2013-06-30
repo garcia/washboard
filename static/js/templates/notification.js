@@ -6,7 +6,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   
-  return " onclick=\"unhide(this)\"";
+  return " onclick=\"Washboard.unhide(this)\"";
   }
 
 function program3(depth0,data) {
