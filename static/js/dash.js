@@ -872,12 +872,21 @@
      * Reblogs        *
      ******************/
 
+    function fix_reblog_box_height(id) {
+        var reblog_box = $('#reblog_' + id);
+        if (reblog_box[0].clientHeight != reblog_box[0].scrollHeight) {
+            reblog_box.css('height', reblog_box[0].scrollHeight);
+        }
+    }
+
     Washboard.chooseblog = function(id, blog) {
         $('#reblog_' + id).find('.chooseblog').text(blog);
+        fix_reblog_box_height(id);
     };
 
     Washboard.choosestate = function(id, state) {
-        return $('#reblog_' + id).find('.choosestate').text(state2name(state));
+        $('#reblog_' + id).find('.choosestate').text(state2name(state));
+        fix_reblog_box_height(id);
     };
 
     Washboard.toggle_media = function(media, id) {
@@ -918,16 +927,15 @@
             $('.action-box').addClass('closed');
 
             // Calculate box's height for animations
-            if (!reblog_box.attr('style')) {
-                reblog_box.addClass('get-height').removeClass('closed');
-                reblog_box.css('height', reblog_box.height());
-                reblog_box.addClass('closed').removeClass('get-height');
-            }
+            reblog_box.addClass('get-height').removeClass('closed');
+            reblog_box.css('height', reblog_box.height());
+            reblog_box.addClass('closed').removeClass('get-height');
             reblog_box.removeClass('closed');
         }
         // Close if opened
         else {
             reblog_box.addClass('closed');
+            reblog_box.removeAttr('style');
         }
         save_session_attr('posts');
     };
@@ -1279,6 +1287,15 @@
             };
             load_more_string = 'Load more';
         }
+
+        // Resize handler
+        window.onresize = function() {
+            console.log('resize');
+            $('.reblog-box:not(.closed)').each(function(r, reblog_box) {
+                console.log(reblog_box);
+                fix_reblog_box_height(reblog_box.id.slice(7));
+            });
+        };
 
         // Add safe mode handlers
         if (Washboard.profile.safe_mode) {
