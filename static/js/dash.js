@@ -682,19 +682,23 @@
 
         // Load session, if present
         if (hash.session) {
-            for (attr = 0; attr < session_attributes.length; attr++) {
-                session_data[attr] = localStorage.getItem(hash.session + '_' + attr);
-                if (!session_data[attr]) {
-                    hash.session = null;
-                    break;
+            for (attr in session_attributes) {
+                if (session_attributes.hasOwnProperty(attr)) {
+                    session_data[attr] = localStorage.getItem(hash.session + '_' + attr);
+                    if (!session_data[attr]) {
+                        hash.session = null;
+                        break;
+                    }
                 }
             }
         }
 
         // If everything was successfully loaded from localStorage, set the values
         if (hash.session) {
-            for (attr = 0; attr < session_attributes.length; attr++) {
-                session_attributes[attr].set(session_data[attr]);
+            for (attr in session_attributes) {
+                if (session_attributes.hasOwnProperty(attr)) {
+                    session_attributes[attr].set(session_data[attr]);
+                }
             }
             done_loading(load_more_string);
         }
