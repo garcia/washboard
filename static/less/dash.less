@@ -349,7 +349,8 @@ code {
 
 .action-box button:active,
 .action-box input[type=submit]:active,
-.safe_mode #safe_mode_toggle {
+.safe_mode #safe_mode_toggle,
+.reblog-box .media.on {
     .shinybg(darken(@primary, 36%); darken(@primary, 30%); darken(@primary, 24%); darken(@primary, 18%));
 }
 
@@ -424,7 +425,7 @@ code {
     float: left;
 }
 
-.reblog-box .controls .on {
+.reblog-box .controls span.on {
     display: inline-block;
     float: left;
     padding: 12px 0;
@@ -439,6 +440,37 @@ code {
     content: "";
     display: block;
     clear: both;
+}
+
+/* social media toggles */
+
+.reblog-box .media {
+    float: left;
+    width: 30px;
+    height: 30px;
+    padding: 2px;
+    cursor: pointer;
+}
+
+.reblog-box .media a {
+    display: block;
+    width: 24px;
+    height: 24px;
+    opacity: 0.5;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.reblog-box .media.on a {
+    opacity: 1;
+}
+
+.reblog-box .twitter a {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAABOwAAATsBH99vcQAAAAd0SU1FB90GHBYeBtJy/f4AAAEnSURBVEjH7ZXdUcMwEIQ/MxTgFgwdiHSQQAfQQYYOaCEthKED04EZKgh04KEDM3SwvEjMRUixnB+e2Bk9yDrdWqfdUyWJU+KME+NPCeoJ+xqgBWTG2uSYA0sAJIXRS1qaeW40kgal0fu1wcf9ENQm6GGEoNM4Wh+XJJBfbBLJa5VhkOQsQShRjLWkWxMzLyRwYY8lWI1s6grLI3vqc6MKgDdgllHOdaHCPu2kMk4+lqVfgJuUDx6PRPC+NYsUstHhcPYOYhk6r5x90cXSjnvRFXB/QHmefn1JmGnfE7Qp5+fawWpHv8n1oHoKAb7x9QXJN/HFpowWzDYDHLDYYbhY83fAVzbC9JhuQkmGwta+5eTwUCy8mi6Ay+hvP4BX4LlUVtX/oz+Gb0Ely5lwhIIhAAAAAElFTkSuQmCC");
+}
+
+.reblog-box .facebook a {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90GHBYxEDS6cMIAAADTSURBVEjHY2AgE/z790/h////xUC8B8i+AKQvQOn9DJQCoEHZQPwfBGA0jA3EXyg1XAlqEMJkJAuA4AylFhzDYuhvIP4BZP8E4pNkGw40hBWL628DsRwQS0KxCCWuF8ISMosZqAWAhguiWwDkLxv8FgDNcYXioP+YYB+SPBiTYwFyOv+HJRWhALItIASgDjhDqQX/sBiK7Jvz5FhwGYSBBlzDEiQfgGIw+StAvJqSVMSKxYJFo/lg1IJRC6hoAdA8QSzlD1Ut4IMWGxdgGGhBBz49AAgXxST74890AAAAAElFTkSuQmCC");
 }
 
 /* margin fixes for action boxes */
