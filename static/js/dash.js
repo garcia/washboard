@@ -4,22 +4,22 @@
      * Properties     *
      ******************/
 
-    Washboard.session = {
+    var session = {
         hr_widths: {},
         last_post: null,
         featured_tag: false,
         offset: 0,
     };
-    Washboard.scan_attributes = ['blog_name', 'reblogged_from_name',
+    var scan_attributes = ['blog_name', 'reblogged_from_name',
         'title', 'body', 'caption', 'text', 'source', 'url', 'description',
         'label', 'phrase', 'asking_name', 'question', 'answer', 'source_url'];
-    Washboard.session_attributes = {
+    var session_attributes = {
         'session': {
             'get': function() {
-                return JSON.stringify(Washboard.session);
+                return JSON.stringify(session);
             },
             'set': function(data) {
-                Washboard.session = JSON.parse(data);
+                session = JSON.parse(data);
             },
         },
         'posts': {
@@ -28,7 +28,7 @@
             },
             'set': function(data) {
                 $('#middle > div')[0].innerHTML = data;
-                Washboard.done_loading(Washboard.load_more_string);
+                done_loading(load_more_string);
             },
         },
         'position': {
@@ -40,25 +40,25 @@
             },
         },
     };
-    Washboard.states = [
+    var states = [
         {'state': 'published', 'name': 'Publish'},
         {'state': 'draft', 'name': 'Save as draft'},
         {'state': 'queue', 'name': 'Add to queue'},
         // {'state': 'private', 'name': 'Private post'}, // doesn't seem to be working?
     ];
-    Washboard.allow_selection = -1;
-    Washboard.unhiding = -1;
-    Washboard.hash = {};
-    Washboard.load_more_string = 'Next page';
+    var allow_selection = -1;
+    var unhiding = -1;
+    var hash = {};
+    var load_more_string = 'Next page';
     var scale = Math.min(500, window.innerWidth) / 500;
-    Washboard.optimal_sizes = {'1': 500 * scale, '2': 245 * scale, '3': 160 * scale};
-    Washboard.touchscreen = 'ontouchstart' in window; 
+    var optimal_sizes = {'1': 500 * scale, '2': 245 * scale, '3': 160 * scale};
+    var touchscreen = window.ontouchstart != undefined;
 
     /******************
      * Notifications  *
      ******************/
 
-    Washboard.notify = function(message, type) {
+    function notify(message, type) {
         if (!$('#messages').length) {
             $('body').append('<ul id="messages" class="ajax-messages"></ul>');
         }
@@ -69,7 +69,7 @@
         $('#messages').append(Handlebars.templates.message({
             message: message,
             type: type,
-            touchscreen: Washboard.touchscreen,
+            touchscreen: touchscreen,
             id: message_id,
         }));
         $('#message_' + message_id).hide().fadeIn();
@@ -77,9 +77,9 @@
 
     Washboard.dismiss = function(elem) {
         $(elem).fadeOut();
-    }
+    };
 
-    Washboard.error_message = function(jqXHR, doing) {
+    function error_message(jqXHR, doing) {
         var error_class = ~~(jqXHR.status / 100);
         var status_code = jqXHR.real_status;
         var who = 'Tumblr';
@@ -100,7 +100,7 @@
      * Blacklisting   *
      ******************/
 
-    Washboard.special_entities = function(html) {
+    function special_entities(html) {
         return html
             .replace('&#160;', ' ')
             .replace('&#8217;', "'")
@@ -111,7 +111,7 @@
             .replace('&gt;', '>');
     }
 
-    Washboard.kw_list = function(array) {
+    function kw_list(array) {
         if (!array || !array.length) {
             return "";
         }
@@ -127,12 +127,12 @@
         }();
     }
 
-    Washboard.plural = function(array) {
+    function plural(array) {
         return array.length == 1 ? '' : 's';
     }
 
-    Washboard.is_blacklisted = function(post) {
-        var notification = {touchscreen: Washboard.touchscreen};
+    function is_blacklisted(post) {
+        var notification = {touchscreen: touchscreen};
 
         // Check if this post was specifically hidden
         for (var hp = 0; hp < Washboard.hidden_posts.length; hp++) {
@@ -156,7 +156,7 @@
         
         // Find elements to be scanned
         var scan = [];
-        $.each(Washboard.scan_attributes, function(a, attribute) {
+        $.each(scan_attributes, function(a, attribute) {
             if (post[attribute]) {
                 scan.push(post[attribute]);
             }
@@ -187,7 +187,7 @@
                     rule.regex = true;
                 }
 
-                var scanned = Washboard.special_entities(scan_element);
+                var scanned = special_entities(scan_element);
                 if ((rule.regex && scanned.search(kw) >= 0) ||
                     (!rule.regex && scanned.toLowerCase().indexOf(kw.toLowerCase()) >= 0)) {
                     
@@ -234,10 +234,10 @@
 
             // Construct notification text
             notification.text = 'This post contains the keyword' +
-                Washboard.plural(blacklist_keywords) + ' ' + Washboard.kw_list(blacklist_keywords);
+                plural(blacklist_keywords) + ' ' + kw_list(blacklist_keywords);
             if (whitelist_keywords.length) {
                 notification.text += ', but also matched the whitelisted keyword'
-                    + Washboard.plural(whitelist_keywords) + ' ' + Washboard.kw_list(whitelist_keywords);
+                    + plural(whitelist_keywords) + ' ' + kw_list(whitelist_keywords);
             }
             notification.text += '.';
 
@@ -267,7 +267,7 @@
         like_button.addClass('pending');
         
         // Send the API request
-        Washboard.apicall(endpoint, parameters, {
+        apicall(endpoint, parameters, {
             success: function(data) {
                 if (endpoint == 'like') {
                     like_button.addClass('liked');
@@ -277,14 +277,14 @@
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                Washboard.notify(Washboard.error_message(jqXHR, 'liking the post'), 'warning');
+                notify(error_message(jqXHR, 'liking the post'), 'warning');
             },
             complete: function(jqXHR, textStatus) {
                 like_button.removeClass('pending');
-                Washboard.save_session_attr('posts');
+                save_session_attr('posts');
             },
         });
-    }
+    };
 
     /******************
      * Notes          *
@@ -322,7 +322,7 @@
                 },
                 600,
                 function() {
-                    Washboard.save_session_attr('posts');
+                    save_session_attr('posts');
                 }
             );
         }
@@ -334,10 +334,10 @@
                 'margin-bottom': '-20px',
             }, {complete: function() {
                 notes.css('display', 'none');
-                Washboard.save_session_attr('posts');
+                save_session_attr('posts');
             }});
         }
-    }
+    };
 
 
     /******************
@@ -362,7 +362,7 @@
             // Insert state menu
             $('#dropdowns').append(Handlebars.templates.choosestate({
                 id: id,
-                states: Washboard.states,
+                states: states,
             }));
         }
 
@@ -386,8 +386,8 @@
         else {
             reblog_box.addClass('closed');
         }
-        Washboard.save_session_attr('posts');
-    }
+        save_session_attr('posts');
+    };
 
     Washboard.submit_reblog = function(id, reblog_text) {
         var this_post = $('#post_' + id);
@@ -399,35 +399,35 @@
             comment: reblog_box.find('.caption').val(),
             tags: reblog_box.find('.tags').val(),
             blog: reblog_box.find('.chooseblog').text(),
-            state: Washboard.name2state(reblog_box.find('.choosestate').text()),
+            state: name2state(reblog_box.find('.choosestate').text()),
             send_to_facebook: reblog_box.find('.facebook').hasClass('on') ? 'yes' : 'no',
             tweet: reblog_box.find('.twitter').hasClass('on') ? '' : 'off',
         };
 
         this_post.find('.buttons .reblog').addClass('pending');
 
-        Washboard.apicall('reblog', data, {
+        apicall('reblog', data, {
             success: function(data) {
                 var reblog_elem = $('#reblog_' + id);
                 reblog_elem.addClass('closed');
                 reblog_elem.find('input[type!=submit]').val('');
                 reblog_elem.find('textarea').val('');
                 $('#post_' + id).find('.buttons .reblog').addClass('done');
-                Washboard.save_session_attr('posts');
+                save_session_attr('posts');
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                Washboard.notify(Washboard.error_message(jqXHR, 'reblogging the post'), 'warning');
+                notify(error_message(jqXHR, 'reblogging the post'), 'warning');
             },
             complete: function(jqXHR, textStatus) {
                 this_post.find('.buttons .reblog').removeClass('pending');
             },
         });
-    }
+    };
 
     Washboard.toggle_media = function(media, id) {
         var reblog_box = $('#reblog_' + id);
         reblog_box.find('.controls .' + media).toggleClass('on');
-    }
+    };
 
     /******************
      * Replying       *
@@ -467,8 +467,8 @@
         else {
             reply_box.addClass('closed');
         }
-        Washboard.save_session_attr('posts');
-    }
+        save_session_attr('posts');
+    };
 
     Washboard.submit_reply = function(id, reply_text) {
         var this_post = $('#post_' + id);
@@ -481,23 +481,23 @@
 
         this_post.find('.buttons .reply').addClass('pending');
 
-        Washboard.apicall('reply', data, {
+        apicall('reply', data, {
             success: function(data) {
                 reply_box
                     .addClass('closed')
                     .find('.reply')
                     .val('');
                 this_post.find('.buttons .reply').addClass('done');
-                Washboard.save_session_attr('posts');
+                save_session_attr('posts');
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                Washboard.notify(Washboard.error_message(jqXHR, 'replying to the post'), 'warning');
+                notify(error_message(jqXHR, 'replying to the post'), 'warning');
             },
             complete: function(jqXHR, textStatus) {
                 this_post.find('.buttons .reply').removeClass('pending');
             }
         });
-    }
+    };
 
     Washboard.reply_keypress = function(id, e) {
         if ((e.which || e.keyCode || e.charCode) == 13) {
@@ -505,7 +505,7 @@
                 Washboard.submit_reply(id, e.target.value);
             }
         }
-    }
+    };
 
     /******************
      * Hiding posts   *
@@ -527,10 +527,10 @@
             alert('The server was unable to hide the post permanently, sorry.');
         }).always(function() {
             $('#post_' + id).fadeOut(400, function() {
-                Washboard.save_session_attr('posts');
+                save_session_attr('posts');
             });
         });
-    }
+    };
 
     /******************
      * Unhiding posts *
@@ -538,7 +538,7 @@
 
     Washboard.touchstart = function(elem) {
         // Don't re-allow selection if we've already received another tap
-        clearTimeout(Washboard.allow_selection);
+        clearTimeout(allow_selection);
         
         // Disallow selection
         $('body').attr('style', '-webkit-user-select: none; -webkit-touch-callout: none');
@@ -549,7 +549,7 @@
         })
 
         // Unhide after 1 second
-        Washboard.unhiding = setTimeout(function() {
+        unhiding = setTimeout(function() {
             var prog = $(elem).find('.progress');
             prog.stop()
                 .css('opacity', .25)
@@ -565,19 +565,19 @@
                     }
                 );
         }, 50);
-    }
+    };
 
     Washboard.touchend = function(elem) {
         // Re-allow selection after 300ms; without the delay,
         // iOS will try to select the progress slider immediately upon touchend
-        Washboard.allow_selection = setTimeout(function() {
+        allow_selection = setTimeout(function() {
             $('body').removeAttr('style');
         }, 300);
 
         $(window).off('scroll');
 
         // Stop unhiding the post
-        clearTimeout(Washboard.unhiding);
+        clearTimeout(unhiding);
         var prog = $(elem).find('.progress');
         prog.stop()
             .animate(
@@ -587,7 +587,7 @@
                     $(this).css('opacity', 0).css('width', 0);
                 }
             );
-    }
+    };
 
     Washboard.unhide = function(elem) {
         var post = $(elem).closest('.post');
@@ -608,12 +608,12 @@
                         post.children().each(function(c, child) {
                             $(child).attr('style') || $(child).removeAttr('style')
                         });
-                        Washboard.save_session_attr('posts');
+                        save_session_attr('posts');
                     }
                 );
             }
         );
-    }
+    };
 
     /******************
      * Miscellaneous  *
@@ -622,41 +622,40 @@
     Washboard.toggle_album_art = function(id) {
         var this_post = $('#post_' + id);
         this_post.find('.album_art').toggleClass('expanded');
-        Washboard.save_session_attr('posts');
-    }
+        save_session_attr('posts');
+    };
 
     Washboard.chooseblog = function(id, blog) {
         $('#reblog_' + id).find('.chooseblog').text(blog);
-    }
+    };
 
-    Washboard.state2name = function(state) {
-        for (var s in Washboard.states) {
-            if (Washboard.states[s].state == state) {
-                return Washboard.states[s].name;
+    function state2name(state) {
+        for (var s in states) {
+            if (states[s].state == state) {
+                return states[s].name;
             }
         }
         return false;
     }
 
-    Washboard.name2state = function(name) {
-        for (var s in Washboard.states) {
-            if (Washboard.states[s].name == name) {
-                return Washboard.states[s].state;
+    function name2state(name) {
+        for (var s in states) {
+            if (states[s].name == name) {
+                return states[s].state;
             }
         }
         return false;
     }
 
     Washboard.choosestate = function(id, state) {
-        return $('#reblog_' + id).find('.choosestate').text(Washboard.state2name(state));
-    }
-
+        return $('#reblog_' + id).find('.choosestate').text(state2name(state));
+    };
 
     /******************
      * Read-mores     *
      ******************/
 
-    Washboard.parse_read_mores = function(postelem) {
+    function parse_read_mores(postelem) {
         postelem.find('p').contents().filter(function() {
             // Select comment nodes
             return this.nodeType == 8;
@@ -708,14 +707,14 @@
         console.log(elem);
         $(elem).closest('.post').find('.cut.under').removeClass('under').addClass('over');
         $(elem).remove();
-        Washboard.save_session_attr('posts');
-    }
+        save_session_attr('posts');
+    };
 
     /******************
      * Photo(set)s    *
      ******************/
 
-    Washboard.best_fit = function(elements, target_width) {
+    function best_fit(elements, target_width) {
         var best = 0;
         var best_width = 0;
         $.each(elements, function(i, item) {
@@ -739,7 +738,7 @@
             function() {
                 this_post.find('.photos').css('display', 'none');
                 this_post.addClass('hr')
-                    .css('max-width', Math.max(540, Washboard.session.hr_widths[id]))
+                    .css('max-width', Math.max(540, session.hr_widths[id]))
                     .find('.hr_photos')
                     .css('display', 'block')
                     .css('opacity', 0)
@@ -747,7 +746,7 @@
                         {opacity: 1},
                         600,
                         function() {
-                            Washboard.save_session_attr('posts');
+                            save_session_attr('posts');
                         }
                     )
                     .find('img')
@@ -761,7 +760,7 @@
                 );
             }
         );
-    }
+    };
 
     Washboard.collapse = function(id) {
         var this_post = $('#post_' + id);
@@ -779,7 +778,7 @@
                         {opacity: 1},
                         600,
                         function() {
-                            Washboard.save_session_attr('posts');
+                            save_session_attr('posts');
                         }
                     );
                 $('body').animate(
@@ -788,9 +787,9 @@
                 );
             }
         );
-    }
+    };
 
-    Washboard.photoset = function(post, context) {
+    function photoset(post, context) {
         // Assemble photoset
         if (post.type == 'photo') {
             
@@ -808,9 +807,9 @@
             // post any wider than it needs to be
             var largest_width = 0;
             $.each(post.photos, function(ph, photo) {
-                largest_width = Math.max(largest_width, Washboard.best_fit(photo.alt_sizes, 1280).width);
+                largest_width = Math.max(largest_width, best_fit(photo.alt_sizes, 1280).width);
             });
-            Washboard.session.hr_widths[post.id] = largest_width;
+            session.hr_widths[post.id] = largest_width;
 
             // Insert each photo
             $.each(post.photos, function(ph, photo) {
@@ -834,13 +833,13 @@
                 last_row = running_row;
 
                 // Determine optimal photo sizes to load
-                var target_size = Washboard.optimal_sizes[layout[running_row]];
-                var best_photo = Washboard.best_fit(photo.alt_sizes, target_size);
-                var hr_photo = Washboard.best_fit(photo.alt_sizes, window.innerWidth);
+                var target_size = optimal_sizes[layout[running_row]];
+                var best_photo = best_fit(photo.alt_sizes, target_size);
+                var hr_photo = best_fit(photo.alt_sizes, window.innerWidth);
                 
                 // Recalculate row height
                 row.height = Math.min(row.height,
-                    Washboard.optimal_sizes[layout[running_row]] / best_photo.width * best_photo.height,
+                    optimal_sizes[layout[running_row]] / best_photo.width * best_photo.height,
                     (window.innerWidth - 40) / best_photo.width * best_photo.height)
                 row.photos.push({url: best_photo.url, hr_url: hr_photo.url})
             });
@@ -853,19 +852,19 @@
      * Post compiling *
      ******************/
 
-    Washboard.compile = function(post) {
+    function compile(post) {
         // Save the current last post ID or timestamp
-        if (!Washboard.session.featured_tag && 'featured_timestamp' in post) {
-            Washboard.session.featured_tag = true;
+        if (!session.featured_tag && 'featured_timestamp' in post) {
+            session.featured_tag = true;
         }
         if (Washboard.well_ordered) {
-            Washboard.session.last_post = post.id;
+            session.last_post = post.id;
         }
-        else if (Washboard.session.featured_tag) {
-            Washboard.session.last_post = post.featured_timestamp;
+        else if (session.featured_tag) {
+            session.last_post = post.featured_timestamp;
         }
         else {
-            Washboard.session.last_post = post.timestamp;
+            session.last_post = post.timestamp;
         }
         
         // Fix date for timeago()
@@ -882,7 +881,7 @@
 
         // Create photoset layout
         if (post.type == 'photo') {
-            Washboard.photoset(post, context);
+            photoset(post, context);
         }
 
         // If the quote is plain text, wrap it in a paragraph tag
@@ -894,7 +893,7 @@
 
         // Find best video size
         if (post.type == 'video') {
-            context.best_player = Washboard.best_fit(post.player, Math.min(500, window.innerWidth)).embed_code;
+            context.best_player = best_fit(post.player, Math.min(500, window.innerWidth)).embed_code;
         }
 
         if (post.type == 'answer') {
@@ -934,7 +933,7 @@
         };
     }
 
-    Washboard.dash = function(data, textStatus, jqXHR) {
+    function insert_posts(data, textStatus, jqXHR) {
         // Some methods return posts in data.response.posts,
         // others in data.response
         if ('posts' in data.response) {
@@ -949,7 +948,7 @@
 
         // Build posts
         $.each(post_list, function(p, post) {
-            var blacklisted = Washboard.is_blacklisted(post);
+            var blacklisted = is_blacklisted(post);
             
             // Blacklisted with no notification: skip immediately
             if (blacklisted == true) {
@@ -962,7 +961,7 @@
             }
 
             // Compile the post's HTML
-            var compiled = Washboard.compile(post);
+            var compiled = compile(post);
             var post_elem = $($.parseHTML(compiled.post));
             
             // Add notification if necessary
@@ -972,7 +971,7 @@
             }
 
             // Parse read-more breaks
-            Washboard.parse_read_mores(post_elem);
+            parse_read_mores(post_elem);
 
             // Add to the page
             $('#posts').append(post_elem);
@@ -983,7 +982,7 @@
         });
 
         // Reset "Load more" footer
-        Washboard.done_loading(Washboard.load_more_string);
+        done_loading(load_more_string);
 
         // Convert new audio elements to MediaElement players
         // This has to be done after they've been inserted into the document
@@ -1001,16 +1000,16 @@
         $('audio.new').removeClass('new');
 
         // Save posts and session
-        Washboard.save_session_attr('posts');
-        Washboard.save_session_attr('session');
+        save_session_attr('posts');
+        save_session_attr('session');
     }
 
     /******************
      * API AJAX calls *
      ******************/
 
-    Washboard.apicall = function(endpoint, data, ajaxdata) {
-        Washboard.parse_hash();
+    function apicall(endpoint, data, ajaxdata) {
+        parse_hash();
 
         var _data = $.extend(data, {
             csrfmiddlewaretoken: csrf_token,
@@ -1049,8 +1048,8 @@
             // Print the whole stack before calling window.onerror
             catch (e) {
                 console.log(e.stack);
-                if (Washboard.hash.debug) {
-                    Washboard.notify(e.stack.replace(/\n/g, '<br />'));
+                if (hash.debug) {
+                    notify(e.stack.replace(/\n/g, '<br />'));
                 }
                 throw e;
             }
@@ -1058,22 +1057,22 @@
         $.ajax(_ajaxdata);
     }
 
-    Washboard.dashboard = function(data) {
+    function get_posts(data) {
         var _data = $.extend({
             reblog_info: 'true',
             notes_info: 'true'
         }, data);
-        Washboard.apicall(Washboard.endpoint, _data, {
-            success: Washboard.dash,
+        apicall(Washboard.endpoint, _data, {
+            success: insert_posts,
             error: function(jqXHR, textStatus, errorThrown) {
-                var message = Washboard.error_message(jqXHR, 'loading your posts')
-                var retry_message = (Washboard.touchscreen ? 'Tap' : 'Click') + ' to retry.';
+                var message = error_message(jqXHR, 'loading your posts')
+                var retry_message = (touchscreen ? 'Tap' : 'Click') + ' to retry.';
                 if ($('#posts').is(':empty')) {
                     $('#posts').append(Handlebars.templates.empty({message: message}));
-                    Washboard.done_loading(retry_message);
+                    done_loading(retry_message);
                 }
                 else {
-                    Washboard.done_loading(message + ' ' + retry_message);
+                    done_loading(message + ' ' + retry_message);
                 }
             },
         });
@@ -1083,26 +1082,26 @@
      * Load more      *
      ******************/
 
-    Washboard.load_more = function() {
+    function load_more() {
         var data = {};
         if (Washboard.pagination_key == 'offset') {
-            data['offset'] = $('#posts .post').length + Washboard.session.offset;
+            data['offset'] = $('#posts .post').length + session.offset;
         }
         else {
-            data[Washboard.pagination_key] = Washboard.session.last_post;
+            data[Washboard.pagination_key] = session.last_post;
         }
         $('#load_more').text('Loading...');
         $('#load_more').addClass('loading');
-        Washboard.dashboard(data);
+        get_posts(data);
     }
 
-    Washboard.done_loading = function(message) {
+    function done_loading(message) {
         var load_more = $('#load_more');
         load_more.text(message);
         load_more.removeClass('loading');
         if (!Washboard.profile.infinite_scrolling) {
             load_more.removeAttr('onclick');
-            var page = (Washboard.pagination_key == 'offset' ? (Washboard.session.offset + 20) : Washboard.session.last_post);
+            var page = (Washboard.pagination_key == 'offset' ? (session.offset + 20) : session.last_post);
             load_more.attr('href', location.pathname + '?' + Washboard.pagination_key + '=' + page);
         }
     }
@@ -1111,11 +1110,11 @@
      * Inf. scrolling *
      ******************/
 
-    Washboard.scroll_handler = function(e) {
+    function scroll_handler(e) {
         if (document.body.scrollTop + window.innerHeight * 3 > document.height) {
             if (!$('#load_more').hasClass('loading')) {
                 console.log("Infinite scrolling invoked");
-                Washboard.load_more();
+                load_more();
             }
         }
     }
@@ -1124,41 +1123,41 @@
      * Sessions       *
      ******************/
 
-    Washboard.init_session = function() {
-        Washboard.parse_hash();
+    function init_session() {
+        parse_hash();
 
         // Load session, if present
-        if (Washboard.hash.session) {
+        if (hash.session) {
             var session_data = {};
-            for (attr in Washboard.session_attributes) {
-                session_data[attr] = localStorage.getItem(Washboard.hash.session + '_' + attr);
+            for (attr in session_attributes) {
+                session_data[attr] = localStorage.getItem(hash.session + '_' + attr);
                 if (!session_data[attr]) {
-                    Washboard.hash.session = null;
+                    hash.session = null;
                     break;
                 }
             }
         }
 
         // If everything was successfully loaded from localStorage, set the values
-        if (Washboard.hash.session) {
-            for (attr in Washboard.session_attributes) {
-                Washboard.session_attributes[attr].set(session_data[attr]);
+        if (hash.session) {
+            for (attr in session_attributes) {
+                session_attributes[attr].set(session_data[attr]);
             }
         }
         // Otherwise, start a new session and load the first page of the dashboard
         else {
-            Washboard.hash.session = (new Date()).getTime().toString();
-            Washboard.save_hash();
+            hash.session = (new Date()).getTime().toString();
+            save_hash();
 
             // Record this session
             var sessions = [];
             if (localStorage.getItem('sessions')) {
                 sessions = JSON.parse(localStorage.getItem('sessions'));
             }
-            sessions.push(Washboard.hash.session);
+            sessions.push(hash.session);
             localStorage.setItem('sessions', JSON.stringify(sessions));
             
-            Washboard.load_more();
+            load_more();
         }
 
         // Clean up outdated sessions
@@ -1169,8 +1168,8 @@
                 // Expire sessions after 1 hour
                 if (time - sessions[s] > 3600000) {
                     console.log('Removing outdated session ' + sessions[s]);
-                    for (attr in Washboard.session_attributes) {
-                        localStorage.removeItem(Washboard.hash.session + '_' + attr);
+                    for (attr in session_attributes) {
+                        localStorage.removeItem(hash.session + '_' + attr);
                     }
                     sessions.splice(s, 1);
                 }
@@ -1181,24 +1180,24 @@
         // Save page position once every 5 seconds
         Washboard.save_position = setInterval(
             function() {
-                Washboard.save_session_attr('position');
+                save_session_attr('position');
             },
             5 * 1000
         );
     }
 
-    Washboard.save_session_attr = function(attr) {
+    function save_session_attr(attr) {
         if (!Washboard.profile.sessions) {
             return;
         }
         try {
-            localStorage.setItem(Washboard.hash.session + '_' + attr, Washboard.session_attributes[attr].get());
+            localStorage.setItem(hash.session + '_' + attr, session_attributes[attr].get());
         }
         catch (err) {
             console.log('Ran out of localStorage quota. Clearing...');
             if (err.name.toLowerCase().indexOf('quota') > -1) {
                 localStorage.clear();
-                localStorage.setItem('sessions', JSON.stringify([Washboard.hash.session]));
+                localStorage.setItem('sessions', JSON.stringify([hash.session]));
             }
         }
     }
@@ -1207,11 +1206,11 @@
      * URL parsing    *
      ******************/
 
-    Washboard.parse_hash = function() {
-        Washboard.hash = URI('?' + location.hash.slice(1)).query(true);
-        if (Washboard.hash.throw_error) {
-            Washboard.parameters.throw_error = Washboard.hash.throw_error;
-            Washboard.parameters.error_type = Washboard.hash.error_type;
+    function parse_hash() {
+        hash = URI('?' + location.hash.slice(1)).query(true);
+        if (hash.throw_error) {
+            Washboard.parameters.throw_error = hash.throw_error;
+            Washboard.parameters.error_type = hash.error_type;
         }
         else {
             delete Washboard.parameters.throw_error;
@@ -1219,24 +1218,24 @@
         }
     }
 
-    Washboard.save_hash = function() {
-        location.hash = URI.buildQuery(Washboard.hash);
+    function save_hash() {
+        location.hash = URI.buildQuery(hash);
     }
 
     /******************
      * Debugging      *
      ******************/
 
-    Washboard.error_handler = function(msg, url, line) {
+    function error_handler(msg, url, line) {
         try {
             console.log({msg: msg, url: url, line: line});
             if ($('#load_more').hasClass('loading')) {
-                Washboard.done_loading((Washboard.touchscreen ? 'Tap' : 'Click') + ' to retry.');
+                done_loading((touchscreen ? 'Tap' : 'Click') + ' to retry.');
             }
-            if (Washboard.hash.debug) {
-                Washboard.notify('Debug info:<br/>' + msg + '<br/>' + url + '<br/>' + line);
+            if (hash.debug) {
+                notify('Debug info:<br/>' + msg + '<br/>' + url + '<br/>' + line);
             }
-            Washboard.notify('Whoops! Washboard just broke. Please <a href="mailto:admin@washboard.ws">contact us</a> if this keeps happening.', 'error');
+            notify('Whoops! Washboard just broke. Please <a href="mailto:admin@washboard.ws">contact us</a> if this keeps happening.', 'error');
         }
         // Prevent infinite looping
         catch (e) {
@@ -1251,12 +1250,12 @@
 
     Washboard.init = function() {
         // Set error handler
-        window.onerror = Washboard.error_handler;
+        window.onerror = error_handler;
 
         // Infinite scrolling
         if (Washboard.profile.infinite_scrolling) {
-            window.onscroll = Washboard.scroll_handler;
-            Washboard.load_more_string = 'Load more';
+            window.onscroll = scroll_handler;
+            load_more_string = 'Load more';
         }
             
         // Add safe mode handlers
@@ -1271,22 +1270,22 @@
         // Parse query string
         var query = URI(location.search).query(true);
         if (query.offset) {
-            Washboard.session.offset = query.offset;
+            session.offset = query.offset;
         }
         if (query[Washboard.pagination_key]) {
-            Washboard.session.last_post = query[Washboard.pagination_key];
+            session.last_post = query[Washboard.pagination_key];
         }
         
         // Initialize session
         if (Washboard.profile.sessions) {
-            Washboard.init_session();
+            init_session();
         }
         // Or, if not using sessions, load initial data
         else {
-            Washboard.parse_hash();
-            Washboard.dash(Washboard.initial_data);
+            parse_hash();
+            insert_posts(Washboard.initial_data);
         }
-    }
+    };
 
 }(window.Washboard = window.Washboard || {}, jQuery));
 
