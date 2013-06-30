@@ -893,6 +893,8 @@
             this_post.after(Handlebars.templates.reblog({
                 id: id,
                 username: Washboard.username,
+                twitter: Washboard.profile.twitter_button,
+                facebook: Washboard.profile.facebook_button,
             }));
 
             // Insert blog menu
@@ -941,9 +943,16 @@
             tags: reblog_box.find('.tags').val(),
             blog: reblog_box.find('.chooseblog').text(),
             state: name2state(reblog_box.find('.choosestate').text()),
-            send_to_facebook: reblog_box.find('.facebook').hasClass('on') ? 'yes' : 'no',
-            tweet: reblog_box.find('.twitter').hasClass('on') ? '' : 'off',
-        };
+        }
+
+        var twitter = reblog_box.find('.twitter');
+        var facebook = reblog_box.find('.facebook');
+        if (!twitter.hasClass('hide')) {
+            data.tweet = twitter.hasClass('on') ? '' : 'off';
+        }
+        if (!facebook.hasClass('hide')) {
+            data.send_to_facebook = facebook.hasClass('on') ? 'yes' : 'no';
+        }
 
         this_post.find('.buttons .reblog').addClass('pending');
 

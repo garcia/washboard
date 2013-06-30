@@ -22,6 +22,11 @@ add_introspection_rules([], ['^wb\.models\.LowerCaseCharField'])
 # From http://stackoverflow.com/questions/44109/965883
 
 class UserProfile(models.Model):
+    MEDIA_CHOICES = (
+        ('hide', 'Hide'),
+        ('off',  'Show (off)'),
+        ('on',   'Show (on)'),
+    )
     user = models.OneToOneField(User)
     started = models.BooleanField(default=False)
     infinite_scrolling = models.BooleanField(
@@ -36,6 +41,19 @@ class UserProfile(models.Model):
     safe_mode = models.BooleanField(
         default=False,
         help_text='Hide images and videos with the tap of a button.',
+    )
+    twitter_button = models.CharField(
+        max_length=4,
+        choices=MEDIA_CHOICES,
+        default='hide',
+        help_text='When hidden, sharing defaults to your blog\'s default options. '
+                  'When shown, the button defaults to the parenthesized choice.',
+    )
+    facebook_button = models.CharField(
+        max_length=4,
+        choices=MEDIA_CHOICES,
+        default='hide',
+        help_text='Same options as above.',
     )
 
 def create_user_profile(sender, instance, created, **kwargs):
