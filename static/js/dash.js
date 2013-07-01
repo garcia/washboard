@@ -681,7 +681,7 @@
         save_session_attr('session');
     }
 
-    function load_more() {
+    Washboard.load_more = function() {
         $('#load_more').text('Loading...');
         $('#load_more').addClass('loading');
 
@@ -710,7 +710,7 @@
                 }
             },
         });
-    }
+    };
 
     /******************
      * Session init.  *
@@ -757,7 +757,7 @@
             sessions.push(hash.session);
             localStorage.setItem('sessions', JSON.stringify(sessions));
 
-            load_more();
+            Washboard.load_more();
         }
 
         // Clean up outdated sessions
@@ -1319,7 +1319,7 @@
                 if (document.body.scrollTop + window.innerHeight * 3 > document.height) {
                     if (!$('#load_more').hasClass('loading')) {
                         console.log("Infinite scrolling invoked");
-                        load_more();
+                        Washboard.load_more();
                     }
                 }
             };
