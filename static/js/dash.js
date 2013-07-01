@@ -53,6 +53,8 @@
     var scale = Math.min(500, window.innerWidth) / 500;
     var optimal_sizes = {'1': 500 * scale, '2': 245 * scale, '3': 160 * scale};
     var touchscreen = window.ontouchstart !== undefined;
+    var err = {};
+    var stack = false;
 
     /******************
      * Notifications  *
@@ -133,12 +135,12 @@
             csrfmiddlewaretoken: csrf_token,
             endpoint: endpoint,
         });
-        ajaxdata = $.extend(ajaxdata, {
+        ajaxdata = $.extend({
             type: 'POST',
             url: '/api',
             data: data,
             dataType: 'json',
-        });
+        }, ajaxdata);
         console.log(ajaxdata);
 
         /* Convert Tumblr errors (which look successful) to HTTP errors */
@@ -163,15 +165,48 @@
             }
             // Print the whole stack before calling window.onerror
             catch (e) {
-                console.log(e.stack);
-                if (hash.debug) {
-                    notify(e.stack.replace(/\n/g, '<br />'));
+                if (e.stack !== undefined) {
+                    stack = e.stack;
+                    console.log(e.stack);
+                    if (hash.debug) {
+                        notify(e.stack.replace(/\n/g, '<br />'));
+                    }
                 }
                 throw e;
             }
         };
         $.ajax(ajaxdata);
     }
+    
+    Washboard.report = function() {
+        var report = $.extend({
+                endpoint: Washboard.endpoint,
+                hidden_posts: JSON.stringify(Washboard.hidden_posts),
+                parameters: JSON.stringify(Washboard.parameters),
+                profile: JSON.stringify(Washboard.profile),
+                rules: JSON.stringify(Washboard.rules),
+                username: Washboard.username,
+                csrfmiddlewaretoken: csrf_token,
+            }, err);
+        if (stack) {
+            report.stack = stack;
+        }
+        $.ajax({
+            type: 'POST',
+            url: '/jserror',
+            data: report,
+            success: function(data, textStatus, jqXHR) {
+                notify('Your report has been received and we will ' +
+                       'investigate the issue shortly. Thank you.', 'info');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                notify('Well, this is embarrassing. Would you mind ' +
+                       '<a href="http://blog.washboard.ws/ask">telling us</a> ' +
+                       'that error reporting is broken? Sorry for the trouble.');
+            },
+        });
+    };
+
 
     /******************
      * Blacklisting   *
@@ -1259,19 +1294,22 @@
         // Set error handler
         window.onerror = function(msg, url, line) {
             try {
-                console.log({msg: msg, url: url, line: line});
+                err = {msg: msg, url: url, line: line};
+                console.log(err);
                 if ($('#load_more').hasClass('loading')) {
                     done_loading((touchscreen ? 'Tap' : 'Click') + ' to retry.');
                 }
                 if (hash.debug) {
                     notify('Debug info:<br/>' + msg + '<br/>' + url + '<br/>' + line);
                 }
-                notify('Whoops! Washboard just broke. Please <a href="mailto:admin@washboard.ws">contact us</a> if this keeps happening.', 'error');
+                notify('Whoops! Washboard just broke. ' +
+                       '<a class="js" onclick="Washboard.report()">Report this error?</a>',
+                       'error');
             }
             // Prevent infinite looping
             catch (e) {
                 console.log(e.stack);
-                alert('Whoops! Washboard just broke. Please contact us at admin@washboard.ws if this keeps happening.');
+                alert('Whoops! Washboard just broke. Please contact us at blog.washboard.ws/ask if this keeps happening.');
             }
         };
 
