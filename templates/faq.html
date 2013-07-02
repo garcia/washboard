@@ -5,6 +5,10 @@
 <link rel="stylesheet" type="text/less" href="{% static "less/faq.less" %}" />
 {% endblock %}
 
+{% block js %}
+<script type="text/javascript" src="{% static "js/faq.js" %}"></script>
+{% endblock %}
+
 {% block content %}
 <div id="logo">
     <h1><a href="/">Washboard</a></h1>
@@ -12,39 +16,85 @@
 </div>
 
 <ul id="faq">
-    <li><p class="question">What is Washboard?</p>
-        <p class="answer">Washboard is a web app that provides an alternative frontend to Tumblr. Its primary goal is to give mobile users a way to blacklist keywords, since mobile devices don't have Tumblr Savior or XKit.</p>
+    <li id="general"><h3>General</h3>
+        <ul>
+            <li><p class="question">What is Washboard?</p>
+                <p class="answer">Washboard is a web app that provides an alternative frontend to Tumblr. Its primary goal is to give mobile users a way to blacklist keywords, since mobile devices don't have Tumblr Savior or XKit.</p>
+            </li>
+            <li><p class="question">Which devices / browsers are supported?</p>
+                <p class="answer">Apple devices (iPod Touch, iPhone, and iPad) are well-tested and should have no issues. Android support is experimental at the moment, but users have reported that Washboard runs fine on their Android devices. As for desktops, Chrome, Firefox, and Safari are all compatible.</p>
+            </li>
+            <li><p class="question">Where can I download it?</p>
+                <p class="answer">There's no need to download anything! Washboard runs in your device's browser.</p>
+            </li>
+            <li><p class="question">Will Washboard ever be a "real" app? Can it be integrated with the official Tumblr app?</p>
+                <p class="answer">Unfortunately, I lack many of the resources necessary to develop native phone apps. There is no way to modify Tumblr's apps, either. However, you can <a href="http://www.apple.com/ios/add-to-home-screen/">add Washboard to your home screen</a> to make it look like an app.</p>
+            </li>
+        </ul>
     </li>
-    <li><p class="question">Where can I download it?</p>
-        <p class="answer">There's no need to download anything! Washboard runs in your device's browser.</p>
+    <li id="signing-up"><h3>Signing up</h3>
+        <ul>
+            <li><p class="question">Why do I need to choose a password?</p>
+                <p class="answer">It's a way to keep track of your account even if you change your Tumblr username. If you change your primary blog's name, you'll need to enter your old name and your Washboard password the next time you sign in.</p>
+            </li>
+            <li><p class="question">Okay, so I changed my Tumblr username. What do I do?</p>
+                <p class="answer">When Washboard prompts you for a password, click the link under the password field to connect your new username to your old Washboard profile.</p>
+            </li>
+            <li><p class="question">Will Washboard do anything bad to my Tumblr account?</p>
+                <p class="answer">Absolutely never. Washboard only does what you tell it to do.</p>
+            </li>
+        </ul>
     </li>
-    <li><p class="question">Will Washboard ever be a "real" app? Can it be integrated with the official Tumblr app?</p>
-        <p class="answer">Unfortunately, I lack many of the resources necessary to develop native phone apps. There is no way to modify Tumblr's apps, either. However, you can <a href="http://www.apple.com/ios/add-to-home-screen/">add Washboard to your home screen</a> to make it look like an app.</p>
+    <li id="blacklisting"><h3>Blacklisting</h3>
+        <ul>
+            <li><p class="question">How does blacklisting work?</p>
+                <p class="answer">The <a href="/rules">Rules</a> page allows you to manage your blacklisted and whitelisted keywords. Each keyword has options to show / hide the notification upon blacklisting and to match whole / partial words.</p>
+                <p class="answer">You can also import your blacklist and whitelist from Tumblr Savior using the link at the bottom of the page.</p>
+            </li>
+            <li><p class="question">What if a post contains both blacklisted and whitelisted keywords?</p>
+                <p class="answer">First, look at the matched blacklist keywords. If none of them have "Show notification" unchecked, the whitelisted keyword(s) will cause the post to be displayed as if it weren't blacklisted. However, if any of the blacklisted keywords have "Show notification" unchecked, the whitelisted keyword(s) will cause the notification to be displayed anyway &mdash; a compromise between completely hiding and completely showing the post.</p>
+            <li><p class="question">Will the blacklist stop working if Tumblr updates the layout?</p>
+                <p class="answer">Nope. Although this happens occasionally with desktop browser extensions, Washboard uses the Tumblr API, which is relatively stable. In the event that something critical breaks, Washboard will not display posts at all, rather than displaying all posts indiscriminately.</p>
+            </li>
+            <li><p class="question">What do I put in the "Hidden posts" fields?</p>
+                <p class="answer">You generally shouldn't need to add hidden posts manually; instead, while browsing your dashboard, touch the post's "info" icon and select "Hide this post". If you <em>do</em> want to hide a post manually on the <a href="/rules">Rules</a> page, enter its source URL.</p>
+            </li>
+        </ul>
     </li>
-    <li><p class="question">Why do I need to choose a password?</p>
-        <p class="answer">It's a way to keep track of your account even if you change your Tumblr username. If you change your primary blog's name, you'll need to enter your old name and your Washboard password the next time you sign in.</p>
+    <li id="other-features"><h3>Other features</h3>
+        <ul>
+            <li><p class="question">I enabled "sessions" and now refreshing the page doesn't do anything. What's going on?</p>
+                <p class="answer">While sessions are enabled, you can refresh the page by clicking on the second half of the header (the part after the slash).</p>
+                <p class="answer">Sessions are intended to work around iOS's memory limitations that force tabs to refresh when they aren't looked at in awhile.</p>
+            </li>
+            <li><p class="question">What does Safe Mode hide?</p>
+                <p class="answer">Safe Mode hides all images and <code>iframe</code> elements (which includes videos, some audio posts, and other dynamic content).</p>
+            </li>
+            <li><p class="question">How can I configure which reblogs get shared on Twitter / Facebook?</p>
+                <p class="answer">There are options on your <a href="/settings">Settings</a> page to show or hide buttons that toggle posting to Twitter or Facebook. If a button is hidden, your blog's default options (see tumblr.com/blog/[your-blog-name]/settings) will always be used.</p>
+                <p class="answer">Currently there is no way to change a Tweet's contents, but I may add such a feature if there is sufficient demand for it.</p>
+            </li>
+            <li><p class="question">How do I view my blogs' drafts and queued posts?</p>
+                <p class="answer">There's no way to do this from Washboard yet, but it's planned for the future!</p>
+            </li>
+            <li><p class="question">How do I view notifications on my posts? What about my Inbox?</p>
+                <p class="answer">Unfortunately, the Tumblr API does not provide a way for third-party apps to view notifications or the Inbox yet.</p>
+            </li>
+            <li><p class="question">It's not working! What do I do?</p>
+                <p class="answer">Please <a href="mailto:admin@washboard.ws">email me</a> or <a href="http://blog.grantgarcia.org/ask">send me an ask</a> with as many details as you can provide. Your feedback is critical!</p>
+            </li>
+        </ul>
     </li>
-    <li><p class="question">How does blacklisting work?</p>
-        <p class="answer">The "Rules" page allows you to manage your blacklisted and whitelisted keywords. Each keyword has options to show / hide the notification upon blacklisting and to match whole / partial words.</p>
-    </li>
-    <li><p class="question">What if a post contains both blacklisted and whitelisted keywords?</p>
-        <p class="answer">Usually the whitelisted keyword(s) will cause the post to be displayed, but if any of the blacklisted keywords opt to hide the notification, Washboard compromises by showing the notification.</p>
-    <li><p class="question">Will the blacklist stop working if Tumblr updates the layout?</p>
-        <p class="answer">Nope. Although this happens occasionally with desktop browser extensions, Washboard uses the Tumblr API, which is relatively stable. In the event that something critical breaks, Washboard will not display posts at all, rather than displaying all posts indiscriminately.</p>
-    </li>
-    <li><p class="question">How do I view notifications on my posts? How do I view my Inbox?</p>
-        <p class="answer">Unfortunately, the Tumblr API does not provide a way for third-party apps to view notifications or the Inbox yet.</p>
-    </li>
-    <li><p class="question">I enabled "sessions" and now refreshing the page doesn't do anything. What's going on?</p>
-        <p class="answer">While sessions are enabled, you can refresh the page by clicking on the second half of the header (the part after the slash).</p>
-        <p class="answer">Sessions are intended to work around iOS's memory limitations that force tabs to refresh when they aren't looked at in awhile.</p>
-    </li>
-    <li><p class="question">It's not working! What do I do?</p>
-        <p class="answer">Please <a href="mailto:admin@washboard.ws">email me</a> or <a href="http://blog.grantgarcia.org/ask">send me an ask</a> with as many details as you can provide. Your feedback is critical!</p>
-    </li>
-    <li><p class="question">Does Washboard comply with Tumblr's <a href="http://www.tumblr.com/docs/en/api_agreement">API License Agreement</a>?</p>
-        <p class="answer">Yes. There are two grey areas: the first is the clause that prohibits "substantial replication" of services like the Dashboard, but it explicitly permits "specialized views" of such content, which Washboard falls under. The second is the clause prohibiting removal or insertion of content, but this is a non-issue because Washboard only removes content that the user explicitly requests to be removed.</p>
-        <p class="answer">As an aside: right now the API does not insert advertisements into the stream, but when this changes, Washboard will always display the ads as a measure of good faith.</p>
+    <li id="legal"><h3>Legal</h3>
+        <ul>
+            <li><p class="question">Does Washboard comply with Tumblr's <a href="http://www.tumblr.com/docs/en/api_agreement">API License Agreement</a>?</p>
+                <p class="answer">Yes. There are two grey areas: the first is the clause that prohibits "substantial replication" of services like the Dashboard, but it explicitly permits "specialized views" of such content, which Washboard falls under. The second is the clause prohibiting removal or insertion of content, but this is a non-issue because Washboard only removes content that the user explicitly requests to be removed.</p>
+                <p class="answer">As an aside: right now the API does not insert advertisements into the stream, but when this changes, Washboard will always display the ads as a measure of good faith.</p>
+            </li>
+            <li><p class="question">What is Washboard's license?</p>
+                <p class="answer">Washboard's code and original design elements are licensed under the <a href="http://opensource.org/licenses/MIT">MIT license</a>. Of course, any content delivered from Tumblr belongs to the original creator.</p delivered>
+            </li>
+        </ul>
     </li>
 </ul>
 {% endblock %}

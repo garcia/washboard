@@ -1,13 +1,25 @@
 @import "welcome.less";
 
+html, body {
+    overflow-y: scroll;
+}
+
 #content {
     margin: 5% auto 5% auto;
 }
 
-#faq {
-    padding-left: 0;
+#faq, #faq ul {
     text-align: left;
     list-style-type: none;
+    padding-left: 0;
+    width: 100%;
+    overflow: hidden;
+}
+
+h3 {
+    font-size: 200%;
+    font-weight: normal;
+    text-align: center;
 }
 
 .question {
