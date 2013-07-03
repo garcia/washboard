@@ -625,6 +625,22 @@
         else {
             post_list = data.response;
         }
+        
+        // Empty response
+        if (!post_list.length) {
+            // Haven't loaded any posts yet
+            if ($('#posts').is(':empty')) {
+                $('#posts').append(Handlebars.templates.empty({message: "Nothing to show here."}));
+                done_loading(load_more_string);
+            }
+            // Have loaded some posts already
+            else {
+                done_loading("No more posts to show.");
+            }
+            // Disable infinite scrolling
+            window.onscroll = null;
+            return;
+        }
 
         // Remove 'empty' box if present
         $('#posts .empty').remove();
