@@ -538,13 +538,26 @@
             context.best_player = best_fit(post.player, Math.min(500, window.innerWidth)).embed_code;
         }
 
-        if (post.type === 'answer') {
+        // Private answer posts are weird; the asker and answerer are switched around
+        if (post.state === 'submission' && post.answer) {
+            var tmp = post.blog_name;
+            post.blog_name = post.asking_name;
+            post.asking_name = tmp;
+        }
+
+        // Answer and postcard (fan-mail) posts
+        if (post.asking_name !== undefined) {
             // Determine asker's avatar for answer posts
             context.asking_avatar = (post.asking_name === 'Anonymous') ?
                 'http://assets.tumblr.com/images/anonymous_avatar_24.gif' :
                 ('http://api.tumblr.com/v2/blog/' + post.asking_name + '.tumblr.com/avatar/24');
             // Don't show reblog button
             context.rebloggable = false;
+        }
+
+        // Newlines to line breaks for postcards
+        if (post.type === 'postcard') {
+            post.body = post.body.trim().replace(/\n/g, '<br />');
         }
 
         // Assemble tags with URL-safe counterparts

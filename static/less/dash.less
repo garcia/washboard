@@ -132,6 +132,7 @@ code {
 .meta .avatar img {
     border-radius: 6px;
     box-shadow: 0 0 3px rgba(0, 0, 0, .5);
+    max-width: 64px;
 }
 
 .meta .blog_name,
@@ -749,8 +750,12 @@ img {
     display: block; /* FF3 fix */
 }
 
-.asking {
+.answerbox .asking {
     margin-left: 23px;
+}
+
+.asking_avatar {
+    width: 24px;
 }
 
 .asking_name {
@@ -769,6 +774,19 @@ img {
     margin-top: 15px;
     padding-top: 15px;
     border-top: 1px solid #f0f0f0;
+}
+
+/* postcard / fanmail */
+
+.postcardbox {
+    background-color: #ececec;
+    padding: 10px 20px;
+    line-height: 1.5em;
+    border-radius: 6px;
+}
+
+.postcard .buttons .edit {
+    display: none;
 }
 
 /* notes */

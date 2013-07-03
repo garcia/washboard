@@ -77,6 +77,14 @@ endpoints = {
             'tag', 'before',
         ],
     },
+    'inbox': {
+        'url': 'blog/{blog}.tumblr.com/posts/submission',
+        'method': 'GET',
+        'api_key': True,
+        'parameters': [
+            'filter', 'limit', 'offset', 'reblog_info',
+        ],
+    },
 }
 
 def api_error(status, msg, http_status=None):
