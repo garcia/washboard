@@ -53,6 +53,7 @@
     var scale = Math.min(500, window.innerWidth) / 500;
     var optimal_sizes = {'1': 500 * scale, '2': 245 * scale, '3': 160 * scale};
     var touchscreen = window.ontouchstart !== undefined;
+    var retry_message = (touchscreen ? 'Tap' : 'Click') + ' to retry.';
     var err = {};
     var stack = false;
 
@@ -613,6 +614,11 @@
         // Some methods return posts in data.response.posts,
         // others in data.response
         var post_list;
+        if (data === undefined || data.response === undefined) {
+            notify("Tumblr didn't deliver any posts.", "warning");
+            done_loading(retry_message);
+            return;
+        }
         if (data.response.posts !== undefined) {
             post_list = data.response.posts;
         }
@@ -700,7 +706,6 @@
             success: insert_posts,
             error: function(jqXHR, textStatus, errorThrown) {
                 var message = error_message(jqXHR, 'loading your posts');
-                var retry_message = (touchscreen ? 'Tap' : 'Click') + ' to retry.';
                 if ($('#posts').is(':empty')) {
                     $('#posts').append(Handlebars.templates.empty({message: message}));
                     done_loading(retry_message);
