@@ -1259,6 +1259,32 @@
 
     Washboard.toggle_description = function() {
         $('#blog-description').toggleClass('expanded');
+        save_session_attr('posts');
+    }
+
+    Washboard.follow = function() {
+        var follow_button = $('#follow-button');
+        var endpoint = follow_button.hasClass('followed') ? 'unfollow' : 'follow';
+
+        follow_button.addClass('pending');
+
+        apicall(endpoint, {'url': Washboard.parameters.blog + '.tumblr.com'}, {
+            success: function(data) {
+                if (endpoint == 'follow') {
+                    follow_button.addClass('followed');
+                }
+                else {
+                    follow_button.removeClass('followed');
+                }
+                save_session_attr('posts');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                notify(error_message(jqXHR, 'following this user'), 'warning');
+            },
+            complete: function(jqXHR, textStatus) {
+                follow_button.removeClass('pending');
+            }
+        });
     }
 
     Washboard.read_more = function(elem) {

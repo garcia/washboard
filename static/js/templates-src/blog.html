@@ -7,7 +7,9 @@
         {{else}}
         <button id="follow-button" class="shiny{{#if followed}} followed{{/if}}" onclick="Washboard.follow()">Follow</button>
         {{/if}}
+        {{#if ask}}
         <a class="shiny" href="{{url}}ask" target="_blank">Ask</a>
+        {{/if}}
         {{#if share_likes}}
         <!--<a class="shiny" href="/likes/{{name}}">Likes</a>-->
         {{/if}}

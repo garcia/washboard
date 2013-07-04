@@ -85,6 +85,22 @@ endpoints = {
             'filter', 'limit', 'offset', 'reblog_info',
         ],
     },
+    'follow': {
+        'url': 'user/follow',
+        'method': 'POST',
+        'api_key': False,
+        'parameters': [
+            'url',
+        ],
+    },
+    'unfollow': {
+        'url': 'user/unfollow',
+        'method': 'POST',
+        'api_key': False,
+        'parameters': [
+            'url',
+        ],
+    },
 }
 
 def api_error(status, msg, http_status=None):
