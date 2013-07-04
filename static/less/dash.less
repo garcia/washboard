@@ -1,5 +1,7 @@
 @import "washboard.less";
 @contentwidth: 540px;
+@follow: hsl(150, 60%, 50%);
+@unfollow: hsl(0, 60%, 50%);
 
 .transition(@prop; @duration; @timing-function) {
     -webkit-transition: @arguments;
@@ -69,9 +71,12 @@ code {
     overflow-x: hidden;
 }
 
+#posts > li {
+    width: 500px;
+}
+
 #posts > .empty {
     display: block;
-    width: 500px;
     margin: 10px auto;
     padding: 80px 40px;
     text-align: center;
@@ -80,12 +85,110 @@ code {
     font-size: 24px;
     border: 6px dashed darken(@primary, 12%);
     border-radius: 6px;
-    box-sizing: border-box;
+    .box-sizing-border-box;
 }
+
+/* Blog metadata */
+
+#blog {
+    color: lighten(@primary, 40%);
+    text-shadow: 0 1px 1px darken(@primary, 40%);
+    margin: 20px auto;
+    padding: 0 20px;
+    .box-sizing-border-box;
+}
+
+#blog a {
+    color: lighten(@primary, 40%);
+}
+
+#blog-title a {
+    text-decoration: none;
+}
+
+#blog-description {
+    line-height: 1.2em;
+    max-height: 6em;
+    overflow: hidden;
+}
+
+#blog-description.expanded {
+    max-height: none;
+}
+
+#blog-description p,
+#blog-description blockquote {
+    margin: 0 0 1.2em 0;
+}
+
+#blog-controls {
+    margin: 20px 0;
+}
+
+#blog-controls:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+#blog-controls button,
+#blog-controls a {
+    display: block;
+    float: left;
+    margin: 0 10px 0 0;
+    padding: 5px;
+    text-decoration: none;
+}
+
+#follow-button {
+    border-color: darken(@follow, 12%);
+    .shinyhue(@follow, 22%, 26%, 30%, 34%);
+}
+
+#follow-button:hover {
+    .shinyhue(@follow, 18%, 24%, 30%, 36%);
+}
+
+#follow-button:active {
+    .shinyhue(@follow, 36%, 30%, 24%, 18%); 
+}
+
+#follow-button.followed {
+    border-color: darken(@unfollow, 12%);
+    .shinyhue(@unfollow, 22%, 26%, 30%, 34%);
+}
+
+#follow-button.followed:hover {
+    .shinyhue(@unfollow, 18%, 24%, 30%, 36%);
+}
+
+#follow-button.followed:active {
+    .shinyhue(@unfollow, 36%, 30%, 24%, 18%); 
+}
+
+#follow-button:before {
+    content: "";
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    margin-right: 4px;
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90HBAAPDNEYvvIAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAIElEQVQY02NgQANHn93+D8MMhMAAKUaWJIRpqHgIBh0A7uLIngK/C8oAAAAASUVORK5CYII=");
+    background-position: center left;
+    background-repeat: no-repeat;
+}
+
+#follow-button.followed:before {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90HBAAUCpFN0F0AAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAH0lEQVQY02NgQANHn92GY4JggBQDBf8Ti2moeAgGHQD0mbC2WCcJ4gAAAABJRU5ErkJggg==");
+}
+
+#blog-description-toggle {
+    float: right !important;
+}
+
+/* Posts */
 
 .post {
     position: relative;
-    width: 500px;
     padding: 20px;
     margin: 20px auto 0 auto;
     background-color: white;
@@ -132,6 +235,7 @@ code {
 .meta .avatar img {
     border-radius: 6px;
     box-shadow: 0 0 3px rgba(0, 0, 0, .5);
+    max-width: 64px;
 }
 
 .meta .blog_name,
@@ -319,11 +423,16 @@ code {
     padding: 10px;
     width: 100%;
     color: lighten(@primary, 40%);
-    font-size: 16px;
     background-color: transparent;
-    border: none;
     outline: none;
     .box-sizing-border-box;
+}
+
+.action-box input:not(.shiny),
+.action-box textarea {
+    border-left: none;
+    border-right: none;
+    font-size: 16px;
 }
 
 .action-box button,
@@ -333,25 +442,6 @@ code {
     width: auto;
     margin: 5px;
     padding: 6px;
-    font-size: 14px;
-    color: lighten(@primary, 40%);
-    border: 1px solid darken(@primary, 12%);
-    border-radius: 2px;
-    box-shadow: 0 1px 3px black;
-    .shinybg(darken(@primary, 22%); darken(@primary, 26%); darken(@primary, 30%); darken(@primary, 34%));
-}
-
-.action-box button:hover,
-.action-box input[type=submit]:hover,
-#safe_mode_toggle:hover {
-    .shinybg(darken(@primary, 18%); darken(@primary, 24%); darken(@primary, 30%); darken(@primary, 36%));
-}
-
-.action-box button:active,
-.action-box input[type=submit]:active,
-.safe_mode #safe_mode_toggle,
-.reblog-box .media.on {
-    .shinybg(darken(@primary, 36%); darken(@primary, 30%); darken(@primary, 24%); darken(@primary, 18%));
 }
 
 .action-box:before,
@@ -749,8 +839,12 @@ img {
     display: block; /* FF3 fix */
 }
 
-.asking {
+.answerbox .asking {
     margin-left: 23px;
+}
+
+.asking_avatar {
+    width: 24px;
 }
 
 .asking_name {
@@ -769,6 +863,19 @@ img {
     margin-top: 15px;
     padding-top: 15px;
     border-top: 1px solid #f0f0f0;
+}
+
+/* postcard / fanmail */
+
+.postcardbox {
+    background-color: #ececec;
+    padding: 10px 20px;
+    line-height: 1.5em;
+    border-radius: 6px;
+}
+
+.postcard .buttons .edit {
+    display: none;
 }
 
 /* notes */
@@ -1016,7 +1123,7 @@ img {
     }
 
     #posts,
-    #posts > .empty,
+    #posts > li,
     #top #nav,
     .post.video > iframe,
     .audiobox > iframe,

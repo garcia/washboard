@@ -1,6 +1,10 @@
 @primary: hsl(210, 38%, 50%);
 @contentwidth: 960px;
 
+.shinyhue(@c; @l1; @l2; @l3; @l4) {
+    .shinybg(darken(@c, @l1); darken(@c, @l2); darken(@c, @l3); darken(@c, @l4));
+}
+
 .shinybg(@c1; @c2; @c3; @c4) {
     background: @c1;
     background: -moz-linear-gradient(top, @c1 0%, @c2 50%, @c3 51%, @c4 100%);
@@ -287,6 +291,24 @@ input[type=password]:focus {
     color: inherit;
     text-decoration: none;
     border-bottom: 1px dotted fade(lighten(@primary, 40%), 40%);
+}
+
+.shiny {
+    font-size: 14px;
+    color: lighten(@primary, 40%);
+    border: 1px solid darken(@primary, 12%);
+    border-radius: 2px;
+    box-shadow: 0 1px 3px black;
+    .shinyhue(@primary, 22%, 26%, 30%, 34%);
+}
+
+.shiny:hover {
+    .shinyhue(@primary, 18%, 24%, 30%, 36%);
+}
+
+.shiny:active,
+.shiny.on {
+    .shinyhue(@primary, 36%, 30%, 24%, 18%);
 }
 
 @media screen and (max-width: 1000px) {
