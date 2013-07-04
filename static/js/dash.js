@@ -1418,7 +1418,7 @@
         // Parse query string
         var query = URI(location.search).query(true);
         if (query.offset) {
-            session.offset = query.offset;
+            session.offset = parseInt(query.offset);
         }
         if (query[Washboard.pagination_key]) {
             session.last_post = query[Washboard.pagination_key];
