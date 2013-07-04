@@ -1,4 +1,16 @@
-<li class="blog">
-    <h2 class="blog-title"><a href="{{url}}">{{title}}</a></h2>
-    <p class="blog-description">{{{description}}}</p>
+<li id="blog">
+    <h2 id="blog-title"><a href="{{url}}">{{title}}</a></h2>
+    <div id="blog-description">{{{description}}}</div>
+    <div id="blog-controls">
+        {{#if tweet}}
+        <a class="shiny" href="/blog/{{name}}/inbox">Inbox</a>
+        {{else}}
+        <button id="follow-button" class="shiny{{#if followed}} followed{{/if}}" onclick="Washboard.follow()">Follow</button>
+        {{/if}}
+        <a class="shiny" href="{{url}}ask" target="_blank">Ask</a>
+        {{#if share_likes}}
+        <!--<a class="shiny" href="/likes/{{name}}">Likes</a>-->
+        {{/if}}
+        <button id="blog-description-toggle" class="shiny" onclick="Washboard.toggle_description()">&hellip;</button>
+    </div>
 </li>

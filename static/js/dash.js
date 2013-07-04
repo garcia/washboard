@@ -638,6 +638,13 @@
         else {
             post_list = data.response;
         }
+
+        // Blog info
+        if (data.response.blog !== undefined) {
+            if (!$('#posts > .blog').length) {
+                $('#posts').append(Handlebars.templates.blog(data.response.blog));
+            }
+        }
         
         // Empty response
         if (!post_list.length) {
@@ -1249,6 +1256,10 @@
         this_post.find('.album_art').toggleClass('expanded');
         save_session_attr('posts');
     };
+
+    Washboard.toggle_description = function() {
+        $('#blog-description').toggleClass('expanded');
+    }
 
     Washboard.read_more = function(elem) {
         console.log(elem);
