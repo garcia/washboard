@@ -1409,7 +1409,7 @@
         // Add safe mode handlers
         if (Washboard.profile.safe_mode) {
             $(document.body).addClass('safe_mode');
-            $(document.body).append('<button id="safe_mode_toggle">Safe Mode</button>');
+            $(document.body).append('<button id="safe_mode_toggle" class="shiny">Safe Mode</button>');
             $('#safe_mode_toggle').click(function(e) {
                 $(document.body).toggleClass('safe_mode');
             });
