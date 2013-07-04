@@ -70,6 +70,9 @@ def main(request, data_=None):
 
     data['wb'] = json.dumps(data['wb'])
 
+    # Prohibit </ literals (most importantly in the case of </script>)
+    data['wb'] = data['wb'].replace('</', '<\/');
+
     return render(request, 'dash.html', data)
 
 def blog(request, name):
