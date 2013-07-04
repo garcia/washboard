@@ -428,13 +428,6 @@ code {
     .box-sizing-border-box;
 }
 
-.action-box input:not(.shiny),
-.action-box textarea {
-    border-left: none;
-    border-right: none;
-    font-size: 16px;
-}
-
 .action-box button,
 .action-box input[type=submit],
 #safe_mode_toggle {
@@ -494,6 +487,8 @@ code {
 .reply-box .reply {
     float: left;
     padding-right: 60px;
+    border: none;
+    font-size: 16px;
 }
 
 .reply-box input[type=submit] {
@@ -508,6 +503,13 @@ code {
     height: 75px;
     margin: 0;
     font-family: inherit;
+}
+
+.reblog-box input:not(.shiny),
+.reblog-box textarea {
+    border-left: none;
+    border-right: none;
+    font-size: 16px;
 }
 
 .reblog-box .controls .chooseblog,
