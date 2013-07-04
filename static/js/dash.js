@@ -641,7 +641,7 @@
 
         // Blog info
         if (data.response.blog !== undefined) {
-            if (!$('#posts > .blog').length) {
+            if (!$('#blog').length) {
                 $('#posts').append(Handlebars.templates.blog(data.response.blog));
             }
         }
