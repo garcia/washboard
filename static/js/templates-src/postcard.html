@@ -1,6 +1,6 @@
 {{#with post}}
-<div class="answerbox">
-    <p class="question">{{question}}</p>
+<div class="postcardbox {{background}} {{font}}">
+    <p class="body">{{{body}}}</p>
     <p class="asking">
         <img class="asking_avatar" src="{{../asking_avatar}}" alt="{{asking_name}}'s avatar" />
         {{#if asking_url}}
@@ -10,6 +10,4 @@
         {{/if}}
     </p>
 </div>
-<div class="answer">{{{answer}}}</div>
 {{/with}}
-

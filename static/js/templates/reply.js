@@ -20,7 +20,7 @@ function program1(depth0,data) {
   if (stack1 = helpers.id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + ", event)\" />\n    <input type=\"submit\" value=\"Reply\" onclick=\"Washboard.submit_reply(";
+    + ", event)\" />\n    <input class=\"shiny\" type=\"submit\" value=\"Reply\" onclick=\"Washboard.submit_reply(";
   if (stack1 = helpers.id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)

@@ -2,12 +2,12 @@
     <textarea class="section caption" placeholder="Caption"></textarea>
     <input class="section tags" placeholder="Tags" />
     <div class="section controls">
-        <button class="choosestate" data-dropdown="#choosestate_{{id}}">Publish</button>
+        <button class="shiny choosestate" data-dropdown="#choosestate_{{id}}">Publish</button>
         <span class="on">on</span>
-        <button class="chooseblog" data-dropdown="#chooseblog_{{id}}">{{username}}</button>
-        <button class="media twitter {{twitter}}" onclick="Washboard.toggle_media('twitter', {{id}})"><a></a></button>
-        <button class="media facebook {{facebook}}" onclick="Washboard.toggle_media('facebook', {{id}})"><a></a></button>
-        <input type="submit" value="Reblog" onclick="Washboard.submit_reblog({{id}})" />
+        <button class="shiny chooseblog" data-dropdown="#chooseblog_{{id}}">{{username}}</button>
+        <button class="shiny media twitter {{twitter}}" onclick="Washboard.toggle_media('twitter', {{id}})"><a></a></button>
+        <button class="shiny media facebook {{facebook}}" onclick="Washboard.toggle_media('facebook', {{id}})"><a></a></button>
+        <input class="shiny" type="submit" value="Reblog" onclick="Washboard.submit_reblog({{id}})" />
     </div>
 </div>
 

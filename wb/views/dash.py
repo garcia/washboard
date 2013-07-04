@@ -82,6 +82,16 @@ def blog(request, name):
         },
     })
 
+def inbox(request, name):
+    return main(request, data_={
+        'title': "%s's inbox" % name,
+        'wb': {
+            'endpoint': 'inbox',
+            'parameters': {'blog': name},
+            'pagination_key': 'offset',
+        },
+    })
+
 def tagged(request, tag):
     return main(request, data_={
         'title': 'Posts tagged %s' % tag,

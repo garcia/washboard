@@ -538,13 +538,26 @@
             context.best_player = best_fit(post.player, Math.min(500, window.innerWidth)).embed_code;
         }
 
-        if (post.type === 'answer') {
+        // Private answer posts are weird; the asker and answerer are switched around
+        if (post.state === 'submission' && post.answer) {
+            var tmp = post.blog_name;
+            post.blog_name = post.asking_name;
+            post.asking_name = tmp;
+        }
+
+        // Answer and postcard (fan-mail) posts
+        if (post.asking_name !== undefined) {
             // Determine asker's avatar for answer posts
             context.asking_avatar = (post.asking_name === 'Anonymous') ?
                 'http://assets.tumblr.com/images/anonymous_avatar_24.gif' :
                 ('http://api.tumblr.com/v2/blog/' + post.asking_name + '.tumblr.com/avatar/24');
             // Don't show reblog button
             context.rebloggable = false;
+        }
+
+        // Newlines to line breaks for postcards
+        if (post.type === 'postcard') {
+            post.body = post.body.trim().replace(/\n/g, '<br />');
         }
 
         // Assemble tags with URL-safe counterparts
@@ -624,6 +637,29 @@
         }
         else {
             post_list = data.response;
+        }
+
+        // Blog info
+        if (data.response.blog !== undefined) {
+            if (!$('#posts > .blog').length) {
+                $('#posts').append(Handlebars.templates.blog(data.response.blog));
+            }
+        }
+        
+        // Empty response
+        if (!post_list.length) {
+            // Haven't loaded any posts yet
+            if ($('#posts').is(':empty')) {
+                $('#posts').append(Handlebars.templates.empty({message: "Nothing to show here."}));
+                done_loading(load_more_string);
+            }
+            // Have loaded some posts already
+            else {
+                done_loading("No more posts to show.");
+            }
+            // Disable infinite scrolling
+            window.onscroll = null;
+            return;
         }
 
         // Remove 'empty' box if present
@@ -1220,6 +1256,36 @@
         this_post.find('.album_art').toggleClass('expanded');
         save_session_attr('posts');
     };
+
+    Washboard.toggle_description = function() {
+        $('#blog-description').toggleClass('expanded');
+        save_session_attr('posts');
+    }
+
+    Washboard.follow = function() {
+        var follow_button = $('#follow-button');
+        var endpoint = follow_button.hasClass('followed') ? 'unfollow' : 'follow';
+
+        follow_button.addClass('pending');
+
+        apicall(endpoint, {'url': Washboard.parameters.blog + '.tumblr.com'}, {
+            success: function(data) {
+                if (endpoint == 'follow') {
+                    follow_button.addClass('followed');
+                }
+                else {
+                    follow_button.removeClass('followed');
+                }
+                save_session_attr('posts');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                notify(error_message(jqXHR, 'following this user'), 'warning');
+            },
+            complete: function(jqXHR, textStatus) {
+                follow_button.removeClass('pending');
+            }
+        });
+    }
 
     Washboard.read_more = function(elem) {
         console.log(elem);
