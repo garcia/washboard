@@ -671,6 +671,7 @@
 
             // Blacklisted with no notification: skip immediately
             if (blacklisted === true) {
+                $('#posts').append('<li class="post" style="display: none !important"></li>');
                 return true;
             }
 
