@@ -55,7 +55,6 @@
     var touchscreen = window.ontouchstart !== undefined;
     var retry_message = (touchscreen ? 'Tap' : 'Click') + ' to retry.';
     var err = {};
-    var stack = false;
 
     /******************
      * Notifications  *
@@ -104,6 +103,24 @@
 
         return who + ' ' + what_happened + '.';
     }
+    
+    (Washboard.wrap_all = function(obj) {
+        $.each(obj, function(name, prop) {
+            if (typeof prop === 'function' && prop.wrapped === undefined) {
+                (obj[name] = function() {
+                    try {
+                        prop.apply(this, arguments);
+                    }
+                    catch (e) {
+                        if (e.stack !== undefined) {
+                            Washboard.stack = e.stack;
+                        }
+                        throw e;
+                    }
+                }).wrapped = true;
+            }
+        });
+    }).wrapped = true;
 
     /******************
      * Hash parsing   *
@@ -146,36 +163,24 @@
 
         /* Convert Tumblr errors (which look successful) to HTTP errors */
         ajaxdata.success = function(data, textStatus, jqXHR) {
-            try {
-                var ajax_status = parseInt(data.meta.status);
-                // Returned if error_type = js
-                if (ajax_status === 999) {
-                    throw "User-invoked error";
-                }
-                // Tumblr error, or error_type = tumblr
-                if (ajax_status >= 400) {
-                    console.log(jqXHR);
-                    console.log(textStatus);
-                    console.log(data);
-                    jqXHR.real_status = ajax_status;
-                    return ajaxdata.error(jqXHR, textStatus);
-                }
-                if (success) {
-                    return success(data, textStatus, jqXHR);
-                }
+            var ajax_status = parseInt(data.meta.status);
+            // Returned if error_type = js
+            if (ajax_status === 999) {
+                throw "User-invoked error";
             }
-            // Print the whole stack before calling window.onerror
-            catch (e) {
-                if (e.stack !== undefined) {
-                    stack = e.stack;
-                    console.log(e.stack);
-                    if (hash.debug) {
-                        notify(e.stack.replace(/\n/g, '<br />'));
-                    }
-                }
-                throw e;
+            // Tumblr error, or error_type = tumblr
+            if (ajax_status >= 400) {
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(data);
+                jqXHR.real_status = ajax_status;
+                return ajaxdata.error(jqXHR, textStatus);
+            }
+            if (success) {
+                return success(data, textStatus, jqXHR);
             }
         };
+        Washboard.wrap_all(ajaxdata);
         $.ajax(ajaxdata);
     }
     
@@ -189,8 +194,8 @@
                 username: Washboard.username,
                 csrfmiddlewaretoken: csrf_token,
             }, err);
-        if (stack) {
-            report.stack = stack;
+        if (Washboard.stack !== undefined) {
+            report.stack = Washboard.stack;
         }
         $.ajax({
             type: 'POST',
@@ -1372,6 +1377,9 @@
                     done_loading((touchscreen ? 'Tap' : 'Click') + ' to retry.');
                 }
                 if (hash.debug) {
+                    if (Washboard.stack !== undefined) {
+                        notify('Stack trace:<br/>' + Washboard.stack);
+                    }
                     notify('Debug info:<br/>' + msg + '<br/>' + url + '<br/>' + line);
                 }
                 notify('Whoops! Washboard just broke. ' +
@@ -1437,5 +1445,7 @@
     };
 
 }(window.Washboard = window.Washboard || {}, jQuery));
+
+Washboard.wrap_all(Washboard);
 
 $(Washboard.init);
