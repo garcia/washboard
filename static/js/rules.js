@@ -77,6 +77,14 @@ $(function() {
         return (result < 0) ? -1 : result;
     };
 
+    $('#rules h2').each(function(h, header) {
+        $(header).append(' <span class="collapse">Collapse</span>').click(function(e) {
+            var collapse_link = $(e.currentTarget).find('.collapse');
+            collapse_link.text(collapse_link.text() == 'Expand' ? 'Collapse' : 'Expand');
+            $(e.currentTarget).next().toggle();
+        });
+    });
+
     $('.ruleset').each(function(r, ruleset) { check_no_rules($(ruleset)); });
     $('input').blur();
 });
