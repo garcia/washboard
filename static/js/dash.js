@@ -1377,7 +1377,8 @@
                         msg.indexOf('originalCreateNotification') >= 0 ||
                         msg.indexOf('jid1-ejhbjdxm9zr4tq') >= 0 ||
                         msg.indexOf('miscellaneous_bindings') >= 0 ||
-                        url === undefined) {
+                        msg === 'Script error.' ||
+                        !url) {
                     return;
                 }
                 err = {msg: msg, url: url, line: line};
