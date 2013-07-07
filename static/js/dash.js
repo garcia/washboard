@@ -1376,7 +1376,8 @@
                 if (msg.indexOf('atomicFindClose') >= 0 ||
                         msg.indexOf('originalCreateNotification') >= 0 ||
                         msg.indexOf('jid1-ejhbjdxm9zr4tq') >= 0 ||
-                        msg.indexOf('miscellaneous_bindings') >= 0) {
+                        msg.indexOf('miscellaneous_bindings') >= 0 ||
+                        url === undefined) {
                     return;
                 }
                 err = {msg: msg, url: url, line: line};
