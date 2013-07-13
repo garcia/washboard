@@ -201,6 +201,9 @@ def changename(request):
             login(request, user)
 
         return redirect('/')
+    else:
+        messages.error(request, 'Invalid form data. (Did you fill in all the fields?)')
+        return redirect('/setpassword')
 
 def getstarted(request):
     if not request.user.is_authenticated():
