@@ -1371,14 +1371,8 @@
         // Set error handler
         window.onerror = function(msg, url, line) {
             try {
-                // Ignore certain errors:
-                // http://blog.errorception.com/2012/03/tale-of-unfindable-js-error.html?showComment=1364620989877#c3421873516342898585
-                if (msg.indexOf('atomicFindClose') >= 0 ||
-                        msg.indexOf('originalCreateNotification') >= 0 ||
-                        msg.indexOf('jid1-ejhbjdxm9zr4tq') >= 0 ||
-                        msg.indexOf('miscellaneous_bindings') >= 0 ||
-                        msg === 'Script error.' ||
-                        !url) {
+                // Ignore errors that don't occur within Washboard
+                if (url === undefined || url.indexOf('static') < 0) {
                     return;
                 }
                 err = {msg: msg, url: url, line: line};
