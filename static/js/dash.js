@@ -1437,6 +1437,25 @@
             session.last_post = query[Washboard.pagination_key];
         }
 
+        // Handle absence of localStorage
+        if (window.localStorage === undefined || window.localStorage === null) {
+            var store = {};
+            window.localStorage = {
+                getItem: function(key) {
+                    return store[key];
+                },
+                setItem: function(key, value) {
+                    return store[key] = value + '';
+                },
+                removeItem: function(key) {
+                    delete store[key];
+                },
+                clear: function() {
+                    store = {};
+                },
+            };
+        }
+
         // Initialize session
         if (Washboard.profile.sessions) {
             init_session();
