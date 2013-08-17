@@ -12,9 +12,6 @@
             success: function(data, textStatus, jqXHR) {
                 $('#alert-' + alert_id).fadeOut();
             },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert('NOW YOU FUCKED UP');
-            },
         });
     }
 
