@@ -84,3 +84,14 @@ class HiddenPost(models.Model):
     user = models.ForeignKey(User)
     post = models.URLField()
     show_notification = models.BooleanField(default=True)
+
+class Alert(models.Model):
+    text = models.TextField(max_length=1024)
+    urgent = models.BooleanField(default=False)
+
+class SeenAlert(models.Model):
+    alert = models.ForeignKey(Alert)
+    user = models.ForeignKey(User)
+
+    class Meta:
+        unique_together = ('alert', 'user')

@@ -1066,9 +1066,14 @@ img {
     background-repeat: no-repeat;
 }
 
-/* ajax messages */
+/* messages */
 
-#messages.ajax-messages {
+#messages {
+    width: 540px;
+    margin-bottom: 0;
+}
+
+#ajax-messages {
     position: fixed;
     left: 0;
     right: 0;
@@ -1077,15 +1082,7 @@ img {
     color: white;
 }
 
-#messages.ajax-messages a {
-    color: inherit;
-}
-
-#messages.ajax-messages a.js {
-    text-decoration: underline;
-}
-
-#messages.ajax-messages li span {
+#ajax-messages li span {
     margin-left: 10px;
     font-size: 75%;
     opacity: .5;
@@ -1127,6 +1124,7 @@ img {
     #posts,
     #posts > li,
     #top #nav,
+    #messages,
     .post.video > iframe,
     .audiobox > iframe,
     .body iframe,
@@ -1143,6 +1141,10 @@ img {
 
     #top .dropdown-menu {
         margin-left: -20px;
+    }
+
+    #messages {
+        margin-bottom: 10px;
     }
     
     .post,

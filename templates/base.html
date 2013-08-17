@@ -24,7 +24,10 @@
 {% endcompress %}
 
 {# Used to insert dynamic JS variables without attempting to cache them #}
+<script type="text/javascript">
+csrf_token = "{{ csrf_token }}";
 {% block vars %}{% endblock %}
+</script>
 
 {# jQuery is already compressed, no need to recompress #}
 <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
@@ -81,14 +84,23 @@
 
 <div id="middle" class="wrapper">
     <div>
-        {% if not dash %}
-        {% if messages %}
-        <ul id="messages">
+        {% if messages or alerts %}
+        <ul id="messages" class="messages">
+            {% if alerts %}
+            {% for alert in alerts %}
+            <li id="alert-{{ alert.pk }}" class="alert{% if alert.urgent %} urgent{% endif %}">
+                <p>{{ alert.text }} <a class="js dismiss" onclick="Washboard.dismiss_alert({{ alert.pk }})">Dismiss&nbsp;alert</a></p>
+            </li>
+            {% endfor %}
+            {% endif %}
+            {% if messages %}
             {% for message in messages %}
             <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
             {% endfor %}
+            {% endif %}
         </ul>
         {% endif %}
+        {% if not dash %}
         <div id="content">
             {% block content %}{% endblock %}
         </div>

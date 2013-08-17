@@ -61,14 +61,14 @@
      ******************/
 
     function notify(message, type) {
-        if (!$('#messages').length) {
-            $('body').append('<ul id="messages" class="ajax-messages"></ul>');
+        if (!$('#ajax-messages').length) {
+            $('body').append('<ul id="ajax-messages" class="messages"></ul>');
         }
         if (!type) {
             type = 'error';
         }
         var message_id = (new Date()).getTime().toString();
-        $('#messages').append(Handlebars.templates.message({
+        $('#ajax-messages').append(Handlebars.templates.message({
             message: message,
             type: type,
             touchscreen: touchscreen,
