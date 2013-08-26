@@ -140,6 +140,14 @@ def main(request, data_=None):
             return api_error(400, 'Invalid request')
         elif request.POST.get('error_type') == 'tumblr':
             return api_error(400, 'Invalid request', 200)
+        elif request.POST.get('error_type') == '502':
+            return HttpResponse(json.dumps({
+                "meta": {
+                    "status": 200,
+                    "msg": "Service Unavailable"
+                },
+                "response": "There was an error processing your request. Our engineers have been alerted and will work quickly to correct any issues."
+            }), content_type='application/json', status=200)
         elif request.POST.get('error_type') == 'js':
             return api_error(999, 'JavaScript error', 200)
         else:
