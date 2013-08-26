@@ -641,6 +641,21 @@
             post_list = data.response;
         }
 
+        // Handle error response from Tumblr. These are caught by the AJAX
+        // handler if sessions are enabled, but that handler is bypassed if
+        // sessions are disabled.
+        if (typeof post_list === 'string') {
+            var message = "Tumblr encountered an error: \"" + post_list + "\"";
+            if ($('#posts').is(':empty')) {
+                $('#posts').append(Handlebars.templates.empty({message: message}));
+                done_loading(retry_message);
+            }
+            else {
+                done_loading(message + ' ' + retry_message);
+            }
+            return;
+        }
+
         // Blog info
         if (data.response.blog !== undefined) {
             if (!$('#blog').length) {
