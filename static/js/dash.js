@@ -186,13 +186,10 @@
     
     Washboard.report = function() {
         var report = $.extend({
-                endpoint: Washboard.endpoint,
-                hidden_posts: JSON.stringify(Washboard.hidden_posts),
-                parameters: JSON.stringify(Washboard.parameters),
-                profile: JSON.stringify(Washboard.profile),
-                rules: JSON.stringify(Washboard.rules),
                 username: Washboard.username,
                 csrfmiddlewaretoken: csrf_token,
+                washboard: JSON.stringify(Washboard),
+                page: document.documentElement.innerHTML,
             }, err);
         if (Washboard.stack !== undefined) {
             report.stack = Washboard.stack;
