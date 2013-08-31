@@ -541,6 +541,8 @@
         }
 
         // Private answer posts are weird; the asker and answerer are switched around
+        // XXX: The API currently provides no way to determine the sender of a
+        // private answer; waiting on response from support team
         if (post.state === 'submission' && post.answer) {
             var tmp = post.blog_name;
             post.blog_name = post.asking_name;
@@ -553,8 +555,8 @@
             context.asking_avatar = (post.asking_name === 'Anonymous') ?
                 'http://assets.tumblr.com/images/anonymous_avatar_24.gif' :
                 ('http://api.tumblr.com/v2/blog/' + post.asking_name + '.tumblr.com/avatar/24');
-            // Don't show reblog button
-            context.rebloggable = false;
+            // A relic from the ages when asks weren't rebloggable
+            //context.rebloggable = false;
         }
 
         // Newlines to line breaks for postcards
