@@ -596,20 +596,27 @@
      * Session saving *
      ******************/
 
-    function save_session_attr(attr) {
-        if (!Washboard.profile.sessions) {
-            return;
-        }
+    function set_item(key, value) {
         try {
-            localStorage.setItem(hash.session + '_' + attr, session_attributes[attr].get());
+            localStorage.setItem(key, value);
         }
         catch (err) {
             console.log('Ran out of localStorage quota. Clearing...');
             if (err.name.toLowerCase().indexOf('quota') > -1) {
                 localStorage.clear();
+                // Yes, this will throw an uncaught exception if it fails. But
+                // wrapping it in another call to set_item could lead to
+                // infinite recursion. And that's even worse!
                 localStorage.setItem('sessions', JSON.stringify([hash.session]));
             }
         }
+    }
+
+    function save_session_attr(attr) {
+        if (!Washboard.profile.sessions) {
+            return;
+        }
+        set_item(hash.session + '_' + attr, session_attributes[attr].get());
     }
 
     /******************
@@ -816,7 +823,7 @@
                 sessions = JSON.parse(localStorage.getItem('sessions'));
             }
             sessions.push(hash.session);
-            localStorage.setItem('sessions', JSON.stringify(sessions));
+            set_item('sessions', JSON.stringify(sessions));
 
             Washboard.load_more();
         }
@@ -836,7 +843,7 @@
                     sessions.splice(s, 1);
                 }
             }
-            localStorage.setItem('sessions', JSON.stringify(sessions));
+            set_item('sessions', JSON.stringify(sessions));
         }
 
         // Save page position once every 5 seconds
