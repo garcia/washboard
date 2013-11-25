@@ -29,8 +29,9 @@ csrf_token = "{{ csrf_token }}";
 {% block vars %}{% endblock %}
 </script>
 
-{# jQuery is already compressed, no need to recompress #}
+{# No need to recompress these minified scripts #}
 <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/fastclick.min.js" %}"></script>
 {% compress js %}
 <script type="text/javascript" src="{% static "js/jquery.fix.clone.js" %}"></script>
 <script type="text/javascript" src="{% static "jquery.dropdown/jquery.dropdown.js" %}"></script>
@@ -119,6 +120,12 @@ csrf_token = "{{ csrf_token }}";
         {% block bottom %}{% endblock %}
     </div>
 </div>
+
+<script type="text/javascript">
+$(function() {
+    FastClick.attach(document.body);
+});
+</script>
 
 {% comment %}
 vim:filetype=htmldjango

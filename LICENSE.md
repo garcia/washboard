@@ -5,6 +5,11 @@ Copyright (c) 2013 [Grant Garcia](http://grantgarcia.org/). Licensed under the [
 
 Washboard utilizes code from the following projects:
 
+FastClick
+---------
+
+All open source code released by FT Labs is licenced under the [MIT licence][MIT].
+
 Handlebars.js
 -------------
 
