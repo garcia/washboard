@@ -44,7 +44,7 @@ function program3(depth0,data,depth2) {
   buffer += escapeExpression(stack1)
     + "\" target=\"_blank\" onclick=\"Washboard.expand("
     + escapeExpression(((stack1 = depth2.id),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "); return false\">\n            <img class=\"js\" src=\"";
+    + "); return false\">\n            <img class=\"js needsclick\" src=\"";
   if (stack2 = helpers.url) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
   else { stack2 = depth0.url; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
   buffer += escapeExpression(stack2)
@@ -64,7 +64,7 @@ function program5(depth0,data,depth1) {
 function program6(depth0,data,depth2) {
   
   var buffer = "", stack1;
-  buffer += "\n    <img class=\"js\" hr-src=\"";
+  buffer += "\n    <img class=\"js needsclick\" hr-src=\"";
   if (stack1 = helpers.hr_url) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.hr_url; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
