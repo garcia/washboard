@@ -4,7 +4,7 @@
     <div class="row row-{{count}}" style="height: {{height}}px">
         {{#each photos}}
         <a href="{{hr_url}}" target="_blank" onclick="Washboard.expand({{../../id}}); return false">
-            <img class="js" src="{{url}}" />
+            <img class="js needsclick" src="{{url}}" />
         </a>
         {{/each}}
     </div>
@@ -13,7 +13,7 @@
 <div class="hr_photos" style="display: none">
     {{#each ../rows}}
     {{#each photos}}
-    <img class="js" hr-src="{{hr_url}}" onclick="Washboard.collapse({{../../id}})" />
+    <img class="js needsclick" hr-src="{{hr_url}}" onclick="Washboard.collapse({{../../id}})" />
     {{/each}}
     {{/each}}
 </div>
