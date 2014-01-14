@@ -55,6 +55,7 @@
     var touchscreen = window.ontouchstart !== undefined;
     var retry_message = (touchscreen ? 'Tap' : 'Click') + ' to retry.';
     var err = {};
+    var bad_session = false;
 
     /******************
      * Notifications  *
@@ -601,13 +602,23 @@
             localStorage.setItem(key, value);
         }
         catch (err) {
-            console.log('Ran out of localStorage quota. Clearing...');
             if (err.name.toLowerCase().indexOf('quota') > -1) {
+                console.log('Ran out of localStorage quota. Clearing...');
                 localStorage.clear();
                 // Yes, this will throw an uncaught exception if it fails. But
                 // wrapping it in another call to set_item could lead to
                 // infinite recursion. And that's even worse!
-                localStorage.setItem('sessions', JSON.stringify([hash.session]));
+                try {
+                    localStorage.setItem('sessions', JSON.stringify([hash.session]));
+                }
+                catch (err) {
+                    if (!bad_session) {
+                        notify("Sorry, but something went wrong with Sessions.<br />" +
+                            "If you keep seeing this message, consider disabling the feature from your settings page.",
+                            "warning");
+                        bad_session = true;
+                    }
+                }
             }
         }
     }
