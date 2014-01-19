@@ -56,6 +56,7 @@
     var retry_message = (touchscreen ? 'Tap' : 'Click') + ' to retry.';
     var err = {};
     var bad_session = false;
+    var post_top_padding = 5;
 
     /******************
      * Notifications  *
@@ -1289,6 +1290,25 @@
      * Miscellaneous  *
      ******************/
 
+    function neighboring_posts() {
+        var neighbors = {},
+            window_offset = $(window).scrollTop(),
+            post_elements = $('#posts > .post');
+        post_elements.each(function(p, post) {
+            var post_offset = Math.floor($(post).offset().top - post_top_padding);
+            if (post_offset >= window_offset) {
+                neighbors.current = neighbors.previous = Math.max(p - 1, 0);
+                neighbors.next = p;
+                if (post_offset == window_offset) {
+                    neighbors.current = p;
+                    neighbors.next = Math.min(p + 1, post_elements.length);
+                }
+                return false;
+            }
+        });
+        return neighbors;
+    }
+
     Washboard.toggle_album_art = function(id) {
         var this_post = $('#post_' + id);
         this_post.find('.album_art').toggleClass('expanded');
@@ -1361,7 +1381,7 @@
                     }
                 );
                 $('body').animate(
-                    {scrollTop: this_post.offset().top - 5},
+                    {scrollTop: this_post.offset().top - post_top_padding},
                     200
                 );
             }
@@ -1388,7 +1408,7 @@
                         }
                     );
                 $('body').animate(
-                    {scrollTop: this_post.offset().top - 5},
+                    {scrollTop: this_post.offset().top - post_top_padding},
                     200
                 );
             }
@@ -1440,6 +1460,34 @@
                 }
             };
             load_more_string = 'Load more';
+        }
+
+        // Keyboard handlers
+        window.onkeydown = function(e) {
+            // Ignore keypress if sent to text input
+            if (['input', 'textarea'].indexOf(e.target.tagName.toLowerCase()) >= 0) {
+                return;
+            }
+            // J / K scroll handlers
+            if (e.keyCode == 74 || e.keyCode == 75) {
+                var neighbors = neighboring_posts(),
+                    index = (e.keyCode == 74 ? neighbors.next : neighbors.previous),
+                    post = $($('#posts > .post')[index]);
+                $('body').scrollTop(post.offset().top - post_top_padding);
+            }
+            // L / R shortcuts
+            else if (e.keyCode == 76 || e.keyCode == 82) {
+                var index = neighboring_posts().current,
+                    id = $('#posts > .post')[index].id.slice(5);
+                // L to like
+                if (e.keyCode == 76) {
+                    Washboard.like(id);
+                }
+                // R to open the reblog box
+                else if (e.keyCode == 82) {
+                    Washboard.reblog(id);
+                }
+            }
         }
 
         // Resize handler
