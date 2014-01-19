@@ -55,6 +55,8 @@
     var touchscreen = window.ontouchstart !== undefined;
     var retry_message = (touchscreen ? 'Tap' : 'Click') + ' to retry.';
     var err = {};
+    var bad_session = false;
+    var post_top_padding = 5;
 
     /******************
      * Notifications  *
@@ -601,13 +603,23 @@
             localStorage.setItem(key, value);
         }
         catch (err) {
-            console.log('Ran out of localStorage quota. Clearing...');
             if (err.name.toLowerCase().indexOf('quota') > -1) {
+                console.log('Ran out of localStorage quota. Clearing...');
                 localStorage.clear();
                 // Yes, this will throw an uncaught exception if it fails. But
                 // wrapping it in another call to set_item could lead to
                 // infinite recursion. And that's even worse!
-                localStorage.setItem('sessions', JSON.stringify([hash.session]));
+                try {
+                    localStorage.setItem('sessions', JSON.stringify([hash.session]));
+                }
+                catch (err) {
+                    if (!bad_session) {
+                        notify("Sorry, but something went wrong with Sessions.<br />" +
+                            "If you keep seeing this message, consider disabling the feature from your settings page.",
+                            "warning");
+                        bad_session = true;
+                    }
+                }
             }
         }
     }
@@ -1278,6 +1290,25 @@
      * Miscellaneous  *
      ******************/
 
+    function neighboring_posts() {
+        var neighbors = {},
+            window_offset = $(window).scrollTop(),
+            post_elements = $('#posts > .post');
+        post_elements.each(function(p, post) {
+            var post_offset = Math.floor($(post).offset().top - post_top_padding);
+            if (post_offset >= window_offset) {
+                neighbors.current = neighbors.previous = Math.max(p - 1, 0);
+                neighbors.next = p;
+                if (post_offset == window_offset) {
+                    neighbors.current = p;
+                    neighbors.next = Math.min(p + 1, post_elements.length);
+                }
+                return false;
+            }
+        });
+        return neighbors;
+    }
+
     Washboard.toggle_album_art = function(id) {
         var this_post = $('#post_' + id);
         this_post.find('.album_art').toggleClass('expanded');
@@ -1350,7 +1381,7 @@
                     }
                 );
                 $('body').animate(
-                    {scrollTop: this_post.offset().top - 5},
+                    {scrollTop: this_post.offset().top - post_top_padding},
                     200
                 );
             }
@@ -1377,7 +1408,7 @@
                         }
                     );
                 $('body').animate(
-                    {scrollTop: this_post.offset().top - 5},
+                    {scrollTop: this_post.offset().top - post_top_padding},
                     200
                 );
             }
@@ -1429,6 +1460,34 @@
                 }
             };
             load_more_string = 'Load more';
+        }
+
+        // Keyboard handlers
+        window.onkeydown = function(e) {
+            // Ignore keypress if sent to text input
+            if (['input', 'textarea'].indexOf(e.target.tagName.toLowerCase()) >= 0) {
+                return;
+            }
+            // J / K scroll handlers
+            if (e.keyCode == 74 || e.keyCode == 75) {
+                var neighbors = neighboring_posts(),
+                    index = (e.keyCode == 74 ? neighbors.next : neighbors.previous),
+                    post = $($('#posts > .post')[index]);
+                $('body').scrollTop(post.offset().top - post_top_padding);
+            }
+            // L / R shortcuts
+            else if (e.keyCode == 76 || e.keyCode == 82) {
+                var index = neighboring_posts().current,
+                    id = $('#posts > .post')[index].id.slice(5);
+                // L to like
+                if (e.keyCode == 76) {
+                    Washboard.like(id);
+                }
+                // R to open the reblog box
+                else if (e.keyCode == 82) {
+                    Washboard.reblog(id);
+                }
+            }
         }
 
         // Resize handler
