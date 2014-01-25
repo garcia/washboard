@@ -79,15 +79,15 @@
     </fieldset>
 </form>
 
-<a id="importsaviorlink" class="js" onclick="importsavior()">Import from Tumblr Savior</a>
+<a id="importruleslink" class="js" onclick="importrules()">Import from Tumblr Savior / XKit</a>
 
-<form id="importsaviorbox" action="/importsavior" method="post" onsubmit="return false">
+<form id="importrulesbox" action="/importrules" method="post" onsubmit="return false">
     <fieldset>
-        <h2>Import from Tumblr Savior</h2>
-        <p>Paste your Tumblr Savior save data into the box below to import your blacklist and whitelist.</p>
+        <h2>Import from Tumblr Savior / XKit</h2>
+        <p>Paste your Tumblr Savior or XKit save data into the box below to import your blacklist and whitelist.</p>
         {% csrf_token %}
         <div>
-            {{ importsavior.json }}
+            {{ importrules.json }}
         </div>
         <div class="submit">
             <input class="submit-button" type="submit" value="Import" onclick="form.submit()" />

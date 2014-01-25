@@ -32,7 +32,7 @@ class HidePostForm(forms.ModelForm):
         model = HiddenPost
         exclude = ('user',)
 
-class ImportSaviorForm(forms.Form):
+class ImportRulesForm(forms.Form):
     json = forms.CharField(widget=forms.Textarea)
 
 @transaction.commit_on_success
@@ -66,7 +66,7 @@ def get(request):
             ('whitelist', whitelist),
         ]),
         'hiddenposts': hiddenposts,
-        'importsavior': ImportSaviorForm(),
+        'importrules': ImportRulesForm(),
     }
     return render(request, 'rules.html', data)
 
@@ -159,18 +159,19 @@ def hide(request):
         'response': {},
     }), content_type='application/json')
 
-def importsavior(request):
+def importrules(request):
     max_len = filter(lambda f: f.name == 'keyword',
                      Rule._meta.fields)[0].max_length
-    form = ImportSaviorForm(request.POST)
+    form = ImportRulesForm(request.POST)
     if not form.is_valid():
         messages.error(request, 'Invalid form data.')
         return redirect('/rules')
     try:
-        savior_data = json.loads(form.cleaned_data['json'])
+        import_data = json.loads(form.cleaned_data['json'])
     except ValueError:
         messages.error(request, 'Invalid save data. Are you sure you '
-            'copy-pasted it directly from Tumblr Savior\'s Save/Load box?')
+            'copy-pasted it directly from Tumblr Savior\'s Save/Load box '
+            'or XKit\'s Export box?')
         return redirect('/rules')
 
     i = 0
@@ -180,14 +181,15 @@ def importsavior(request):
     imported = 0
     truncated = False
 
-    for savior_list in ('listBlack', 'listWhite'):
-        if savior_list not in savior_data:
-            continue
-        for keyword in savior_data[savior_list]:
+    for import_list in ('listBlack', 'listWhite', 'blacklist', 'whitelist'):
+        for keyword in import_data.get(import_list, ()):
             # Truncate keyword if necessary
             if len(keyword) > max_len:
                 keyword = keyword[:max_len]
                 truncated = True
+            # Don't add empty keywords
+            if not keyword:
+                continue
             # Check for keyword's existence first
             try:
                 Rule.objects.get(user=request.user, keyword=keyword)
@@ -195,7 +197,7 @@ def importsavior(request):
             except Rule.DoesNotExist:
                 try:
                     Rule(user=request.user, keyword=keyword, index=i,
-                         blacklist=('Black' in savior_list)).save()
+                         blacklist=('black' in import_list.lower())).save()
                     i += 1
                     imported += 1
                 except IntegrityError:
