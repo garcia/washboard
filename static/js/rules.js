@@ -63,9 +63,14 @@ function delete_rule(e) {
     check_no_rules(ruleset);
 }
 
-function importsavior() {
-    $('#importsaviorlink').hide();
-    $('#importsaviorbox').slideDown();
+function importrules() {
+    $('#importruleslink').hide();
+    $('#importrulesbox').slideDown();
+}
+
+function exportrules() {
+    $('#exportruleslink').hide();
+    $('#exportrulesbox').slideDown();
 }
 
 $(function() {

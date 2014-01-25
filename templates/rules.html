@@ -79,21 +79,31 @@
     </fieldset>
 </form>
 
-<a id="importsaviorlink" class="js" onclick="importsavior()">Import from Tumblr Savior</a>
+<p><a id="importruleslink" class="js" onclick="importrules()">Import from Tumblr Savior / XKit</a></p>
+<p><a id="exportruleslink" class="js" onclick="exportrules()">Export to Tumblr Savior / XKit</a></p>
 
-<form id="importsaviorbox" action="/importsavior" method="post" onsubmit="return false">
+<form id="importrulesbox" action="/importrules" method="post" onsubmit="return false">
     <fieldset>
-        <h2>Import from Tumblr Savior</h2>
-        <p>Paste your Tumblr Savior save data into the box below to import your blacklist and whitelist.</p>
+        <h2>Import from Tumblr Savior / XKit</h2>
+        <p>Paste your Tumblr Savior or XKit save data into the box below to import your blacklist and whitelist.</p>
         {% csrf_token %}
         <div>
-            {{ importsavior.json }}
+            {{ importrules.json }}
         </div>
         <div class="submit">
             <input class="submit-button" type="submit" value="Import" onclick="form.submit()" />
         </div>
     </fieldset>
 </form>
+
+<fieldset id="exportrulesbox">
+    <h2>Export to Tumblr Savior / XKit</h2>
+    <p>Copy the data in the box below and paste it into Tumblr Savior or XKit's import box to export your blacklist and whitelist.</p>
+    <p>Note: exporting from Washboard to Tumblr Savior may overwrite your Tumblr Savior settings.</p>
+    <div>
+        <textarea cols="40" rows="10">{{ exportdata }}</textarea>
+    </div>
+</fieldset>
 {% endblock %}
 
 {% block bottom %}
