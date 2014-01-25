@@ -58,6 +58,27 @@ def get(request):
     for i, p in enumerate(HiddenPost.objects.filter(user__exact=request.user)):
         hiddenposts.extend([HiddenPostForm(instance=p, prefix='hp-'+str(i))])
 
+    exportdata = json.dumps({
+        'creator': 'Washboard',
+        'version': '0.4.9',
+        'listBlack': filter(None, (r.instance.keyword for r in blacklist)),
+        'listWhite': filter(None, (r.instance.keyword for r in whitelist)),
+        'hide_source': True,
+        'show_notice': True,
+        'show_words': True,
+        'match_words': True,
+        'promoted_tags': False,
+        'promoted_posts': False,
+        'context_menu': True,
+        'toolbar_butt': True,
+        'white_notice': True,
+        'black_notice': True,
+        'hide_pinned': False,
+        'auto_unpin': True,
+        'show_tags': True,
+        'hide_premium': True,
+    })
+
     data = {
         'title': 'Rules',
         'rulesets': ('blacklist', 'whitelist'),
@@ -67,6 +88,7 @@ def get(request):
         ]),
         'hiddenposts': hiddenposts,
         'importrules': ImportRulesForm(),
+        'exportdata': exportdata,
     }
     return render(request, 'rules.html', data)
 

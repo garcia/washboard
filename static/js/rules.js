@@ -68,6 +68,11 @@ function importrules() {
     $('#importrulesbox').slideDown();
 }
 
+function exportrules() {
+    $('#exportruleslink').hide();
+    $('#exportrulesbox').slideDown();
+}
+
 $(function() {
     $('.keyword input').keypress(keyword_keypress);
     $('input[type=checkbox]').click(checkbox_click);
