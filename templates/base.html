@@ -90,7 +90,7 @@ csrf_token = "{{ csrf_token }}";
             {% if alerts %}
             {% for alert in alerts %}
             <li id="alert-{{ alert.pk }}" class="alert{% if alert.urgent %} urgent{% endif %}">
-                <p>{{ alert.text }} <a class="js dismiss" onclick="Washboard.dismiss_alert({{ alert.pk }})">Dismiss&nbsp;alert</a></p>
+                <p>{{ alert.text|safe }} <a class="js dismiss" onclick="Washboard.dismiss_alert({{ alert.pk }})">Dismiss&nbsp;alert</a></p>
             </li>
             {% endfor %}
             {% endif %}
