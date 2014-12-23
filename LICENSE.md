@@ -1,7 +1,7 @@
 Washboard
 =========
 
-Copyright (c) 2013 [Grant Garcia](http://grantgarcia.org/). Licensed under the [MIT License][MIT].
+Copyright (c) 2014 [Grant Garcia](http://grantgarcia.org/). Licensed under the [MIT License][MIT].
 
 Washboard utilizes code from the following projects:
 
@@ -9,6 +9,18 @@ FastClick
 ---------
 
 All open source code released by FT Labs is licenced under the [MIT licence][MIT].
+
+Font Awesome
+------------
+
+**Font License:** [SIL OFL 1.1][OFL]
+
+**Code License:** [MIT License][MIT]
+
+Gen
+---
+
+Licensed under the [SIL Open Font License][OFL].
 
 Handlebars.js
 -------------

@@ -49,45 +49,45 @@ function program5(depth0,data) {
 function program7(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n            <a class=\"edit\" href=\"http://www.tumblr.com/edit/"
+  buffer += "\n            <a class=\"reply js fa fa-lg fa-reply\" aria-label=\"Reply\" onclick=\"Washboard.reply("
     + escapeExpression(((stack1 = ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\" target=\"_blank\">Edit</a>\n            ";
+    + ")\"></a>\n            ";
   return buffer;
   }
 
 function program9(depth0,data) {
   
-  var buffer = "", stack1, stack2;
-  buffer += "\n            <a class=\"js like";
-  stack2 = helpers['if'].call(depth0, ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.liked), {hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\" onclick=\"Washboard.like("
+  var buffer = "", stack1;
+  buffer += "\n            <a class=\"reblog js fa fa-lg fa-retweet\" aria-label=\"Reblog\" onclick=\"Washboard.reblog("
     + escapeExpression(((stack1 = ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ")\">Like</a>\n            ";
+    + ")\"></a>\n            ";
   return buffer;
   }
-function program10(depth0,data) {
+
+function program11(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n            <a class=\"edit fa fa-lg fa-pencil-square-o\" aria-label=\"Edit\" href=\"http://www.tumblr.com/edit/"
+    + escapeExpression(((stack1 = ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\" target=\"_blank\"></a>\n            ";
+  return buffer;
+  }
+
+function program13(depth0,data) {
+  
+  var buffer = "", stack1, stack2;
+  buffer += "\n            <a class=\"like js";
+  stack2 = helpers['if'].call(depth0, ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.liked), {hash:{},inverse:self.noop,fn:self.program(14, program14, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += " fa fa-lg fa-heart\" aria-label=\"Like\" onclick=\"Washboard.like("
+    + escapeExpression(((stack1 = ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + ")\"></a>\n            ";
+  return buffer;
+  }
+function program14(depth0,data) {
   
   
   return " liked";
-  }
-
-function program12(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n            <a class=\"js reblog\" onclick=\"Washboard.reblog("
-    + escapeExpression(((stack1 = ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ")\">Reblog</a>\n            ";
-  return buffer;
-  }
-
-function program14(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\n            <a class=\"js reply\" onclick=\"Washboard.reply("
-    + escapeExpression(((stack1 = ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ")\">Reply</a>\n            ";
-  return buffer;
   }
 
 function program16(depth0,data) {
@@ -204,18 +204,18 @@ function program25(depth0,data) {
   buffer += "\n\n    ";
   stack2 = helpers['if'].call(depth0, depth0.tags, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\n\n    <div class=\"actions\">\n        <div class=\"buttons\">\n            ";
-  stack2 = helpers['if'].call(depth0, depth0.mine, {hash:{},inverse:self.program(9, program9, data),fn:self.program(7, program7, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\n            ";
-  stack2 = helpers['if'].call(depth0, depth0.rebloggable, {hash:{},inverse:self.noop,fn:self.program(12, program12, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\n            ";
-  stack2 = helpers['if'].call(depth0, ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.can_reply), {hash:{},inverse:self.noop,fn:self.program(14, program14, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\n            <a class=\"js info\" data-dropdown=\"#info_"
+  buffer += "\n\n    <div class=\"actions\">\n        <div class=\"buttons\">\n            <a class=\"info js fa fa-lg fa-info-circle\" aria-label=\"Info\" data-dropdown=\"#info_"
     + escapeExpression(((stack1 = ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">Info</a>\n        </div>\n        <div class=\"not-buttons\">\n            ";
+    + "\"></a>\n            ";
+  stack2 = helpers['if'].call(depth0, ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.can_reply), {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\n            ";
+  stack2 = helpers['if'].call(depth0, depth0.rebloggable, {hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\n            ";
+  stack2 = helpers['if'].call(depth0, depth0.mine, {hash:{},inverse:self.program(13, program13, data),fn:self.program(11, program11, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\n        </div>\n        <div class=\"not-buttons\">\n            ";
   stack2 = helpers['if'].call(depth0, ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.note_count), {hash:{},inverse:self.noop,fn:self.program(16, program16, data),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
   buffer += "\n            ";

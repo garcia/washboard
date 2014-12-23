@@ -68,144 +68,103 @@ input[type=password]:focus {
 #top > div,
 #bottom > div {
     height: 100%;
-    padding: 10px 0;
-    font-family: "Signika";
+    font-family: "Gen";
     color: lighten(@primary, 40%);
     background-color: darken(@primary, 36%);
 }
 
+#bottom > div {
+    padding: 10px;
+    .box-sizing-border-box;
+}
+
 #nav {
+    display: table;
     position: relative;
     width: 920px;
+    max-width: 100%;
     margin: 0 auto;
 }
 
-#nav:after {
-    content: "";
-    display: block;
-    clear: both;
+#nav > * {
+    display: table-cell;
 }
 
-#top h1,
-#bottom h1 {
-    display: inline;
-    position: relative;
-    margin: 0;
-    top: 2px;
-    font-size: 28px;
-}
-
-#top h1 a {
-    color: inherit;
+#mini-logo {
+    width: 1.3em;
+    padding: .2em .1em 0 .1em;
+    height: 1.3em;
+    color: @primary;
+    text-align: center;
     text-decoration: none;
+    vertical-align: middle;
+    font-size: 28px;
+    font-family: "Signika";
+    font-weight: bold;
+    background-color: lighten(@primary, 40%);
 }
 
-#top h1 .title {
+#title {
+    padding-left: 1em;
+    color: lighten(@primary, 40%);
+    text-decoration: none;
+    vertical-align: middle;
     font-size: 16px;
+    font-weight: bold;
+}
+
+#nav .link {
+    width: 1.5em;
+    height: 1.5em;
+    padding: .75em;
     color: lighten(@primary, 20%);
-}
-
-#top h1 .title:before {
-    content: " / ";
-}
-
-#top #links {
-    float: right;
-}
-
-#top #links a {
-    width: 24px;
-    height: 24px;
-    margin: 5px 20px 0 0;
-    float: right;
-    text-indent: -65536em;
-    background-position: center;
-    background-repeat: no-repeat;
+    text-align: center;
+    vertical-align: middle;
     opacity: .8;
 }
 
-#top #links a:hover {
+#top .link:hover {
+    background-color: darken(@primary, 28%);
     opacity: 1;
 }
 
-#top #links a:first-of-type {
+#top .link:first-of-type {
     margin-right: 0;
 }
 
-#blogs-link {
-    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90DCQM0AZa37TMAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAJElEQVQokWNYcfD6fyhmgOL/pGAGahhAEaaKAaNhMBoGAx8GAEFRZ6/Zklp5AAAAAElFTkSuQmCC");
+#menus {
+    position: relative;
+    width: 900px;
+    margin: 0 auto;
 }
 
-#new-link {
-    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAQCAYAAAAiYZ4HAAAAAXNSR0IArs4c6QAAAAZiS0dEAAAAAAAA+UO7fwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90DCRQhBb8GessAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAM0lEQVQoz2NYcfA6AxL2AeL/+DBJipE1oCtmwILhGrCZjFfDf3I1MBDAoxoGqQaiMMkaAPnlD/AWM5t5AAAAAElFTkSuQmCC");
-}
-
-#menu-link {
-    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAAAAAAAA+UO7fwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90GDAUTBimlyQUAAAAdaVRYdENvbW1lbnQAAAAAAENyZWF0ZWQgd2l0aCBHSU1QZC5lBwAAAEhJREFUOI1jWHHwejwQPwTi/yRikJ54BjI1ww1hQOIwkIjB+oaxAbgCjWgDfLBo9iHVCz54NBMdBj44NA+BWKCvARRnJoqyMwBl7Ln7X7S3iwAAAABJRU5ErkJggg==");
-}
-
-#menu, #new {
+#menus ul {
     display: none;
+    position: absolute;
+    width: 240px;
+    max-width: 100%;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+    list-style-type: none;
+    color: lighten(@primary, 20%);
+    text-align: right;
+    word-wrap: break-word;
+    background-color: darken(@primary, 28%);
 }
 
-/* jquery.dropdown.js overrides 
-   TODO: fix tip positioning on small devices */
-
-#top .dropdown {
-    right: -20px !important;
-    left: inherit !important;
-    top: 33px !important;
+#menus ul a {
+    padding: .5em;
+    display: block;
+    color: lighten(@primary, 20%);
+    text-decoration: none;
 }
 
-#top .dropdown.dropdown-tip:before {
-    top: -7px !important;
-    border-bottom-color: rgba(0, 0, 0, 0.2) !important;
+#menus ul a:hover {
+    background-color: darken(@primary, 20%);
 }
 
-#menu.dropdown.dropdown-tip:before {
-    left: 125px !important;
-}
-#menu.dropdown.dropdown-tip:after {
-    left: 126px !important;
-}
-
-#new.dropdown.dropdown-tip:before {
-    left: 81px !important;
-}
-#new.dropdown.dropdown-tip:after { 
-    left: 82px !important;
-}
-
-#blogs.dropdown.dropdown-tip:before {
-    left: 41px !important;
-}
-#blogs.dropdown.dropdown-tip:after { 
-    left: 42px !important;
-}
-
-#top .dropdown.dropdown-tip:after {
-    top: -6px !important;
-    border-bottom-color: @primary !important;
-}
-
-#top .dropdown .dropdown-menu,
-#top .dropdown .dropdown-panel {
-    background-color: darken(@primary, 36%) !important;
-    border: solid 2px @primary !important;
-    box-shadow: -1px 1px 1px rgba(0, 0, 0, .2) !important;
-}
-
-#top .dropdown .dropdown-menu li > a {
-    color: lighten(@primary, 40%) !important;
-}
-
-#top .dropdown .dropdown-menu li > a:hover {
-    background-color: @primary !important;
-}
-
-.dropdown-divider {
-    border-top: 2px solid @primary !important;
-}
 
 /* messages */
 
@@ -214,7 +173,7 @@ input[type=password]:focus {
     margin: 20px auto;
     list-style-type: none;
     padding-left: 0;
-    font-family: "Signika";
+    font-family: "Gen";
     font-size: 16px;
     color: white;
     text-shadow: 0 1px 1px rgba(0, 0, 0, .5);
@@ -285,11 +244,14 @@ input[type=password]:focus {
 
 /* middle / content */
 
+#middle {
+    background-color: darken(@primary, 22%);
+}
+
 #middle > div {
     height: 100%;
-    background-color: darken(@primary, 22%);
-    border-top: 2px solid @primary;
-    border-bottom: 2px solid @primary;
+    // fixes weird layout issue
+    border-top: 1px solid transparent;
 }
 
 #middle > div > h1 {
@@ -352,28 +314,19 @@ input[type=password]:focus {
      
     #content {
         width: 100%;
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        -o-box-sizing: border-box;
-        box-sizing: border-box;
         padding: 20px;
+        .box-sizing-border-box;
     }
     
-    #top #nav,
-    .messages {
+    #nav,
+    #menus {
         width: 100%;
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        -o-box-sizing: border-box;
-        box-sizing: border-box;
-        padding: 0 10px;
     }
 
-    #top .dropdown-tip:before,
-    #top .dropdown-tip:after {
-        margin-left: -10px;
+    .messages {
+        width: 100%;
+        padding: 0 20px;
+        .box-sizing-border-box;
     }
 
 }
@@ -387,6 +340,15 @@ input[type=password]:focus {
     #menu-link:before,
     #menu-link:after {
         top: 4px;
+    }
+
+    #nav {
+        padding: 0 !important;
+    }
+    
+    #top .dropdown-tip:before,
+    #top .dropdown-tip:after {
+        margin-left: 0;
     }
     
     #content {

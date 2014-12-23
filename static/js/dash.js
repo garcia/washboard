@@ -937,7 +937,10 @@
             reblog_key: this_post.data('reblog-key'),
         };
 
-        like_button.addClass('pending');
+        like_button
+            .removeClass('fa-heart')
+            .addClass('fa-spinner')
+            .addClass('fa-spin');
 
         // Send the API request
         apicall(endpoint, parameters, {
@@ -953,7 +956,10 @@
                 notify(error_message(jqXHR, 'liking the post'), 'warning');
             },
             complete: function(jqXHR, textStatus) {
-                like_button.removeClass('pending');
+                like_button
+                    .removeClass('fa-spinner')
+                    .removeClass('fa-spin')
+                    .addClass('fa-heart');
                 save_session_attr('posts');
             },
         });
@@ -1077,7 +1083,12 @@
             data.send_to_facebook = facebook.hasClass('on') ? 'yes' : 'no';
         }
 
-        this_post.find('.buttons .reblog').addClass('pending');
+        this_post
+            .find('.buttons .reblog')
+            .removeClass('done')
+            .removeClass('fa-retweet')
+            .addClass('fa-spinner')
+            .addClass('fa-spin');
 
         apicall('reblog', data, {
             success: function(data) {
@@ -1085,14 +1096,23 @@
                 reblog_elem.addClass('closed');
                 reblog_elem.find('input[type!=submit]').val('');
                 reblog_elem.find('textarea').val('');
-                $('#post_' + id).find('.buttons .reblog').addClass('done');
+                $('#post_' + id)
+                    .find('.buttons .reblog')
+                    .addClass('fa-check')
+                    .addClass('done');
                 save_session_attr('posts');
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 notify(error_message(jqXHR, 'reblogging the post'), 'warning');
+                this_post
+                    .find('.buttons .reblog')
+                    .addClass('fa-retweet');
             },
             complete: function(jqXHR, textStatus) {
-                this_post.find('.buttons .reblog').removeClass('pending');
+                this_post
+                    .find('.buttons .reblog')
+                    .removeClass('fa-spinner')
+                    .removeClass('fa-spin');
             },
         });
     };
@@ -1147,7 +1167,11 @@
             reply_text: reply_box.find('.reply').val(),
         };
 
-        this_post.find('.buttons .reply').addClass('pending');
+        this_post
+            .find('.buttons .reply')
+            .removeClass('fa-reply')
+            .addClass('fa-spinner')
+            .addClass('fa-spin');
 
         apicall('reply', data, {
             success: function(data) {
@@ -1155,14 +1179,23 @@
                     .addClass('closed')
                     .find('.reply')
                     .val('');
-                this_post.find('.buttons .reply').addClass('done');
+                this_post
+                    .find('.buttons .reply')
+                    .addClass('fa-check')
+                    .addClass('done');
                 save_session_attr('posts');
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 notify(error_message(jqXHR, 'replying to the post'), 'warning');
+                this_post
+                    .find('.buttons .reply')
+                    .addClass('fa-reply');
             },
             complete: function(jqXHR, textStatus) {
-                this_post.find('.buttons .reply').removeClass('pending');
+                this_post
+                    .find('.buttons .reply')
+                    .removeClass('fa-spinner')
+                    .removeClass('fa-spin');
             }
         });
     };

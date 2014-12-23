@@ -77,7 +77,7 @@ def main(request, data_=None):
 
 def blog(request, name):
     return main(request, data_={
-        'title': "%s's blog" % name,
+        'title': "%s" % name,
         'wb': {
             'endpoint': 'blog',
             'parameters': {'blog': name},
