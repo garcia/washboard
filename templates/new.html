@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/less" href="{% static "less/new.less" %}" />
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="{% static "js/new.js" %}"></script>
+{% endblock %}
+
+{% block content %}
+<form method="post" onsubmit="return false">
+    <fieldset>
+        {% csrf_token %}
+        <div class="action-box">
+            {% for field in post_form %}
+            {{ field }}
+            {% endfor %}
+            <div class="section">
+                <input class="shiny" type="submit" value="Post" />
+            </div>
+        </div>
+    </fieldset>
+</form>
+{% endblock %}
+
+{% block bottom %}
+{% include "links.html" %}
+{% endblock %}

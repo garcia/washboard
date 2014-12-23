@@ -1,5 +1,6 @@
 import json
 import random
+import socket # for socket.error
 import sys
 import urllib
 import urlparse
@@ -182,5 +183,8 @@ def main(request, data_=None):
             response = req.request_json(url, endpoint['method'], qs)
     except ValueError:
         return api_error(500, 'Tumblr returned a malformed reponse.', 200)
+    except socket.error as socket_error:
+        return api_error(500, ('Unable to connect to Tumblr (%s). ' +
+            'Wait a few seconds and retry your request.') % socket_error, 200)
     
     return HttpResponse(json.dumps(response), content_type='application/json')

@@ -6,4 +6,5 @@ def main(request):
         return redirect('/dash')
     return render(request, 'welcome.html', {
         'environment': settings.ENVIRONMENT,
+        'is_secure': request.is_secure()
     })
