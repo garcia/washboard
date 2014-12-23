@@ -17,11 +17,6 @@ Font Awesome
 
 **Code License:** [MIT License][MIT]
 
-Gen
----
-
-Licensed under the [SIL Open Font License][OFL].
-
 Handlebars.js
 -------------
 
@@ -53,6 +48,12 @@ Public Domain.
 
 NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
 
+Open Sans
+---------
+
+[**Steve Matteson**](https://profiles.google.com/107777320916704234605/about)  
+[Apache License, version 2.0][Apache]
+
 Signika
 -------
 
@@ -83,3 +84,5 @@ Miscellaneous
 [OFL]: http://opensource.org/licenses/OFL-1.1
 
 [CC]: http://creativecommons.org/licenses/by-sa/3.0/
+
+[Apache]: http://www.apache.org/licenses/LICENSE-2.0.html
