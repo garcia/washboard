@@ -15,14 +15,24 @@
         });
     }
 
+    Washboard.hide_all_menus = function() {
+        $('#menus > ul').hide();
+    }
+
+    Washboard.show_menu = function(menu_id) {
+        Washboard.hide_all_menus();
+        $('#menu-' + menu_id).show();
+        event.stopPropagation();
+    }
+
 }(window.Washboard = window.Washboard || {}, jQuery));
 // Hide menu upon touching anywhere else
 
 $(function() {
     $('body').on('touchstart', function(e) {
-        if ($('.dropdown-open').length
-                && !$(e.target).closest('.dropdown').length) {
-            $('.dropdown').css('display', 'none');
+        if (!$(e.target).closest('#menus ul').length) {
+            Washboard.hide_all_menus();
         }
     });
+    $('body').on('click', Washboard.hide_all_menus);
 });

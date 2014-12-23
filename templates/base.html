@@ -18,6 +18,8 @@
 {% compress css %}
 <link rel="stylesheet" type="text/css" href="{% static "jquery.dropdown/jquery.dropdown.css" %}" />
 <link rel="stylesheet" type="text/css" href="{% static "signika/stylesheet.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "gen/stylesheet.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "awesome/css/font-awesome.css" %}" />
 {% block css %}
 <link rel="stylesheet" type="text/less" href="{% static "less/washboard.less" %}" />
 {% endblock %}
@@ -43,41 +45,31 @@ csrf_token = "{{ csrf_token }}";
 <div id="top" class="wrapper">
     <div>
         <div id="nav">
-            <div id="links">
-                <a class="js" id="menu-link" data-dropdown="#menu">Menu</a>
-                <a class="js" id="new-link" data-dropdown="#new">New</a>
-                <a class="js" id="blogs-link" data-dropdown="#blogs">Blogs</a>
-            </div>
-            <h1 id="title">
-                <a class="logo" href="/dash">Washboard</a>
-                <a class="title" href="{{ request.path }}">{{ title }}</a>
-            </h1>
-            <div id="menu" class="dropdown dropdown-tip">
-                <ul class="dropdown-menu">
-                    <li><a href="/rules">Rules</a></li>
-                    <li><a href="/settings">Settings</a></li>
-                    <li><a href="/faq">FAQ</a></li>
-                    <li><a href="/logout">Logout</a></li>
-                </ul>
-            </div>
-            <div id="new" class="dropdown dropdown-tip">
-                <ul class="dropdown-menu">
-                    {% with 'text photo quote link chat audio video' as types %}
-                    {% for type in types.split %}
-                    <li><a href="http://www.tumblr.com/new/{{ type }}">{{ type|title }}</a></li>
-                    {% endfor %}
-                    {% endwith %}
-                </ul>
-            </div>
-            <div id="blogs" class="dropdown dropdown-tip">
-                <ul class="dropdown-menu">
-                    <li><a href="/dash">Dashboard</a></li>
-                    <li class="dropdown-divider"></li>
-                    {% for blog in request.session.blogs %}
-                    <li><a href="/blog/{{ blog }}">{{ blog }}</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
+            <a id="mini-logo" href="/dash">W</a>
+            <a id="title" href="{{ request.path }}">{{ title }}</a>
+            <a class="link js fa fa-user" aria-label="Blogs" onclick="Washboard.show_menu('blogs')"></a>
+            <a class="link js fa fa-pencil-square" aria-label="New" onclick="Washboard.show_menu('new')"></a>
+            <a class="link js fa fa-toggle-down" aria-label="Menu" onclick="Washboard.show_menu('other')"></a>
+        </div>
+        <div id="menus">
+            <ul id="menu-blogs">
+                {% for blog in request.session.blogs %}
+                <li><a href="/blog/{{ blog }}">{{ blog }}</a></li>
+                {% endfor %}
+            </ul>
+            <ul id="menu-new">
+                {% with 'text photo quote link chat audio video' as types %}
+                {% for type in types.split %}
+                <li><a href="http://www.tumblr.com/new/{{ type }}">{{ type|title }}</a></li>
+                {% endfor %}
+                {% endwith %}
+            </ul>
+            <ul id="menu-other">
+                <li><a href="/rules">Rules</a></li>
+                <li><a href="/settings">Settings</a></li>
+                <li><a href="/faq">FAQ</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
         </div>
     </div>
 </div>
