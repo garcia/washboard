@@ -47,9 +47,9 @@ csrf_token = "{{ csrf_token }}";
         <div id="nav">
             <a id="mini-logo" href="/dash">W</a>
             <a id="title" href="{{ request.path }}">{{ title }}</a>
-            <a class="link js fa fa-user" aria-label="Blogs" onclick="Washboard.show_menu('blogs')"></a>
-            <a class="link js fa fa-pencil-square" aria-label="New" onclick="Washboard.show_menu('new')"></a>
-            <a class="link js fa fa-toggle-down" aria-label="Menu" onclick="Washboard.show_menu('other')"></a>
+            <a class="link js fa fa-user" aria-label="Blogs" onclick="Washboard.show_menu('blogs', event)"></a>
+            <a class="link js fa fa-pencil-square" aria-label="New" onclick="Washboard.show_menu('new', event)"></a>
+            <a class="link js fa fa-toggle-down" aria-label="Menu" onclick="Washboard.show_menu('other', event)"></a>
         </div>
         <div id="menus">
             <ul id="menu-blogs">

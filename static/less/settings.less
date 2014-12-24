@@ -10,8 +10,24 @@ td {
     padding: 10px;
 }
 
+#portrait-text {
+    display: none;
+}
+
 .help-text {
     color: #404040;
     font-style: italic;
     font-size: 12px;
+}
+
+@media screen and (max-width: 360px) {
+    .help-text {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 360px) and (max-device-width: 360px) and (min-device-height: 361px) {
+    #portrait-text {
+        display: block;
+    }
 }
