@@ -26,7 +26,7 @@
                 </div>
                 {% for rule in ruleset %}
                 <div class="row{% if not rule.instance.keyword %} defaults{% else %} rule{% endif %}" data-prefix="{{ rule.prefix }}">
-                    <div class="delete"><a class="delete-alt" onclick="delete_rule(this)">Delete</a></div>
+                    <div class="delete"><a class="js fa fa-lg fa-close" aria-label="Delete" onclick="delete_rule(this)"></a></div>
                     {% if not rule.instance.keyword %}
                     <div class="label">Default values</div>
                     <div class="keyword" style="display: none">{{ rule.keyword }}</div>
@@ -55,7 +55,7 @@
                 </div>
                 {% for post in hiddenposts %}
                 <div class="row{% if not post.instance.post %} defaults{% else %} rule{% endif %}" data-prefix="{{ post.prefix }}">
-                    <div class="delete"><a class="delete-alt" onclick="delete_rule(this)">Delete</a></div>
+                    <div class="delete"><a class="js fa fa-lg fa-close" aria-label="Delete" onclick="delete_rule(this)"></a></div>
                     {% if not post.instance.post %}
                     <div class="label">Default values</div>
                     <div class="post" style="display: none">{{ post.post }}</div>
