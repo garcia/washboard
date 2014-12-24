@@ -19,7 +19,7 @@
         $('#menus > ul').hide();
     }
 
-    Washboard.show_menu = function(menu_id) {
+    Washboard.show_menu = function(menu_id, event) {
         Washboard.hide_all_menus();
         $('#menu-' + menu_id).show();
         event.stopPropagation();
