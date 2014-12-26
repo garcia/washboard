@@ -233,7 +233,7 @@ code {
 }
 
 .meta .blog_name,
-.meta .reblogged_text,
+.meta .reblogged_from_icon,
 .meta .reblogged_from_name {
     display: inline-block;
     font-weight: bold;
@@ -242,24 +242,16 @@ code {
     text-decoration: none;
 }
 
-.meta .reblogged_text {
-    display: inline-block;
-    width: 24px;
-    height: 18px;
-    text-indent: -65536em;
-    opacity: 0.25;
-    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAXNSR0IArs4c6QAAAAZiS0dEAAAAAAAA+UO7fwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90DDhI1KE0tteAAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAR0lEQVQoz51QQQoAMAjy/6/yKf7EnQYRbasJQoSSCfRADOFs4oOOprh4UeW5QyRNHtJvE4yDG2KjaOHWFHe+TkPMTxlDqCNanU04I/CzZMEAAAAASUVORK5CYII=");
-    background-repeat: no-repeat;
-    background-position: center;
+.meta .reblogged_from_icon {
+    font-weight: normal;
+    padding: 0 .25em;
 }
 
 /* controls / buttons */
 
 .actions {
     display: table;
-    margin-top: 15px;
     margin-bottom: -20px; // needs to stay the same as the .post's bottom margin
-    border-top: 1px solid #f0f0f0;
 }
 
 .actions > div,
@@ -1129,10 +1121,6 @@ img {
     .meta .avatar {
         margin-left: 0;
         width: 40px;
-    }
-    
-    .meta .reblogged_text {
-        padding-top: 2px;
     }
     
     .reply-box {

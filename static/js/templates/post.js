@@ -6,7 +6,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n        <span class=\"reblogged_text\">&nbsp;reblogged&nbsp;</span>\n        <a class=\"reblogged_from_name\" href=\""
+  buffer += "\n        <span class=\"reblogged_from_icon fa fa-retweet\" aria-label=\"reblogged\"></span>\n        <a class=\"reblogged_from_name\" href=\""
     + escapeExpression(((stack1 = ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.reblogged_from_url)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\">\n            "
     + escapeExpression(((stack1 = ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.reblogged_from_name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
