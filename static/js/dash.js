@@ -1084,7 +1084,7 @@
         }
 
         this_post
-            .find('.buttons .reblog')
+            .find('.button.reblog')
             .removeClass('done')
             .removeClass('fa-retweet')
             .addClass('fa-spinner')
@@ -1097,7 +1097,7 @@
                 reblog_elem.find('input[type!=submit]').val('');
                 reblog_elem.find('textarea').val('');
                 $('#post_' + id)
-                    .find('.buttons .reblog')
+                    .find('.button.reblog')
                     .addClass('fa-check')
                     .addClass('done');
                 save_session_attr('posts');
@@ -1105,12 +1105,12 @@
             error: function(jqXHR, textStatus, errorThrown) {
                 notify(error_message(jqXHR, 'reblogging the post'), 'warning');
                 this_post
-                    .find('.buttons .reblog')
+                    .find('.button.reblog')
                     .addClass('fa-retweet');
             },
             complete: function(jqXHR, textStatus) {
                 this_post
-                    .find('.buttons .reblog')
+                    .find('.button.reblog')
                     .removeClass('fa-spinner')
                     .removeClass('fa-spin');
             },
@@ -1168,7 +1168,7 @@
         };
 
         this_post
-            .find('.buttons .reply')
+            .find('.button.reply')
             .removeClass('fa-reply')
             .addClass('fa-spinner')
             .addClass('fa-spin');
@@ -1180,7 +1180,7 @@
                     .find('.reply')
                     .val('');
                 this_post
-                    .find('.buttons .reply')
+                    .find('.button.reply')
                     .addClass('fa-check')
                     .addClass('done');
                 save_session_attr('posts');
@@ -1188,12 +1188,12 @@
             error: function(jqXHR, textStatus, errorThrown) {
                 notify(error_message(jqXHR, 'replying to the post'), 'warning');
                 this_post
-                    .find('.buttons .reply')
+                    .find('.button.reply')
                     .addClass('fa-reply');
             },
             complete: function(jqXHR, textStatus) {
                 this_post
-                    .find('.buttons .reply')
+                    .find('.button.reply')
                     .removeClass('fa-spinner')
                     .removeClass('fa-spin');
             }

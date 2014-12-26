@@ -256,70 +256,62 @@ code {
 /* controls / buttons */
 
 .actions {
-    display: block;
-    height: 10px;
+    display: table;
     margin-top: 15px;
-    padding-top: 15px;
+    margin-bottom: -20px; // needs to stay the same as the .post's bottom margin
     border-top: 1px solid #f0f0f0;
 }
 
-.actions .buttons {
-    display: table;
-    float: right;
-}
-
-.actions .buttons a {
+.actions > div,
+.actions > a {
     display: table-cell;
-    width: 1em !important;
-    padding: 0 .4em;
-    text-align: center;
-    text-decoration: none;
+    padding: 1em .5em;
     vertical-align: middle;
-    opacity: 0.25;
 }
 
-.buttons a:hover {
-    opacity: .4;
+.actions a {
+    text-decoration: none;
+    color: #b0b0b0;
 }
 
-.buttons .like.liked {
+.actions a:hover {
+    color: #909090;
+}
+
+.actions .button {
+    width: 1em !important;
+    text-align: center;
+}
+
+.actions .button.like.liked {
     color: #ff0000;
-    opacity: 1;
 }
 
-.buttons .done {
-    opacity: .75 !important;
-    color: #00a000;
+.actions .button.done {
+    color: #40b040;
 }
 
-.actions .not-buttons {
-    height: 1.2em;
+.actions .text {
+    width: 100%;
+    padding-left: 0;
+    text-indent: 0;
     overflow: hidden;
     word-break: break-all;
 }
 
-.actions .not-buttons a {
-    display: block;
-    float: left;
-    margin: 0;
-    width: auto;
-    text-indent: 0;
-    text-decoration: none;
-    color: #c0c0c0;
-}
-
-.actions .not-buttons a:hover {
-    color: #999999;
-}
-
-.actions .note_count {
+.actions .text .note_count {
     font-weight: bold;
 }
 
-.note_count + .source:before {
-    content: "\00a0\b7\00a0";
+.actions .text .note_count + .source {
+    padding-left: 0;
 }
-.note_count + .source:hover:before {
+
+.actions .text .note_count + .source:before {
+    content: "\b7\00a0";
+}
+
+.actions .text .note_count + .source:hover:before {
     color: #c0c0c0;
 }
 
@@ -333,6 +325,7 @@ code {
 
 .info-menu {
     display: none;
+    margin-top: 0 !important;
 }
 
 .info-menu ul {
