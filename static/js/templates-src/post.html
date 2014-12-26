@@ -8,7 +8,7 @@
         </a>
         <a class="blog_name" href="{{post.post_url}}">{{post.blog_name}}</a>
         {{#if post.reblogged_from_name}}
-        <span class="reblogged_text">&nbsp;reblogged&nbsp;</span>
+        <span class="reblogged_from_icon fa fa-retweet" aria-label="reblogged"></span>
         <a class="reblogged_from_name" href="{{post.reblogged_from_url}}">
             {{post.reblogged_from_name}}
         </a>
@@ -26,21 +26,7 @@
     {{/if}}
 
     <div class="actions">
-        <div class="buttons">
-            <a class="info js fa fa-lg fa-info-circle" aria-label="Info" data-dropdown="#info_{{post.id}}"></a>
-            {{#if post.can_reply}}
-            <a class="reply js fa fa-lg fa-reply" aria-label="Reply" onclick="Washboard.reply({{post.id}})"></a>
-            {{/if}}
-            {{#if rebloggable}}
-            <a class="reblog js fa fa-lg fa-retweet" aria-label="Reblog" onclick="Washboard.reblog({{post.id}})"></a>
-            {{/if}}
-            {{#if mine}}
-            <a class="edit fa fa-lg fa-pencil-square-o" aria-label="Edit" href="http://www.tumblr.com/edit/{{post.id}}" target="_blank"></a>
-            {{else}}
-            <a class="like js{{#if post.liked}} liked{{/if}} fa fa-lg fa-heart" aria-label="Like" onclick="Washboard.like({{post.id}})"></a>
-            {{/if}}
-        </div>
-        <div class="not-buttons">
+        <div class="text">
             {{#if post.note_count}}
             <a class="js note_count" onclick="Washboard.notes({{post.id}})">{{post.note_count}} {{pluralize post.note_count "note" "notes"}}</a>
             {{/if}}
@@ -48,6 +34,18 @@
             <a class="source" href="{{post.source_url}}" target="_blank">{{post.source_title}}</a>
             {{/if}}
         </div>
+        <a class="button info js fa fa-lg fa-info-circle" aria-label="Info" data-dropdown="#info_{{post.id}}"></a>
+        {{#if post.can_reply}}
+        <a class="button reply js fa fa-lg fa-reply" aria-label="Reply" onclick="Washboard.reply({{post.id}})"></a>
+        {{/if}}
+        {{#if rebloggable}}
+        <a class="button reblog js fa fa-lg fa-retweet" aria-label="Reblog" onclick="Washboard.reblog({{post.id}})"></a>
+        {{/if}}
+        {{#if mine}}
+        <a class="button edit js fa fa-lg fa-pencil-square-o" aria-label="Edit" href="http://www.tumblr.com/edit/{{post.id}}" target="_blank"></a>
+        {{else}}
+        <a class="button like js{{#if post.liked}} liked{{/if}} fa fa-lg fa-heart" aria-label="Like" onclick="Washboard.like({{post.id}})"></a>
+        {{/if}}
     </div>
 
     {{#if post.notes}}
