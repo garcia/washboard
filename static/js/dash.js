@@ -105,7 +105,7 @@
 
         return who + ' ' + what_happened + '.';
     }
-    
+
     (Washboard.wrap_all = function(obj) {
         $.each(obj, function(name, prop) {
             if (typeof prop === 'function' && prop.wrapped === undefined) {
@@ -185,7 +185,7 @@
         Washboard.wrap_all(ajaxdata);
         $.ajax(ajaxdata);
     }
-    
+
     Washboard.report = function() {
         var report = $.extend({
                 username: Washboard.username,
@@ -491,7 +491,7 @@
                 // Hide everything else
                 more_link.parent().nextAll().addClass('cut under');
             }
-        }); 
+        });
     }
 
     /******************
@@ -598,6 +598,10 @@
      * Session saving *
      ******************/
 
+    function get_item(key) {
+        return localStorage.getItem(key);
+    }
+
     function set_item(key, value) {
         try {
             localStorage.setItem(key, value);
@@ -641,7 +645,7 @@
             var page = (Washboard.pagination_key === 'offset' ? (session.offset + 20) : session.last_post);
             load_more.attr('href', location.pathname + '?' + Washboard.pagination_key + '=' + page);
         }
-    } 
+    }
 
     function insert_posts(data, textStatus, jqXHR) {
         // Some methods return posts in data.response.posts,
@@ -680,7 +684,7 @@
                 $('#posts').append(Handlebars.templates.blog(data.response.blog));
             }
         }
-        
+
         // Empty response
         if (!post_list.length) {
             // Haven't loaded any posts yet
@@ -759,10 +763,7 @@
         save_session_attr('session');
     }
 
-    Washboard.load_more = function() {
-        $('#load_more').text('Loading...');
-        $('#load_more').addClass('loading');
-
+    function get_next_page(options) {
         var data = {
             reblog_info: 'true',
             notes_info: 'true',
@@ -774,7 +775,14 @@
             data[Washboard.pagination_key] = session.last_post;
         }
 
-        apicall(Washboard.endpoint, data, {
+        apicall(Washboard.endpoint, data, options);
+    }
+
+    Washboard.load_more = function() {
+        $('#load_more').text('Loading...');
+        $('#load_more').addClass('loading');
+
+        get_next_page({
             success: insert_posts,
             error: function(jqXHR, textStatus, errorThrown) {
                 var message = error_message(jqXHR, 'loading your posts');
@@ -788,6 +796,35 @@
             },
         });
     };
+
+    function get_preload_key(path) {
+        if (path === undefined) {
+            var load_more = $('#load_more');
+            path = load_more.attr('href');
+        }
+        return 'next_page:' + path;
+    }
+
+    function get_preloaded_page() {
+        var next_page = get_item(get_preload_key(location.pathname + location.search));
+        if (next_page) {
+            Washboard.initial_data = JSON.parse(next_page);
+        }
+
+    }
+
+    function preload_next_page() {
+        get_next_page({
+            success: function(data, textStatus, jqXHR) {
+                var load_more = $('#load_more');
+                load_more.attr('href', load_more.attr('href') + '&preloaded=1');
+                set_item(get_preload_key(), JSON.stringify(data));
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                notify('Unable to preload the next page.  Sorry about that.', 'warning');
+            }
+        });
+    }
 
     /******************
      * Session init.  *
@@ -803,7 +840,7 @@
         if (hash.session) {
             for (attr in session_attributes) {
                 if (session_attributes.hasOwnProperty(attr)) {
-                    session_data[attr] = localStorage.getItem(hash.session + '_' + attr);
+                    session_data[attr] = get_item(hash.session + '_' + attr);
                     if (!session_data[attr]) {
                         hash.session = null;
                         break;
@@ -828,8 +865,8 @@
 
             // Record this session
             sessions = [];
-            if (localStorage.getItem('sessions')) {
-                sessions = JSON.parse(localStorage.getItem('sessions'));
+            if (get_item('sessions')) {
+                sessions = JSON.parse(get_item('sessions'));
             }
             sessions.push(hash.session);
             set_item('sessions', JSON.stringify(sessions));
@@ -838,8 +875,8 @@
         }
 
         // Clean up outdated sessions
-        if (localStorage.getItem('sessions')) {
-            sessions = JSON.parse(localStorage.getItem('sessions'));
+        if (get_item('sessions')) {
+            sessions = JSON.parse(get_item('sessions'));
             var time = new Date().getTime();
             var s;
             for (s = 0; s < sessions.length; s++) {
@@ -965,7 +1002,7 @@
     /******************
      * Reblog states  *
      ******************/
-    
+
     function state2name(state) {
         var s;
         for (s = 0; s < states.length; s++) {
@@ -1144,7 +1181,7 @@
                 reply_box.addClass('closed').removeClass('get-height');
             }
             reply_box.removeClass('closed');
-            setTimeout(function() { 
+            setTimeout(function() {
                 reply_box.find('.reply').click().focus();
             }, 200);
         }
@@ -1492,6 +1529,12 @@
             load_more_string = 'Load more';
         }
 
+        // Preload next page
+        else if (Washboard.profile.preload_next_page) {
+            get_preloaded_page();
+            preload_next_page();
+        }
+
         // Keyboard handlers
         window.onkeydown = function(e) {
             // Ignore keypress if sent to text input
@@ -1567,7 +1610,7 @@
         }
 
         // Initialize session
-        if (Washboard.profile.sessions) {
+        if (Washboard.profile.sessions && !Washboard.initial_data) {
             init_session();
         }
         // Or, if not using sessions, load initial data

@@ -55,8 +55,8 @@ def main(request, data_=None):
     }
     if data_: update(data, data_)
     
-    # Preload data if not using sessions
-    if not data['wb']['profile']['sessions']:
+    # Load data now if not using sessions or preloading
+    if not data['wb']['profile']['sessions'] and 'preloaded' not in request.GET:
         POST = {}
         POST['endpoint'] = data['wb']['endpoint']
         POST['reblog_info'] = POST['notes_info'] = 'true'

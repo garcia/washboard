@@ -33,6 +33,10 @@ class UserProfile(models.Model):
         default=True,
         help_text='Automatically load posts while you scroll.',
     )
+    preload_next_page = models.BooleanField(
+        default=True,
+        help_text='When infinite scrolling is disabled, this option preloads '
+                  'the next page for faster browsing.')
     sessions = models.BooleanField(
         default=False,
         help_text='Sessions enable tabs to restore their contents even when '
