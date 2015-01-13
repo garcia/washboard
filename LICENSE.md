@@ -1,7 +1,7 @@
 Washboard
 =========
 
-Copyright (c) 2014 [Grant Garcia](http://grantgarcia.org/). Licensed under the [MIT License][MIT].
+Copyright (c) 2015 [Grant Garcia](http://grantgarcia.org/). Licensed under the [MIT License][MIT].
 
 Washboard utilizes code from the following projects:
 
@@ -51,7 +51,8 @@ NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
 Open Sans
 ---------
 
-[**Steve Matteson**](https://profiles.google.com/107777320916704234605/about)  
+[**Steve Matteson**](https://profiles.google.com/107777320916704234605/about)
+
 [Apache License, version 2.0][Apache]
 
 Signika

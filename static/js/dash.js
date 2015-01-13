@@ -606,9 +606,6 @@
             if (err.name.toLowerCase().indexOf('quota') > -1) {
                 console.log('Ran out of localStorage quota. Clearing...');
                 localStorage.clear();
-                // Yes, this will throw an uncaught exception if it fails. But
-                // wrapping it in another call to set_item could lead to
-                // infinite recursion. And that's even worse!
                 try {
                     localStorage.setItem('sessions', JSON.stringify([hash.session]));
                 }
