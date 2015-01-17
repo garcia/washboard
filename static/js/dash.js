@@ -105,7 +105,7 @@
 
         return who + ' ' + what_happened + '.';
     }
-    
+
     (Washboard.wrap_all = function(obj) {
         $.each(obj, function(name, prop) {
             if (typeof prop === 'function' && prop.wrapped === undefined) {
@@ -185,7 +185,7 @@
         Washboard.wrap_all(ajaxdata);
         $.ajax(ajaxdata);
     }
-    
+
     Washboard.report = function() {
         var report = $.extend({
                 username: Washboard.username,
@@ -491,7 +491,7 @@
                 // Hide everything else
                 more_link.parent().nextAll().addClass('cut under');
             }
-        }); 
+        });
     }
 
     /******************
@@ -641,7 +641,7 @@
             var page = (Washboard.pagination_key === 'offset' ? (session.offset + 20) : session.last_post);
             load_more.attr('href', location.pathname + '?' + Washboard.pagination_key + '=' + page);
         }
-    } 
+    }
 
     function insert_posts(data, textStatus, jqXHR) {
         // Some methods return posts in data.response.posts,
@@ -680,7 +680,7 @@
                 $('#posts').append(Handlebars.templates.blog(data.response.blog));
             }
         }
-        
+
         // Empty response
         if (!post_list.length) {
             // Haven't loaded any posts yet
@@ -924,7 +924,7 @@
 
     Washboard.like = function(id) {
         var this_post = $('#post_' + id);
-        var like_button = this_post.find('.like');
+        var like_button = this_post.find('.button.like');
         // Determine whether to like or unlike the post
         var endpoint = like_button.hasClass('liked') ? 'unlike' : 'like';
 
@@ -965,7 +965,7 @@
     /******************
      * Reblog states  *
      ******************/
-    
+
     function state2name(state) {
         var s;
         for (s = 0; s < states.length; s++) {
@@ -1144,7 +1144,7 @@
                 reply_box.addClass('closed').removeClass('get-height');
             }
             reply_box.removeClass('closed');
-            setTimeout(function() { 
+            setTimeout(function() {
                 reply_box.find('.reply').click().focus();
             }, 200);
         }
