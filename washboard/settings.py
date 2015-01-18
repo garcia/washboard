@@ -57,7 +57,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    
+
     'compressor.finders.CompressorFinder',
 )
 
@@ -116,9 +116,12 @@ INSTALLED_APPS = (
     'south',
     'compressor',
     'django_handlebars',
-    
+    'longerusernameandemail',
+
     'wb',
 )
+
+REQUIRE_UNIQUE_EMAIL = False
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -169,15 +172,15 @@ HANDLEBARS_SCRIPT_EXTRAS = ['plural.js']
 try:
     import local_settings
 except ImportError:
-    print """ 
+    print """
         -------------------------------------------------------------------------
         You need to create a local_settings.py file which needs to contain at least
         database connection information.
-        
+
         Copy local_settings_example.py to local_settings.py and edit it.
         -------------------------------------------------------------------------
         """
-    import sys 
+    import sys
     sys.exit(1)
 else:
     # Import any symbols that begin with A-Z. Append to lists any symbols that
