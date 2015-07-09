@@ -1,4 +1,6 @@
+import errno
 import json
+import socket
 import urlparse
 
 import oauth2
@@ -28,7 +30,16 @@ class Tumblr(object):
         return dict(urlparse.parse_qsl(content))
 
     def request_json(self, url, method, data=''):
-        resp, content = self.client.request(url, method, data)
+        try:
+            resp, content = self.client.request(url, method, data)
+        except socket.error as e:
+            if e.errno != errno.ECONNRESET:
+                raise
+            return {'meta': {
+                'status': '502',
+                'msg': 'Dropped connection.  Refreshing should fix this.',
+            }}
+
         try:
             return json.loads(content)
         except ValueError:
