@@ -51,6 +51,11 @@ def main(request, data_=None):
                     if field not in ('user_id', 'id', 'index')}
                 for hp in HiddenPost.objects.filter(user__exact=request.user).values()
             ],
+            'bookmarks': [
+                {field: bookmark[field] for field in bookmark
+                    if field not in ('user_id', 'id', 'index')}
+                for bookmark in Bookmark.objects.filter(user__exact=request.user).values()
+            ],
         },
     }
     if data_: update(data, data_)

@@ -681,6 +681,25 @@
             }
         }
 
+        // Tag info
+        if (Washboard.parameters.tag !== undefined) {
+            var tag = Washboard.parameters.tag;
+            var bookmarked = false;
+            $.each(Washboard.bookmarks, function(i, bookmark) {
+                if (bookmark.tag == tag) {
+                    bookmarked = true;
+                    return false; // break
+                }
+            });
+            
+            if (!$('#tag').length) {
+                $('#posts').append(Handlebars.templates.tag({
+                    'tag': tag,
+                    'bookmarked': bookmarked,
+                }));
+            }
+        }
+
         // Empty response
         if (!post_list.length) {
             // Haven't loaded any posts yet
@@ -1375,6 +1394,72 @@
         });
     }
 
+    /******************
+     * Bookmarks      *
+     ******************/
+    
+    function update_bookmarks(tag) {
+        $('#menu-bookmarks li.bookmark_a_tag').before(
+            $('<li>').append($('<a>').attr('href', '/tagged/' + tag).text('#' + tag))
+        );
+    }
+
+    Washboard.bookmark = function() {
+        var bookmark_button = $('#bookmark-button');
+        var action = bookmark_button.hasClass('bookmarked') ? 'unbookmark' : 'bookmark';
+
+        bookmark_button.addClass('pending');
+
+        $.ajax({
+            type: 'POST',
+            url: '/bookmark',
+            data: {
+                'tag': Washboard.parameters.tag,
+                'action': action,
+                'csrfmiddlewaretoken': csrf_token,
+            },
+            success: function(data, textStatus, jqXHR) {
+                if (action == 'bookmark') {
+                    bookmark_button.addClass('bookmarked');
+                    update_bookmarks(Washboard.parameters.tag)
+                }
+                else {
+                    bookmark_button.removeClass('bookmarked');
+                }
+                save_session_attr('posts');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                notify(error_message(jqXHR, 'bookmarking this tag'), 'warning');
+            },
+            complete: function(jqXHR, textStatus) {
+                bookmark_button.removeClass('pending');
+            }
+        });
+    }
+
+    Washboard.add_bookmark = function() {
+        var tag = prompt("Type the tag you want to bookmark:")
+
+        if (tag != null) {
+            $.ajax({
+                type: 'POST',
+                url: '/bookmark',
+                data: {
+                    'tag': tag,
+                    'action': 'bookmark',
+                    'csrfmiddlewaretoken': csrf_token,
+                },
+                success: function(data, textStatus, jqXHR) {
+                    update_bookmarks(tag);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    notify(error_message(jqXHR, 'bookmarking this tag'), 'warning');
+                },
+            });
+        }
+    }
+
+
     Washboard.read_more = function(elem) {
         console.log(elem);
         $(elem).closest('.post').find('.cut.under').removeClass('under').addClass('over');
@@ -1564,6 +1649,13 @@
                     store = {};
                 },
             };
+        }
+
+        // Initialize bookmarks
+        if (Washboard.bookmarks) {
+            $.each(Washboard.bookmarks, function(i, bookmark) {
+                update_bookmarks(bookmark.tag);
+            });
         }
 
         // Initialize session
