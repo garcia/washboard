@@ -26,9 +26,9 @@
     }
 
 }(window.Washboard = window.Washboard || {}, jQuery));
-// Hide menu upon touching anywhere else
 
 $(function() {
+    // Hide menu upon touching anywhere else
     $('body').on('touchstart', function(e) {
         if (!$(e.target).closest('#menus ul').length) {
             Washboard.hide_all_menus();

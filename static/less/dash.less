@@ -85,7 +85,8 @@ code {
 
 /* Blog metadata */
 
-#blog {
+#blog,
+#tag {
     color: lighten(@primary, 40%);
     text-shadow: 0 1px 1px darken(@primary, 40%);
     margin: 20px auto;
@@ -135,33 +136,60 @@ code {
     text-decoration: none;
 }
 
-#follow-button {
+#tag {
+    overflow: auto;
+}
+
+#tag h2 {
+    display: inline-block;
+    padding: 5px; // line it up with the bookmark button
+    margin: 0;
+}
+
+#tag-controls {
+    display: inline-block;
+    float: right;
+}
+
+#tag-controls button {
+    padding: 5px;
+    text-decoration: none;
+}
+
+#follow-button,
+#bookmark-button {
     border-color: darken(@follow, 12%);
     .shinyhue(@follow, 22%, 26%, 30%, 34%);
 }
 
-#follow-button:hover {
+#follow-button:hover,
+#bookmark-button:hover {
     .shinyhue(@follow, 18%, 24%, 30%, 36%);
 }
 
-#follow-button:active {
+#follow-button:active,
+#bookmark-button:active {
     .shinyhue(@follow, 36%, 30%, 24%, 18%); 
 }
 
-#follow-button.followed {
+#follow-button.followed,
+#bookmark-button.bookmarked {
     border-color: darken(@unfollow, 12%);
     .shinyhue(@unfollow, 22%, 26%, 30%, 34%);
 }
 
-#follow-button.followed:hover {
+#follow-button.followed:hover,
+#bookmark-button.bookmarked:hover {
     .shinyhue(@unfollow, 18%, 24%, 30%, 36%);
 }
 
-#follow-button.followed:active {
+#follow-button.followed:active,
+#bookmark-button.bookmarked:active {
     .shinyhue(@unfollow, 36%, 30%, 24%, 18%); 
 }
 
-#follow-button:before {
+#follow-button:before,
+#bookmark-button:before {
     content: "";
     display: inline-block;
     width: 11px;
@@ -172,7 +200,8 @@ code {
     background-repeat: no-repeat;
 }
 
-#follow-button.followed:before {
+#follow-button.followed:before,
+#bookmark-button.bookmarked:before {
     background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90HBAAUCpFN0F0AAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAH0lEQVQY02NgQANHn92GY4JggBQDBf8Ti2moeAgGHQD0mbC2WCcJ4gAAAABJRU5ErkJggg==");
 }
 

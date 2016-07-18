@@ -95,3 +95,7 @@ class SeenAlert(models.Model):
 
     class Meta:
         unique_together = ('alert', 'user')
+
+class Bookmark(models.Model):
+    user = models.ForeignKey(User)
+    tag = LowerCaseCharField(max_length=512)
