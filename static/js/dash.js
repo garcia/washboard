@@ -1440,11 +1440,11 @@
     Washboard.add_bookmark = function() {
         var tag = prompt("Type the tag you want to bookmark:")
 
-        if (tag.startsWith('#')) {
-            tag = tag.slice(1);
-        }
-
         if (tag != null) {
+            if (tag.startsWith('#')) {
+                tag = tag.slice(1);
+            }
+
             $.ajax({
                 type: 'POST',
                 url: '/bookmark',
