@@ -1592,7 +1592,9 @@
                 var neighbors = neighboring_posts(),
                     index = (e.keyCode == 74 ? neighbors.next : neighbors.previous),
                     post = $($('#posts > .post')[index]);
-                $('body').scrollTop(post.offset().top - post_top_padding);
+                if (post) {
+                    $('body').scrollTop(post.offset().top - post_top_padding);
+                }
             }
             // L / R shortcuts
             else if (e.keyCode == 76 || e.keyCode == 82) {
