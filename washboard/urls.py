@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.conf.urls import patterns, include, url
+from django.conf.urls.static import static
 from django.views.generic.base import RedirectView
 
 urlpatterns = patterns('',
@@ -23,4 +25,4 @@ urlpatterns = patterns('',
     url(r'^seen$', 'wb.alerts.seen'),
     url(r'^bookmark$', 'wb.views.bookmark.main'),
     url(r'^favicon\.ico$', RedirectView.as_view(url='/static/images/favicon.ico')),
-)
+) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
