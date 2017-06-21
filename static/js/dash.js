@@ -519,7 +519,7 @@
         // Initial context
         var context = {
             post: post,
-            dashboard: 'http://www.tumblr.com/dashboard/10/' + (post.id + 1),
+            dashboard: 'https://www.tumblr.com/dashboard/10/' + (post.id + 1),
             mine: Washboard.blogs.indexOf(post.blog_name) >= 0,
             hide_url: post.reblogged_root_url || post.post_url,
             rebloggable: true,
@@ -555,8 +555,8 @@
         if (post.asking_name !== undefined) {
             // Determine asker's avatar for answer posts
             context.asking_avatar = (post.asking_name === 'Anonymous') ?
-                'http://assets.tumblr.com/images/anonymous_avatar_24.gif' :
-                ('http://api.tumblr.com/v2/blog/' + post.asking_name + '.tumblr.com/avatar/24');
+                'https://assets.tumblr.com/images/anonymous_avatar_24.gif' :
+                ('https://api.tumblr.com/v2/blog/' + post.asking_name + '.tumblr.com/avatar/24');
             // A relic from the ages when asks weren't rebloggable
             //context.rebloggable = false;
         }
