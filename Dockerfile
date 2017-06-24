@@ -1,4 +1,4 @@
-FROM python:2.7-onbuild
+FROM python:2.7
 
 EXPOSE 8000
 
@@ -11,4 +11,4 @@ COPY requirements.txt ./
 RUN pip install -r requirements.txt
 COPY . .
 
-CMD ["gunicorn_django", "-b", "0.0.0.0:8000", "-k", "eventlet"]
+CMD ["./start.sh"]
