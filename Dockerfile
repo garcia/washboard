@@ -3,7 +3,7 @@ FROM python:2.7
 EXPOSE 8000
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends mysql-client node-less \
+    && apt-get install -y --no-install-recommends mysql-client node-less ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/app

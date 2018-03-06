@@ -7,11 +7,11 @@ import oauth2
 
 class Tumblr(object):
 
-    OAUTH_BASE = 'http://www.tumblr.com/oauth/'
+    OAUTH_BASE = 'https://www.tumblr.com/oauth/'
     REQUEST_TOKEN = OAUTH_BASE + 'request_token'
     AUTHORIZE = OAUTH_BASE + 'authorize?oauth_token=%s'
     ACCESS_TOKEN = OAUTH_BASE + 'access_token'
-    API_BASE = 'http://api.tumblr.com/v2/'
+    API_BASE = 'https://api.tumblr.com/v2/'
     USER_INFO = API_BASE + 'user/info'
 
     def __init__(self, api_key, api_secret, token_key=None, token_secret=None,
