@@ -9,6 +9,7 @@ httplib2==0.10.3
 oauth2==1.9.0.post1
 wsgiref==0.1.2
 django-handlebars==0.1
+python-spidermonkey==0.0.10
 Fabric==1.6.1
 paramiko==1.10.1
 mock==1.0.1

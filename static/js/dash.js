@@ -165,10 +165,12 @@
 
         /* Convert Tumblr errors (which look successful) to HTTP errors */
         ajaxdata.success = function(data, textStatus, jqXHR) {
-            var ajax_status = parseInt(data.meta.status);
-            // Returned if error_type = js
-            if (ajax_status === 999) {
-                throw "User-invoked error";
+            if (data.meta) {
+                var ajax_status = parseInt(data.meta.status);
+                // Returned if error_type = js
+                if (ajax_status === 999) {
+                    throw "User-invoked error";
+                }
             }
             // Tumblr error, or error_type = tumblr
             if (ajax_status >= 400) {
@@ -1181,6 +1183,7 @@
             post_id: id,
             reblog_key: this_post.data('reblog-key'),
             reply_text: reply_box.find('.reply').val(),
+            tumblelog: this_post.data('tumblelog')
         };
 
         this_post

@@ -57,7 +57,7 @@ endpoints = {
         'method': 'POST',
         'api_key': True,
         'parameters': [
-            'post_id', 'reblog_key', 'reply_text',
+            'post_id', 'reblog_key', 'reply_text', 'tumblelog'
         ],
     },
     'reblog': {

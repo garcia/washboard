@@ -182,6 +182,8 @@ function program25(depth0,data) {
     + escapeExpression(((stack1 = ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"\n    data-reblog-key=\""
     + escapeExpression(((stack1 = ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.reblog_key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\"\n    data-tumblelog=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.blog_name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\"\n    data-type=\""
     + escapeExpression(((stack1 = ((stack1 = depth0.post),stack1 == null || stack1 === false ? stack1 : stack1.type)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\">\n    <div class=\"meta\">\n        <a class=\"avatar\" href=\"/blog/"
