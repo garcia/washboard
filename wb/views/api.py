@@ -32,7 +32,7 @@ endpoints = {
     },
     'like': {
         'url': 'user/like',
-        'method': 'GET',
+        'method': 'POST',
         'api_key': False,
         'parameters': [
             'id', 'reblog_key',
@@ -40,7 +40,7 @@ endpoints = {
     },
     'unlike': {
         'url': 'user/unlike',
-        'method': 'GET',
+        'method': 'POST',
         'api_key': False,
         'parameters': [
             'id', 'reblog_key',
