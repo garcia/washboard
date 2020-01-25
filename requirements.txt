@@ -11,7 +11,7 @@ wsgiref==0.1.2
 django-handlebars==0.1
 python-spidermonkey==0.0.10
 Fabric==1.6.1
-paramiko==1.10.1
+paramiko==2.0.9
 mock==1.0.1
 django-longerusernameandemail==0.5.6
 certifi
