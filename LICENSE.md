@@ -1,7 +1,7 @@
 Washboard
 =========
 
-Copyright (c) 2015 [Grant Garcia](http://grantgarcia.org/). Licensed under the [MIT License][MIT].
+Copyright (c) 2020 [Ash Garcia](https://garcia.sh/). Licensed under the [MIT License][MIT].
 
 Washboard utilizes code from the following projects:
 
