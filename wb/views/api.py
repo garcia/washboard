@@ -161,7 +161,7 @@ def main(request, data_=None):
             data[parameter] = value
 
     # Build endpoint URL
-    url = 'http://api.tumblr.com/v2/'
+    url = 'https://api.tumblr.com/v2/'
     try:
         url += endpoint['url'].format(
             **{k: v for k, v in request.POST.items()}
