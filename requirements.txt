@@ -10,7 +10,7 @@ oauth2==1.9.0.post1
 wsgiref==0.1.2
 django-handlebars==0.1
 Fabric==1.6.1
-paramiko==1.10.1
+paramiko==2.10.1
 mock==1.0.1
 django-longerusernameandemail==0.5.6
 certifi
